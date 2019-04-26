@@ -1,0 +1,416 @@
+body {
+	font-size: 16px;
+	vertical-align: middle;
+	color: #7F7F70;
+}
+
+.hidden {
+	display: none;
+}
+
+.stop-button {
+	background-color: red;
+}
+
+div[onclick] {
+	cursor: pointer;
+}
+
+span[onclick] {
+	cursor: pointer;
+}
+
+img[onclick] {
+	cursor: pointer;
+}
+
+.icon-wrapper img {
+	margin: .25rem;
+	margin-left: 0rem;
+	max-height: 3rem;
+}
+
+input, textarea, select {
+	box-sizing: border-box;
+	padding: 0px;
+	margin: 2px 0px;
+	text-align: top;
+	height: 1.5rem;
+}
+
+.us-table {
+	display: table;
+	width: 100%;
+}
+
+.us-inline-table {
+	display: inline-table;
+}
+
+.us-table-row {
+	display: table-row;
+}
+
+.t-left {
+	text-align: left;
+}
+
+.t-right {
+	text-align: right;
+}
+
+.t-center {
+	text-align: center;
+}
+
+.t-justify {
+	text-align: justify;
+}
+
+.us-table-cell {
+	vertical-align: middle;
+	display: table-cell;
+}
+
+#searches {
+	width: 30rem;
+}
+
+#display-window {
+	height: 90vh;
+	overflow-y: scroll;
+	background-color: #1C1E23;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+#queue-count {
+	width: 2rem;
+}
+
+#socket-count {
+	background-color: #e77a7d;
+}
+
+#socket-count.active {
+	background-color: #88fca7;
+}
+
+.copy-text {
+	position: absolute;
+	left: -100vw;
+}
+
+.button {
+	color: #ffffff;
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	border: 1px solid black;
+	padding: .25rem;
+	border-radius: .25rem;
+	background-color: #2c6ace;
+	transition: background-color 1s;
+}
+
+.button:hover {
+	background-color: #1f4c93;
+}
+
+.item-display {
+	border-bottom: 1px solid #E9CF9F;
+	vertical-align: middle;
+	border-right: 1px solid #E9CF9F;
+	border-left: 1px solid #E9CF9F;
+	border-collapse: collapse;
+	padding: .5rem;
+	position: relative;
+}
+
+.searchinfo {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	display: inline-block;
+	border-left: 1px solid black;
+	border-bottom: 1px solid black;
+	padding: .25rem;
+}
+
+.item-display:first-child {
+	border-top: 1px solid blue;
+}
+
+#socket-count {
+	width: 3rem;
+}
+
+#whisper-message {
+	display: inline-block;
+	position: absolute;
+	top: 50vh;
+	right: 50vw;
+	background-color: black;
+	opacity: 0;
+	-webkit-transition: opacity 2s; /* Safari */
+	transition: opacity 1s;
+	transition-timing-function: ease-out;
+	border: 1px solid #E9CF9F;
+	padding: 1rem;
+	border-radius: .25rem;
+	color: #E9CF9F;
+}
+
+#whisper-message.active {
+	-webkit-transition: opacity 0s; /* Safari */
+	transition: opacity 0s;
+	opacity: 1;
+}
+
+.corrupted {
+	color: #b30000;
+	font-weight: bold;
+}
+
+.mirrored {
+	color: #0073e6;
+	font-weight: bold;
+}
+
+.implicit-mods li {
+	color: #958e87;
+	border-bottom: 1px dotted #003300;
+}
+
+.explicit-mods {
+	color: #5476FF;
+}
+
+ul {
+	display: block;
+	margin-top: 0px;
+	margin-bottom: 3px;
+}
+
+ul li {
+	max-width: 50vw;
+}
+
+li:hover {
+	background-color: #2d3139;
+}
+
+.crafted-mods {
+	color: #99B4FF;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+.fractured-mods {
+	color: #A29162;
+}
+
+.data-value span.l-6L {
+	border: #ff0000;
+	background-color: #ffffff;
+	color: #ff0000;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.mod-box {
+	margin-left: .5rem;
+}
+
+.prefix {
+	color: #8888FF !important;
+}
+
+.suffix {
+	color: #ec7676 !important;
+}
+
+.data-value span {
+	display: inline-block;
+	padding: .1rem;
+	margin: .1rem;
+	border-radius: 5px;
+	background-color: #323438;
+	color: #b7b7ff;
+}
+
+.enchant-mods {
+	color: #99B4FF;
+}
+
+.copied {
+	text-decoration: line-through;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.r-Normal {
+	color: #C8C8C8;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.r-Magic {
+	color: #8888FF;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.r-Rare {
+	color: #FFFF77;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.r-Unique {
+	color: #AF6020;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.socket-link {
+	color: #ffffff;
+	text-shadow: 1px 1px 1px #5d5d5d;
+	font-weight: bold;
+}
+
+.socket-R {
+	display: inline-block;
+	padding: .25rem;
+	background-color: #990000;
+	border-radius: 1rem;
+	width: 1rem;
+	text-align: center;
+	color: #ffffff;
+	font-weight: bold;
+	border: 1px solid #000000;
+}
+
+.socket-B {
+	display: inline-block;
+	padding: .25rem;
+	background-color: #003399;
+	border-radius: 1rem;
+	width: 1rem;
+	text-align: center;
+	color: #ffffff;
+	font-weight: bold;
+	border: 1px solid #000000;
+}
+
+.socket-G {
+	display: inline-block;
+	padding: .25rem;
+	background-color: #004d00;
+	border-radius: 1rem;
+	width: 1rem;
+	text-align: center;
+	color: #ffffff;
+	font-weight: bold;
+	border: 1px solid #000000;
+}
+
+.socket-W {
+	display: inline-block;
+	padding: .25rem;
+	background-color: #ffffff;
+	border-radius: 1rem;
+	width: 1rem;
+	text-align: center;
+	font-weight: bold;
+	border: 1px solid #000000;
+	text-shadow: none;
+	color: #1C1E23;
+}
+
+.socket-A {
+	display: inline-block;
+	padding: .25rem;
+	background-color: #000000;
+	border-radius: 1rem;
+	width: 1rem;
+	text-align: center;
+	color: #ffffff;
+	font-weight: bold;
+	border: 1px solid rgba(0, 0, 0, .5);
+}
+
+.ilvl {
+	white-space: nowrap;
+}
+
+.v-top {
+	vertical-align: top;
+}
+
+a:link {
+	color: #b7b7ff;
+}
+
+a:hover {
+	color: #f7f7ff;
+}
+
+a:visited {
+	color: #4c4c6a;
+}
+
+.searchpart a:visited {
+	color: #b7b7ff;
+}
+
+.key-header {
+	border: 1px solid black;
+	padding: .25rem;
+}
+
+.key-value {
+	background-color: #2d3139;
+	margin-left: 1rem;
+	padding: .25rem;
+}
+
+.template-field.icon {
+	display: inline-block;
+}
+
+.icon-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.icon-wrapper .stack-text {
+	position: absolute;
+	display: inline-block;
+	bottom: 5px;
+	right: 5px;
+	background-color: rgba(255, 255, 255, .7);
+	border-radius: 5px;
+	color: #000000;
+	text-shadow: none;
+}
+
+.itemPopupContainer {
+	text-align: center;
+	display: inline-block;
+	width: 40%;
+	horizontal-align: center;
+	position: relative;
+}
+
+.results {
+	height: 90vh;
+}
+
+.itemPopupContainer {
+	text-align: center;
+	display: inline-block;
+	width: 40%;
+	horizontal-align: center;
+	position: relative;
+}
