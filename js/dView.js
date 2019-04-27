@@ -35,6 +35,12 @@ function dView(result, searchInfo, display)
 		searchLink.appendChild(document.createTextNode(searchText));
 		searchLink.target = '_blank';
 		overrides['searchinfo'] = searchLink;
+		var colorIndicator = document.createElement('div');
+		if(searchInfo.color && searchInfo.color.length > 0)
+		{
+			colorIndicator.style.backgroundColor = searchInfo.color;
+		}
+		overrides['searchcolor'] = colorIndicator;
 	}
 
 	if(result.item)

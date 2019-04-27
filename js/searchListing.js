@@ -18,31 +18,42 @@ function SearchListing(listingString)
 	this.searchComment = '';
 	this.soundId = '';
 	this.soundVolume = 0.25;
+	this.color = '';
 	
 
 	var searchParts = listingString.split('[');
 	for (var i = 0; i < searchParts.length; i++)
 	{
 		var searchPart = searchParts[i].replace('[','').replace(']','');
-		if(i == 0)
+		if(searchPart != null)
 		{
-			this.searchUrlPart = searchPart;
-		}
-		else if(i == 1)
-		{
-			this.searchComment = searchPart;
-		}
-		else if(i == 2)
-		{
-			this.soundId = searchPart;
-		}
-		else if(i == 3)
-		{
-			if(searchPart != null)
+			if(i == 0)
 			{
-				this.soundVolume = searchPart;
+				this.searchUrlPart = searchPart;
 			}
-		}
+			else if(i == 1)
+			{
+				this.searchComment = searchPart;
+			}
+			else if(i == 2)
+			{
+				this.soundId = searchPart;
+			}
+			else if(i == 3)
+			{
+				if(searchPart != null)
+				{
+					this.soundVolume = searchPart;
+				}
+			}
+			else if(i == 4)
+			{
+				if(searchPart != null)
+				{
+					this.color = searchPart;
+				}
+			}
+		}		
 	}
 }
 
@@ -62,7 +73,6 @@ function SearchStringBuilder(searchBox)
 		for(var i = 0; i < searchRows.length; i++)
 		{
 			var searchRow = searchRows[i];
-			console.log(searchRow);
 			if(!searchRow.classList.contains('search-header-row'))
 			{
 				if(isFirstRow)
@@ -122,7 +132,7 @@ function SearchStringBuilder(searchBox)
 			var headerRow = document.createElement('div');
 			headerRow.classList.add('search-header-row');
 			headerRow.classList.add('us-table-row');
-			var headerText = ['Url', 'Comment', 'Sound', 'Volume', ''];
+			var headerText = ['Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
 			for (var i = 0; i < headerText.length; i++)
 			{
 				var cell = document.createElement('div');
@@ -171,6 +181,15 @@ function SearchStringBuilder(searchBox)
 			newCell = document.createElement('div');
 			newCell.classList.add('us-table-cell');
 			newCell.append(soundVolume);
+			newRow.append(newCell);
+			
+			var color = document.createElement('input');
+			color.type = 'text';
+			color.value = '';
+			color.classList.add('search-color');
+			newCell = document.createElement('div');
+			newCell.classList.add('us-table-cell');
+			newCell.append(color);
 			newRow.append(newCell);
 			
 			var addNewButton = document.createElement('div');
@@ -293,7 +312,7 @@ function SearchStringBuilder(searchBox)
 		var headerRow = document.createElement('div');
 		headerRow.classList.add('search-header-row');
 		headerRow.classList.add('us-table-row');
-		var headerText = ['Url', 'Comment', 'Sound', 'Volume', ''];
+		var headerText = ['Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
 		for (var i = 0; i < headerText.length; i++)
 		{
 			var cell = document.createElement('div');
@@ -346,6 +365,15 @@ function SearchStringBuilder(searchBox)
 			newCell = document.createElement('div');
 			newCell.classList.add('us-table-cell');
 			newCell.append(soundVolume);
+			newRow.append(newCell);
+			
+			var color = document.createElement('input');
+			color.type = 'text';
+			color.value = currentSearch.color;
+			color.classList.add('search-color');
+			newCell = document.createElement('div');
+			newCell.classList.add('us-table-cell');
+			newCell.append(color);
 			newRow.append(newCell);
 			
 			var removeButton = document.createElement('div');

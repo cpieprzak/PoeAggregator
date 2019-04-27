@@ -124,7 +124,8 @@ input, textarea, select {
 	border-right: 1px solid #E9CF9F;
 	border-left: 1px solid #E9CF9F;
 	border-collapse: collapse;
-	padding: .5rem;
+	padding: .5rem;    
+	padding-left: .75rem;
 	position: relative;
 }
 
@@ -499,7 +500,14 @@ a:visited {
 	
 }
 
-.add-new-search
+.search-color div
 {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: .5rem;
+	height: 100%;
+	border-left: 1px solid #E9CF9F;
+	box-sizing: border-box;
 	
 }
