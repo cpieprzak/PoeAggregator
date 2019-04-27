@@ -4,28 +4,32 @@
 	<link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
+	<div class="us-table all-screen" >
+			<div class="us-table-row" >			
+				<div class="us-table-cell control-panel" >
+					<input type="text" value="Synthesis" id="league" />
+					<label>Alert Sound <select id='notification-sound'>
+							<option value="" selected></option>
+							<option value="woop">woop</option>
+							<option value="gong">gong</option></label>
+					<label>Searches<input type='text' id='searches' value='ZvGnm6uQ' /></label>
+					<label>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>
+					<label>Queue Size<input type='text' value='0' id='queue-count' disabled /></label>
+				
+				
+					<input type='button' value='Start' onclick="startSockets()" />
+					<input type='button' value='Stop' onclick="stopSockets()" />
+					<input type='button' value='Clear' onclick="clearDisplay()" />
+				</div>
+			</div>
+			<div class="us-table-row" >			
+				<div class="us-table-cell" >
+					<div id='display-window' class='results'></div>
+				</div>
+			</div>
+		</div>
 
-
-	<input type="text" value="Synthesis" id="league" />
-	<label>Alert Sound <select id='notification-sound'>
-			<option value="" selected></option>
-			<option value="woop">woop</option>
-			<option value="gong">gong</option></label>
-	<label>Searches<input type='text' id='searches' value='ZvGnm6uQ' /></label>
-	<label>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>
-	<label>Queue Size<input type='text' value='0' id='queue-count' disabled /></label>
-
-
-	<input type='button' value='Start' onclick="startSockets()" />
-	<input type='button' value='Stop' onclick="stopSockets()" />
-	<input type='button' value='Clear' onclick="clearDisplay()" />
-
-	<script type="text/javascript" src="./js/audio.js"></script>
-	<script type="text/javascript" src="./js/searchListing.js"></script>
-	<script type="text/javascript" src="./js/dView.js"></script>
-	<script type="text/javascript" src="./js/main.js"></script>
-	<div id='whisper-message'>Whisper Message Copied</div>
-	<div id='display-window' class='results'></div>
+	
 	<div class="hidden">
 		<div class='item-display' id='item-template'>
 			<span class='template-field searchinfo' tf='searchinfo'></span>
@@ -78,7 +82,8 @@
 						</div>
 						<div class='template-field bold' tf='item.pseudoMods'></div>
 						<div class='template-field' tf='item.sockets'></div>
-						<div>			
+						<div>	
+							<div class='template-field prophecy-text' tf='item.prophecyText'></div>		
 							<span class='template-field' tf='item.properties.Level'>
 								<span class='if-present'>lvl:</span>
 								<span class='data-target data-value'></span>
@@ -153,7 +158,7 @@
 						</div>
 					</div>
 					<div class='us-table-cell v-top t-left'>
-						<br /> <br />
+						<br /> <br />						
 						<div>
 							<span class='template-field enchant-mods' tf='item.enchantMods' title='Enchant'> </span>
 						</div>
@@ -187,7 +192,14 @@
 				</span>
 			</span>
 			<span class='template-field' tf='copy-item-button'></span>
+			<div class='template-field' tf='itemKeyPanel'></div>	
 		</div>
 	</div>
+
+	<script type="text/javascript" src="./js/audio.js"></script>
+	<script type="text/javascript" src="./js/searchListing.js"></script>
+	<script type="text/javascript" src="./js/dView.js"></script>
+	<script type="text/javascript" src="./js/main.js"></script>
+	
 </body>
 </html>

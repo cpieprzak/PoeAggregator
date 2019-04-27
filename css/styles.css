@@ -2,10 +2,11 @@ body {
 	font-size: 16px;
 	vertical-align: middle;
 	color: #7F7F70;
+	overflow: hidden;
 }
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .stop-button {
@@ -36,6 +37,17 @@ input, textarea, select {
 	margin: 2px 0px;
 	text-align: top;
 	height: 1.5rem;
+}
+
+.control-panel
+{
+	height: 1px;
+}
+
+.all-screen
+{
+	height: 99vh;
+	overflow: hidden;
 }
 
 .us-table {
@@ -78,7 +90,7 @@ input, textarea, select {
 }
 
 #display-window {
-	height: 90vh;
+	height: 100%;
 	overflow-y: scroll;
 	background-color: #1C1E23;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
