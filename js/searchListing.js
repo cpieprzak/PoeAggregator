@@ -35,7 +35,6 @@ function SearchListing(listingString)
 			}
 		}		
 	}
-	console.log(this);
 }
 
 var searchBox = document.getElementById('searches');
@@ -167,17 +166,45 @@ function SearchStringBuilder(searchBox)
 			newCell.append(comment);
 			newRow.append(newCell);
 			
+			var soundPanel = document.createElement('div');
+			soundPanel.classList.add('us-table');
+			var soundRow = document.createElement('div');
+			soundRow.classList.add('us-table-row');
+			soundPanel.append(soundRow);
+			var soundCell = document.createElement('div');
+			soundCell.classList.add('us-table-cell');
+			soundRow.append(soundCell);
+			
+			
 			var soundId = document.getElementById('notification-sound').cloneNode(true);
 			soundId.classList.add('search-control');
 			soundId.id = '';
 			soundId.value = '';
 			soundId.classList.add('search-sound-id');
-			newCell = document.createElement('div');
-			newCell.classList.add('us-table-cell');
-			newCell.append(soundId);
-			newRow.append(newCell);
+			soundCell.append(soundId);
 			
 			var soundVolume = document.createElement('input');
+			var testSoundButton = document.createElement('div');
+			testSoundButton.classList.add('button');
+			testSoundButton.append(document.createTextNode('?'));
+			testSoundButton.title = 'Test Sound';
+			testSoundButton.soundId = soundId;
+			testSoundButton.soundVolume = soundVolume;
+			testSoundButton.onclick = function()
+			{
+				playSound(this.soundId.value, this.soundVolume.value);
+			};
+
+			var soundCell = document.createElement('div');
+			soundCell.classList.add('us-table-cell');
+			soundCell.append(testSoundButton);
+			soundRow.append(soundCell);
+			
+			newCell = document.createElement('div');
+			newCell.classList.add('us-table-cell');
+			newCell.append(soundPanel);
+			newRow.append(newCell);
+			
 			soundVolume.classList.add('search-control');
 			soundVolume.type = 'text';
 			soundVolume.value = '';
@@ -374,17 +401,45 @@ function SearchStringBuilder(searchBox)
 			newCell.append(comment);
 			newRow.append(newCell);
 			
+			var soundPanel = document.createElement('div');
+			soundPanel.classList.add('us-table');
+			var soundRow = document.createElement('div');
+			soundRow.classList.add('us-table-row');
+			soundPanel.append(soundRow);
+			var soundCell = document.createElement('div');
+			soundCell.classList.add('us-table-cell');
+			soundRow.append(soundCell);
+			
+			
 			var soundId = document.getElementById('notification-sound').cloneNode(true);
 			soundId.classList.add('search-control');
 			soundId.id = '';
 			soundId.value = currentSearch.soundId;
 			soundId.classList.add('search-sound-id');
-			newCell = document.createElement('div');
-			newCell.classList.add('us-table-cell');
-			newCell.append(soundId);
-			newRow.append(newCell);
+			soundCell.append(soundId);
 			
 			var soundVolume = document.createElement('input');
+			var testSoundButton = document.createElement('div');
+			testSoundButton.classList.add('button');
+			testSoundButton.append(document.createTextNode('?'));
+			testSoundButton.title = 'Test Sound';
+			testSoundButton.soundId = soundId;
+			testSoundButton.soundVolume = soundVolume;
+			testSoundButton.onclick = function()
+			{
+				playSound(this.soundId.value, this.soundVolume.value);
+			};
+
+			var soundCell = document.createElement('div');
+			soundCell.classList.add('us-table-cell');
+			soundCell.append(testSoundButton);
+			soundRow.append(soundCell);
+			
+			newCell = document.createElement('div');
+			newCell.classList.add('us-table-cell');
+			newCell.append(soundPanel);
+			newRow.append(newCell);
+			
 			soundVolume.classList.add('search-control');
 			soundVolume.type = 'text';
 			soundVolume.value = currentSearch.soundVolume;

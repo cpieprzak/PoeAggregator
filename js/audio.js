@@ -12,11 +12,15 @@ function populateSounds(){
 	soundSelect.append(blankOption);
 	for (var key in sounds)
 	{
-
 		var newOption = document.createElement('option');
 		newOption.value = key;
 		newOption.append(document.createTextNode(key));
 		soundSelect.append(newOption);
+	}
+	soundSelect.playSound = function()
+	{
+		var soundId = this.value;
+		sounds[soundId].play();
 	}
 }
 populateSounds();
