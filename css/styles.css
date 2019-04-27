@@ -432,14 +432,6 @@ a:visited {
 	background-color: rgba(0,0,0,.7);
 }
 
-.all-searches
-{
-	max-height: 50vh;
-	overflow-y: scroll;
-	max-height: calc(50vh-3rem);
-	min-height: 300px;
-}
-
 .ssb-content-box
 {
 	text-align: center;
@@ -448,12 +440,17 @@ a:visited {
 	left: 15vw;
 	position: fixed;
 	width: 70vw;
-	height: 70vh;
 	border-radius: 1rem;
 	border: 1px solid black;
 	background-color: #ffffff;	
 	padding: .5rem;
 	min-height: 425px;
+}
+
+.all-searches
+{
+	height: 50vh;
+	overflow-y: scroll;
 }
 
 .ssb-content-box .us-table
@@ -482,18 +479,14 @@ a:visited {
 
 .ssb-footer
 {	
-	position: absolute;
-	display: inline-block;
+	display: block;
 	height: 1.5rem;
-	width: 68.25vw;
 	line-height: 1rem;
 	background-color: #2c6ace;
 	padding: .5rem;
     border-radius: 0px 0px 1rem 1rem;
     color: white;
     font-weight: bold;
-    bottom: .5rem;
-    left: .5rem;
 }
 
 .ssb-footer .button
@@ -508,12 +501,5 @@ a:visited {
 
 .add-new-search
 {
-	position: absolute;
-	display: inline-block;
-	height: 1.5rem;
-	width: 68.25vw;
-	line-height: 1rem;
-	padding: .5rem;
-    bottom: 4.5rem;
-    left: .5rem;
+	
 }
