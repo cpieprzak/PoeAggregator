@@ -32,9 +32,10 @@ img[onclick] {
 }
 
 input, textarea, select {
+	display: inline-block;
 	box-sizing: border-box;
 	padding: 0px;
-	margin: 2px 0px;
+	margin: 0px;
 	text-align: top;
 	height: 1.5rem;
 }
@@ -42,6 +43,19 @@ input, textarea, select {
 .control-panel
 {
 	height: 1px;
+	text-align: center;
+}
+
+.control-panel > div
+{
+	display: flex;
+	justify-content: center;
+}
+
+.control-panel label
+{
+	margin-right: 1rem;
+	margin-left: 1rem;
 }
 
 .all-screen
@@ -149,6 +163,7 @@ input, textarea, select {
 	border-left: 1px solid black;
 	border-bottom: 1px solid black;
 	padding: .25rem;
+	text-align: center;
 }
 
 .item-display:first-child {

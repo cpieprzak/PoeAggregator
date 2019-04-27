@@ -66,6 +66,32 @@ function getItems()
 }
 
 setInterval(getItems, 500);
+
+
+function updateTimes()
+{
+	var timesToUpdate = document.querySelectorAll('.create-date');
+	for (var i = 0; i < timesToUpdate.length; i++)
+	{
+		var time = timesToUpdate[i];
+		var createDate = time.createDate;
+		var now = new Date();
+		var text = 'A few seconds';
+		var ageInSeconds = (now - createDate) / 1000;
+		if(ageInSeconds < 60)
+		{
+			text = Math.round(ageInSeconds) + ' seconds ago';
+		}
+		else
+		{
+			var timeInMinutes = ageInSeconds / 60;
+			text = Math.round(timeInMinutes) + ' minutes ago';
+		
+		}
+		time.innerHTML = text;
+	}
+}
+setInterval(updateTimes, 1000);
 function startSockets() 
 {	
 	if(hasActiveSockets)
@@ -180,142 +206,6 @@ function addItem(data, searchInfo)
 	}
 } 
 
-function ItemMod(modName, modTier, modRangeString)
-{
-	this.modName = modName;
-	this.modTier = modTier;
-	this.modRangeString = modRangeString;
-	this.affixType = '';
-	if(modTier != null)
-	{
-		if(modTier.startsWith('P'))
-		{
-			this.affixType ='prefix';
-		}
-		else if(modTier.startsWith('S'))
-		{
-			this.affixType ='suffix';
-		}
-		else if(modTier.startsWith('R'))
-		{
-			this.affixType ='crafted';
-		}
-	}
-}
-
-function CompositeMod(modType, displayText)
-{
-	this.modType = modType;
-	this.displayText = displayText;
-	this.compositeModKey = '';
-	this.mods = [];
-}
-
-function getMods(item, modType)
-{
-	var veiledHashes = [];
-	var fullMods = [];
-	if(item[modType + 'Mods'])
-	{
-		var basicModText = item[modType + 'Mods'];
-		if(basicModText != null && basicModText.length && basicModText.length > 0)
-		{
-			var hashToMod = [];
-			for(var i = 0; i < basicModText.length; i++)
-			{
-				var displayText = basicModText[i];
-				fullMods.push(new CompositeMod(modType,displayText));
-			}
-			if(item.extended)
-			{
-				if(item.extended.hashes)
-				{
-					var hashes = item.extended.hashes;
-					if(hashes[modType])
-					{
-						for(var i = 0; i < hashes[modType].length; i++)
-						{		
-							fullMods[i].compositeModKey = hashes[modType][i][0];
-							hashToMod[fullMods[i].compositeModKey] = fullMods[i];
-						}
-					}
-				}
-				if(item.extended.mods)
-				{
-					if(item.extended.mods[modType])
-					{
-						var moreModInfoListing = item.extended.mods[modType];
-						if(moreModInfoListing != null && moreModInfoListing.length > 0)
-						{
-							for(var i = 0; i < moreModInfoListing.length; i++)
-							{		
-								var moreModInfo = moreModInfoListing[i];
-								var modName = moreModInfo.name;
-								var modTier = moreModInfo.tier;
-								
-								if(moreModInfo.magnitudes)
-								{
-									var modMagnitudes = moreModInfo.magnitudes;
-									if(modMagnitudes != null && modMagnitudes.length > 0)
-									{
-										var keyToCompositeMods = [];
-										for(var v = 0; v < modMagnitudes.length; v++)
-										{	
-											var modHashKey = modMagnitudes[v].hash;
-											var modMin = modMagnitudes[v].min;
-											var modMax = modMagnitudes[v].max;
-											var modRange = '';
-											if(modMin != modMax)
-											{
-												modRange = '('+ modMin + '-' + modMax + ')';
-												
-											}
-
-											if(modMin != 0 || modMax != 0)
-											{
-												var itemMod = keyToCompositeMods[modHashKey];
-												
-												if(itemMod == null)
-												{
-													var itemMod = new ItemMod(modName, modTier, modRange);
-													try
-													{
-														hashToMod[modHashKey].mods.push(itemMod);
-													}
-													catch(err)
-													{
-														console.log(err);
-													}
-													keyToCompositeMods[modHashKey] = itemMod;
-												}
-												else
-												{
-													if(modRange != '')
-													{
-														itemMod.modRangeString += ' - ' + modRange;
-													}
-												}	
-											}										
-										}
-									}
-									else if (modType == "veiled")
-									{
-										var modHashKey = veiledHashes[i]
-										var modRange = '';
-										var itemMod = new ItemMod(modName, modTier, modRange);
-										hashToMod[modHashKey].mods.push(itemMod);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}			
-	}
-	return fullMods;
-}
-
 function buildCopyButton(buttonText, textToCopy)
 {
 	var inputElement = document.createElement('input');
@@ -330,7 +220,6 @@ function buildCopyButton(buttonText, textToCopy)
 
 	return inputElement;
 }
-
 
 function copyTextToClipboard(text)
 {
