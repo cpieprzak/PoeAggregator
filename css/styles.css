@@ -1,8 +1,17 @@
+html
+{
+	height:100%;
+	margin: 0px;
+	padding: 0px;
+}
 body {
 	font-size: 16px;
 	vertical-align: middle;
 	color: #7F7F70;
-	overflow: hidden;
+	background-color: #1C1E23;
+	height:100%;
+	margin: 0px;
+	padding: 0px;
 }
 
 .hidden {
@@ -38,30 +47,6 @@ input, textarea, select {
 	margin: 0px;
 	text-align: top;
 	height: 1.5rem;
-}
-
-.control-panel
-{
-	height: 1px;
-	text-align: center;
-}
-
-.control-panel > div
-{
-	display: flex;
-	justify-content: center;
-}
-
-.control-panel label
-{
-	margin-right: 1rem;
-	margin-left: 1rem;
-}
-
-.all-screen
-{
-	height: 99vh;
-	overflow: hidden;
 }
 
 .us-table {
@@ -103,11 +88,33 @@ input, textarea, select {
 	width: 30rem;
 }
 
+
+
+.control-panel
+{
+	text-align: center;
+	background-color: #ffffff;
+	height: 5vh;
+	min-height: 2rem;
+}
+
+.control-panel > div
+{
+	display: flex;
+	justify-content: center;
+}
+
+.control-panel label
+{
+	margin-right: 1rem;
+	margin-left: 1rem;
+}
+
 #display-window {
 	overflow-y: scroll;
 	background-color: #1C1E23;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
-	height: 100vh;
+	height: 95vh;
 }
 
 #queue-count {
@@ -433,10 +440,6 @@ a:visited {
 	position: relative;
 }
 
-.results {
-	height: 90vh;
-}
-
 .itemPopupContainer {
 	text-align: center;
 	display: inline-block;
@@ -479,11 +482,6 @@ a:visited {
 {
 	height: 50vh;
 	overflow-y: scroll;
-}
-
-.ssb-content-box .us-table
-{
-	border-spacing: .25rem;
 }
 
 .ssb-header

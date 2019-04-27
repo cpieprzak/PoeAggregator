@@ -4,32 +4,24 @@
 	<link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
-	<div class="us-table all-screen" >
-			<div class="us-table-row" >			
-				<div class="us-table-cell control-panel" >
-					<div>
-						<input type="text" value="Synthesis" id="league" />
-						<label>Alert Sound <select id='notification-sound'>
-								<option value="" selected></option>
-								<option value="woop">woop</option>
-								<option value="gong">gong</option></select></label>
-						<label>Searches<input type='text' id='searches' value='WWZbim[Her Mask][1][.1][],D8O9pXH5[Es On Block][2][.3][blue],nBl35lH0[Fractured % Light Radius][3][.3][green],kPO0W6F5[Good Caster Weapons][4][.5][red]' /></label>
-						<label>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>
-						<label>Queue Size<input type='text' value='0' id='queue-count' disabled /></label>
-					
-					
-						<input type='button' value='Start' onclick="startSockets()" />
-						<input type='button' value='Stop' onclick="stopSockets()" />
-						<input type='button' value='Clear' onclick="clearDisplay()" />
-					</div>
-				</div>
-			</div>
-			<div class="us-table-row" >			
-				<div class="us-table-cell" >
-					<div id='display-window' class='results'></div>
-				</div>
-			</div>
-		</div>
+	<div class="all-screen" >	
+		<div class="control-panel">
+			<input type="text" value="Synthesis" id="league" />
+			<label>Alert Sound <select id='notification-sound'>
+					<option value="" selected></option>
+					<option value="woop">woop</option>
+					<option value="gong">gong</option></select></label>
+			<label>Searches<input type='text' id='searches' value='WWZbim[Her Mask][1][.1][],D8O9pXH5[Es On Block][2][.3][blue],nBl35lH0[Fractured % Light Radius][3][.3][green],kPO0W6F5[Good Caster Weapons][4][.5][red]' /></label>
+			<label>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>
+			<label>Queue Size<input type='text' value='0' id='queue-count' disabled /></label>
+		
+		
+			<input type='button' value='Start' onclick="startSockets()" />
+			<input type='button' value='Stop' onclick="stopSockets()" />
+			<input type='button' value='Clear' onclick="clearDisplay()" />
+		</div>	
+		<div id='display-window'></div>
+	</div>
 
 	
 	<div class="hidden">
