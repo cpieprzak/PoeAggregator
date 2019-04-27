@@ -119,35 +119,38 @@ function startSockets()
 			for(var i = 0; i < providedSearches.length; i++)
 			{
 				var searchInfo = providedSearches[i];
-				var webSocketUrl = socketUrl + searchInfo.searchUrlPart;
-				var searchSocket = new WebSocket(webSocketUrl);
-				searchSocket.searchInfo = searchInfo;
-				searchSocket.onopen = function(event)
+				if(searchInfo.active == '1')
 				{
-					openSockets++;
-					document.getElementById('socket-count').value = openSockets + '/' + providedSearches.length;
-				};
-				searchSocket.onerror = function(event)
-				{
-					var errorMsg = this.searchpart + ' has experienced an error.';
-					alert(errorMsg);
-				};
-				searchSocket.onclose = function(event)
-				{
-					openSockets--;
-					if(openSockets < 1)
+					var webSocketUrl = socketUrl + searchInfo.searchUrlPart;
+					var searchSocket = new WebSocket(webSocketUrl);
+					searchSocket.searchInfo = searchInfo;
+					searchSocket.onopen = function(event)
 					{
-						document.getElementById('socket-count').value = 0;
+						openSockets++;
+						document.getElementById('socket-count').value = openSockets + '/' + providedSearches.length;
+					};
+					searchSocket.onerror = function(event)
+					{
+						var errorMsg = this.searchpart + ' has experienced an error.';
+						alert(errorMsg);
+					};
+					searchSocket.onclose = function(event)
+					{
+						openSockets--;
+						if(openSockets < 1)
+						{
+							document.getElementById('socket-count').value = 0;
+						}
+						document.getElementById('socket-count').value = openSockets + '/' + socketsToOpen;
+					};
+					searchSocket.onmessage = function (event) 
+					{
+						var json = JSON.parse(event.data);
+						var itemRequest = new ItemRequest(this.searchInfo, json.new);
+						requestManager.addRequest(itemRequest);
 					}
-					document.getElementById('socket-count').value = openSockets + '/' + socketsToOpen;
-				};
-				searchSocket.onmessage = function (event) 
-				{
-					var json = JSON.parse(event.data);
-					var itemRequest = new ItemRequest(this.searchInfo, json.new);
-					requestManager.addRequest(itemRequest);
-				}
-				sockets.push(searchSocket);
+					sockets.push(searchSocket);
+				}				
 			}
 		}		
 	}

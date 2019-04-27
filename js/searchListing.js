@@ -14,6 +14,7 @@ function ListingManager(listingString)
 
 function SearchListing(listingString)
 {
+	this.active = '1';
 	this.searchUrlPart = '';
 	this.searchComment = '';
 	this.soundId = '';
@@ -21,40 +22,20 @@ function SearchListing(listingString)
 	this.color = '';
 	
 
-	var searchParts = listingString.split('[');
+	var searchParts = listingString.trim().split('[');
 	for (var i = 0; i < searchParts.length; i++)
 	{
 		var searchPart = searchParts[i].replace('[','').replace(']','').trim();
+		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume',	'color'];
 		if(searchPart != null)
-		{
-			if(i == 0)
+		{	
+			if(variables[i] != null)
 			{
-				this.searchUrlPart = searchPart;
-			}
-			else if(i == 1)
-			{
-				this.searchComment = searchPart;
-			}
-			else if(i == 2)
-			{
-				this.soundId = searchPart;
-			}
-			else if(i == 3)
-			{
-				if(searchPart != null)
-				{
-					this.soundVolume = searchPart;
-				}
-			}
-			else if(i == 4)
-			{
-				if(searchPart != null)
-				{
-					this.color = searchPart;
-				}
+				this[variables[i]] = searchPart;
 			}
 		}		
 	}
+	console.log(this);
 }
 
 var searchBox = document.getElementById('searches');
@@ -81,20 +62,28 @@ function SearchStringBuilder(searchBox)
 				}
 				else
 				{
-					searchString += ',';
+					searchString += ',\n';
 				}
 				var inputs = searchRow.querySelectorAll('.search-control');
 				for(var j = 0; j < inputs.length; j++)
 				{
-					if(j != 0)
+					searchString += '[';
+					if(inputs[j].type =='checkbox')
 					{
-						searchString += '[';
+						if(inputs[j].checked)
+						{
+							searchString += '1';
+						}
+						else
+						{
+							searchString += '0';
+						}
 					}
-					searchString += inputs[j].value;
-					if(j != 0)
+					else
 					{
-						searchString += ']';
+						searchString += inputs[j].value;
 					}
+					searchString += ']';
 				}
 			}
 		}
@@ -132,7 +121,7 @@ function SearchStringBuilder(searchBox)
 			var headerRow = document.createElement('div');
 			headerRow.classList.add('search-header-row');
 			headerRow.classList.add('us-table-row');
-			var headerText = ['Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
+			var headerText = ['Active', 'Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
 			for (var i = 0; i < headerText.length; i++)
 			{
 				var cell = document.createElement('div');
@@ -146,6 +135,17 @@ function SearchStringBuilder(searchBox)
 			newRow.classList.add('search-row');
 			
 			var newCell = null
+
+			var activeCheckBox = document.createElement('input');
+			activeCheckBox.classList.add('search-control');
+			activeCheckBox.type = 'checkbox';
+			activeCheckBox.value = 1;
+			activeCheckBox.checked = true;
+			activeCheckBox.classList.add('search-active');
+			newCell = document.createElement('div');
+			newCell.classList.add('us-table-cell');
+			newCell.append(activeCheckBox);
+			newRow.append(newCell);
 			
 			var newUrl = document.createElement('input');
 			newUrl.classList.add('search-control');
@@ -225,6 +225,10 @@ function SearchStringBuilder(searchBox)
 						var field = fields[j];
 						field.value = '';
 					}
+				}
+				else
+				{
+					alert('A Url is required for a search entry');
 				}
 			};
 			
@@ -317,7 +321,7 @@ function SearchStringBuilder(searchBox)
 		var headerRow = document.createElement('div');
 		headerRow.classList.add('search-header-row');
 		headerRow.classList.add('us-table-row');
-		var headerText = ['Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
+		var headerText = ['Active', 'Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
 		for (var i = 0; i < headerText.length; i++)
 		{
 			var cell = document.createElement('div');
@@ -335,6 +339,20 @@ function SearchStringBuilder(searchBox)
 			newRow.classList.add('us-table-row');
 			
 			var newCell = null
+
+			var activeCheckBox = document.createElement('input');
+			activeCheckBox.classList.add('search-control');
+			activeCheckBox.type = 'checkbox';
+			activeCheckBox.value = 1;
+			if(currentSearch.active == 1)
+			{
+				activeCheckBox.checked = true;
+			}
+			activeCheckBox.classList.add('search-active');
+			newCell = document.createElement('div');
+			newCell.classList.add('us-table-cell');
+			newCell.append(activeCheckBox);
+			newRow.append(newCell);
 			
 			var newUrl = document.createElement('input');
 			newUrl.classList.add('search-control');
@@ -404,7 +422,7 @@ function SearchStringBuilder(searchBox)
 	};
 }
 var buildSearchButton = document.createElement('div');
-buildSearchButton.innerHTML = 'Build';
+buildSearchButton.innerHTML = 'Modify';
 buildSearchButton.searchStringBuilder = searchStringBuilder;
 buildSearchButton.classList.add('button');
 buildSearchButton.onclick = function tmp(event)
