@@ -83,7 +83,7 @@ function SearchStringBuilder(searchBox)
 				{
 					searchString += ',';
 				}
-				var inputs = searchRow.querySelectorAll('input');
+				var inputs = searchRow.querySelectorAll('.search-control');
 				for(var j = 0; j < inputs.length; j++)
 				{
 					if(j != 0)
@@ -148,6 +148,7 @@ function SearchStringBuilder(searchBox)
 			var newCell = null
 			
 			var newUrl = document.createElement('input');
+			newUrl.classList.add('search-control');
 			newUrl.type = 'text';
 			newUrl.value = '';
 			newUrl.classList.add('search-url');
@@ -157,6 +158,7 @@ function SearchStringBuilder(searchBox)
 			newRow.append(newCell);
 			
 			var comment = document.createElement('input');
+			comment.classList.add('search-control');
 			comment.type = 'text';
 			comment.value = '';
 			comment.classList.add('search-comment');
@@ -165,8 +167,9 @@ function SearchStringBuilder(searchBox)
 			newCell.append(comment);
 			newRow.append(newCell);
 			
-			var soundId = document.createElement('input');
-			soundId.type = 'text';
+			var soundId = document.getElementById('notification-sound').cloneNode(true);
+			soundId.classList.add('search-control');
+			soundId.id = '';
 			soundId.value = '';
 			soundId.classList.add('search-sound-id');
 			newCell = document.createElement('div');
@@ -175,6 +178,7 @@ function SearchStringBuilder(searchBox)
 			newRow.append(newCell);
 			
 			var soundVolume = document.createElement('input');
+			soundVolume.classList.add('search-control');
 			soundVolume.type = 'text';
 			soundVolume.value = '';
 			soundVolume.classList.add('search-volume');
@@ -184,6 +188,7 @@ function SearchStringBuilder(searchBox)
 			newRow.append(newCell);
 			
 			var color = document.createElement('input');
+			color.classList.add('search-control');
 			color.type = 'text';
 			color.value = '';
 			color.classList.add('search-color');
@@ -332,6 +337,7 @@ function SearchStringBuilder(searchBox)
 			var newCell = null
 			
 			var newUrl = document.createElement('input');
+			newUrl.classList.add('search-control');
 			newUrl.type = 'text';
 			newUrl.value = currentSearch.searchUrlPart;
 			newUrl.classList.add('search-url');
@@ -341,6 +347,7 @@ function SearchStringBuilder(searchBox)
 			newRow.append(newCell);
 			
 			var comment = document.createElement('input');
+			comment.classList.add('search-control');
 			comment.type = 'text';
 			comment.value = currentSearch.searchComment;
 			comment.classList.add('search-comment');
@@ -349,8 +356,9 @@ function SearchStringBuilder(searchBox)
 			newCell.append(comment);
 			newRow.append(newCell);
 			
-			var soundId = document.createElement('input');
-			soundId.type = 'text';
+			var soundId = document.getElementById('notification-sound').cloneNode(true);
+			soundId.classList.add('search-control');
+			soundId.id = '';
 			soundId.value = currentSearch.soundId;
 			soundId.classList.add('search-sound-id');
 			newCell = document.createElement('div');
@@ -359,6 +367,7 @@ function SearchStringBuilder(searchBox)
 			newRow.append(newCell);
 			
 			var soundVolume = document.createElement('input');
+			soundVolume.classList.add('search-control');
 			soundVolume.type = 'text';
 			soundVolume.value = currentSearch.soundVolume;
 			soundVolume.classList.add('search-volume');
@@ -368,6 +377,7 @@ function SearchStringBuilder(searchBox)
 			newRow.append(newCell);
 			
 			var color = document.createElement('input');
+			color.classList.add('search-control');
 			color.type = 'text';
 			color.value = currentSearch.color;
 			color.classList.add('search-color');

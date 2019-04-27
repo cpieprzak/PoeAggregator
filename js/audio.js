@@ -1,3 +1,26 @@
+var sounds = [];
+function populateSounds(){
+	sounds['woop'] = new Audio('http://poe.trade//static/notification.mp3');
+	sounds['gong'] = new Audio('https://web.poecdn.com/audio/trade/gong.mp3');
+	for(var i = 1; i < 10; i++)
+	{
+		sounds['' + i] = new Audio('./audio/' + i +'.wav');
+	}
+	var soundSelect = document.getElementById('notification-sound');
+	soundSelect.innerHTML = '';
+	var blankOption = document.createElement('option');
+	soundSelect.append(blankOption);
+	for (var key in sounds)
+	{
+
+		var newOption = document.createElement('option');
+		newOption.value = key;
+		newOption.append(document.createTextNode(key));
+		soundSelect.append(newOption);
+	}
+}
+populateSounds();
+
 function initialiseLocalData() 
 { 
 	var storedFields = ['searches','league','notification-sound'];
@@ -14,20 +37,12 @@ function initialiseLocalData()
 } 
 initialiseLocalData();
 
-var sounds = [];
-populateSounds();
-function populateSounds(){
-	sounds['woop'] = new Audio('http://poe.trade//static/notification.mp3');
-	sounds['woop'].volume = 0.5;
-	sounds['gong'] = new Audio('https://web.poecdn.com/audio/trade/gong.mp3');
-	sounds['gong'].volume = 0.5;
-}
 
 function playSound(soundId, volume)
 {
 	if(volume == null || volume == '')
 	{
-		volume = 0.5;
+		volume = 0.25;
 	}
 	if(soundId != null && soundId.length > 0)
 	{
