@@ -304,7 +304,7 @@ function getMods(item, modType)
 										var modRange = '';
 										var itemMod = new ItemMod(modName, modTier, modRange);
 										hashToMod[modHashKey].mods.push(itemMod);
-								}
+									}
 								}
 							}
 						}
@@ -318,12 +318,12 @@ function getMods(item, modType)
 
 function buildCopyButton(buttonText, textToCopy)
 {
-
 	var inputElement = document.createElement('input');
 	inputElement.type = "button"
 	inputElement.className = "button"
 	inputElement.value = buttonText;
-	inputElement.addEventListener('click', function(event){
+	inputElement.addEventListener('click', function(event)
+	{
 	    copyTextToClipboard(textToCopy);
 	    event.target.classList.add('copied');
 	});

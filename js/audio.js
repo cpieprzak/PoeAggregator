@@ -49,7 +49,6 @@ function playSound(soundId, volume)
 			}
 		}
 	}
-	console.log(soundId);
 	if(soundId == null || soundId.trim() == '' || sounds[soundId] == 'error')
 	{
 		soundId = document.getElementById('notification-sound').value;
