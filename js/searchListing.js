@@ -24,7 +24,7 @@ function SearchListing(listingString)
 	var searchParts = listingString.split('[');
 	for (var i = 0; i < searchParts.length; i++)
 	{
-		var searchPart = searchParts[i].replace('[','').replace(']','');
+		var searchPart = searchParts[i].replace('[','').replace(']','').trim();
 		if(searchPart != null)
 		{
 			if(i == 0)
