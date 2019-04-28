@@ -21,19 +21,31 @@ function SearchListing(listingString)
 	this.soundVolume = 0.25;
 	this.color = '';
 	
-
-	var searchParts = listingString.trim().split('[');
-	for (var i = 0; i < searchParts.length; i++)
+	if(listingString != null)
 	{
-		var searchPart = searchParts[i].replace('[','').replace(']','').trim();
-		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume',	'color'];
-		if(searchPart != null)
-		{	
-			if(variables[i] != null)
-			{
-				this[variables[i]] = searchPart;
-			}
-		}		
+		var searchParts = listingString.trim().split('[');
+		for (var i = 0; i < searchParts.length; i++)
+		{
+			var searchPart = searchParts[i].replace('[','').replace(']','').trim();
+			var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume',	'color'];
+			if(searchPart != null)
+			{	
+				if(variables[i] != null)
+				{
+					this[variables[i]] = searchPart;
+				}
+			}		
+		}
+	}
+	this.cloneNode = function()
+	{
+		var clonedNode = new SearchListing();
+		clonedNode.active = this.active;
+		clonedNode.searchUrlPart = this.searchUrlPart;
+		clonedNode.searchComment = this.searchComment;
+		clonedNode.soundId = this.soundId;
+		clonedNode.soundVolume = this.soundVolume;
+		clonedNode.color = this.color;
 	}
 }
 
