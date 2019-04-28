@@ -46,6 +46,8 @@ function SearchListing(listingString)
 		clonedNode.soundId = this.soundId;
 		clonedNode.soundVolume = this.soundVolume;
 		clonedNode.color = this.color;
+		
+		return clonedNode;
 	}
 }
 
