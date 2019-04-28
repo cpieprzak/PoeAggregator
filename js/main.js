@@ -265,3 +265,32 @@ function showHide()
 		target.classList.add('hidden');
 	}
 }
+
+
+function toggleFontSize()
+{
+	var body = document.querySelector('body');
+	var targetClass = 'small';
+	if(body.classList.contains(targetClass))
+	{
+		body.classList.remove(targetClass);	
+	}
+	else
+	{
+		body.classList.add(targetClass);	
+	}
+}
+
+function toggleView()
+{
+	var targetElement = document.getElementById('display-window');
+	var targetClass = 'condensed';
+	if(targetElement.classList.contains(targetClass))
+	{
+		targetElement.classList.remove(targetClass);	
+	}
+	else
+	{
+		targetElement.classList.add(targetClass);	
+	}
+}

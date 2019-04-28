@@ -462,6 +462,11 @@ a:visited {
 	color: #4c4c6a;
 }
 
+.searchinfo a:visited
+{	
+	color: #b7b7ff;
+}
+
 .searchpart a:visited {
 	color: #b7b7ff;
 }
