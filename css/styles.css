@@ -195,9 +195,17 @@ input, textarea, select {
 	padding-left: .75rem;
 	position: relative;
 	text-align: left;
-	min-width: 45vw;
     margin-right: auto;
     margin-left: auto;
+	min-width: 90vw;
+}
+
+@media only screen and (min-width: 1250px)
+{
+	.item-display 
+	{		
+		min-width: 45vw;
+	}
 }
 
 .item-display:nth-child(odd)
