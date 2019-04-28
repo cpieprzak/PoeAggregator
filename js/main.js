@@ -221,7 +221,7 @@ function addItem(data, searchInfo)
 		lastItem = newNode;
 
 		allDisplayedItems.push(lastItem);
-		if(allDisplayedItems.length > maxItemsDisplayed)
+		while(allDisplayedItems.length > maxItemsDisplayed)
 		{
 			var oldestItem = allDisplayedItems.shift();
 			if(oldestItem != null)
