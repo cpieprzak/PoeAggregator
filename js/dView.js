@@ -609,3 +609,8 @@ function getMods(item, modType)
 	}
 	return fullMods;
 }
+
+function scrollToTop()
+{
+	document.getElementById('display-window').scrollTo(0, 0);
+}

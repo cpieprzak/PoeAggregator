@@ -134,6 +134,13 @@ input, textarea, select {
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
     justify-content: flex-start;
 }
+
+#display-window.condensed
+{	
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 	
 .nowrap
 {
@@ -152,9 +159,11 @@ input, textarea, select {
 	background-color: #88fca7;
 }
 
-.copy-text {
-	position: absolute;
+.copy-text 
+{
+	position: fixed;
 	left: -100vw;
+	top: -100vh;
 }
 
 .button {
@@ -170,11 +179,13 @@ input, textarea, select {
 	white-space: nowrap;
 }
 
-.button:hover {
+.button:hover
+{
 	background-color: #1f4c93;
 }
 
-.item-display {
+.item-display 
+{
 	border-bottom: 1px solid #E9CF9F;
 	vertical-align: middle;
 	border-right: 1px solid #E9CF9F;
@@ -184,6 +195,9 @@ input, textarea, select {
 	padding-left: .75rem;
 	position: relative;
 	text-align: left;
+	min-width: 45vw;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .item-display:nth-child(odd)
@@ -316,6 +330,11 @@ li:hover {
 
 .enchant-mods {
 	color: #99B4FF;
+}
+
+.enchant-mods .mod-name
+{
+	display: none;
 }
 
 .copied {
@@ -617,7 +636,16 @@ a:visited {
 {
 	color: #E9CF9F;
 }
-.all-item-properties
+
+#scroll-to-top
 {
-	
+	position: fixed;
+	bottom: 2rem; 
+	right: 2rem; 
+	display: inline-block;
+	border: 1px solid #ffffff;
+	padding: .5rem;
+	color: #ffffff;
+	background-color: rgba(0,0,0,.5);
+	text-shadow: 1px 1px 1px #000000;
 }
