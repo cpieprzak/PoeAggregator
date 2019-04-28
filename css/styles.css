@@ -261,6 +261,12 @@ input, textarea, select {
 	color: #5476FF;
 }
 
+.veiled-mods
+{
+	color: #3d8cc7;
+	text-shadow: 1px 1px 3px rgba(255,255,255,.35);
+}
+
 ul 
 {
 	display: block;
