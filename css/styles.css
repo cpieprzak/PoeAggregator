@@ -664,6 +664,11 @@ a:visited {
 	color: #E9CF9F;
 }
 
+.item-key-panel
+{
+	display: none;
+}
+
 #scroll-to-top
 {
 	position: fixed;
