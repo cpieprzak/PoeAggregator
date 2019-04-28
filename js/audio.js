@@ -74,6 +74,7 @@ function playSound(soundId, volume)
 	}
 	if(soundId != null && soundId.length > 0)
 	{
+		sounds[soundId].volume = volume;
 		sounds[soundId].play();
 	}
 } 
