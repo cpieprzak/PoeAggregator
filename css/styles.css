@@ -206,6 +206,12 @@ input, textarea, select {
 	{		
 		min-width: 45vw;
 	}
+	
+	.item-mods ul
+	{
+		padding-left: 1rem;
+		max-width: 50vw;
+	}
 }
 
 .item-display:nth-child(odd)
@@ -309,11 +315,7 @@ ul
 	padding-left: 1rem;
 }
 
-ul li {
-	max-width: 50vw;
-}
-
-li:hover {
+.item-mods ul li:hover {
 	background-color: #2d3139;
 }
 
@@ -705,6 +707,11 @@ a:visited {
 	flex-wrap: wrap;
 	justify-content: space-between;
 	text-align: center;
+}
+
+.composite-display-text
+{
+	
 }
 
 .outdated
