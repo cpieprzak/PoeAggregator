@@ -212,6 +212,18 @@ input, textarea, select {
 		padding-left: 1rem;
 		max-width: 50vw;
 	}
+	
+	.composite-display-text 
+	{
+	    max-width: 25vw;
+	    text-align: left;
+	}
+	
+	.detail-mod-panel
+	{
+	    max-width: 25vw;
+	    text-align: right;
+	}
 }
 
 .item-display:nth-child(odd)
