@@ -300,7 +300,6 @@ ul
 
 .item-mods
 {
-	display:inline-block;
 	padding-top: .25rem;
 	padding-bottom: .25rem;
 }
@@ -701,4 +700,13 @@ a:visited {
 .req-dex .data-value span
 {
 	border: 1px solid #004d00; 
+}
+
+.composite-mod-panel
+{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	text-align: center;
 }

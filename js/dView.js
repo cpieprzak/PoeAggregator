@@ -375,10 +375,17 @@ function makeModList(compositeMods)
 		{
 			var compositeMod = compositeMods[i];
 			var li = document.createElement('li');
-			var aDiv = document.createElement('span');
-			aDiv.classList.add('mod-display-text');
-			aDiv.append(document.createTextNode(compositeMod.displayText));
-			li.append(aDiv);
+			var compositeModPanel = document.createElement('span');
+			compositeModPanel.classList.add('composite-mod-panel');
+			var compositeText = document.createElement('span');
+			compositeText.classList.add('composite-display-text');
+			compositeText.append(document.createTextNode(compositeMod.displayText));
+			compositeModPanel.append(compositeText);
+			
+
+			var detailModPanel = document.createElement('span');
+			detailModPanel.classList.add('detail-mod-panel');			
+			
 			if(compositeMod.mods && compositeMod.mods.length && compositeMod.mods.length > 0)
 			{
 				var itemMods = compositeMod.mods;
@@ -415,10 +422,13 @@ function makeModList(compositeMods)
 							modRange.append(document.createTextNode(' ' + itemMod.modRangeString));
 							modBox.append(modRange);
 						}
-						li.append(modBox);
+						detailModPanel.append(modBox);
 					}
 				}
 			}
+			
+			compositeModPanel.append(detailModPanel);
+			li.append(compositeModPanel);
 			modlist.append(li);
 		}
 	}	
