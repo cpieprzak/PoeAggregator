@@ -83,13 +83,16 @@ function SearchStringBuilder(searchBox)
 					{
 						if(inputs[j].classList.contains('search-volume'))
 						{
-							if(inputs[j].value > 1)
+							if(inputs[j].value != '')
 							{
-								inputs[j].value = 1;
-							}
-							else if(inputs[j].value < 0.1)
-							{
-								inputs[j].value = 0.1;
+								if(inputs[j].value > 1)
+								{
+									inputs[j].value = 1;
+								}
+								else if(inputs[j].value < 0.1)
+								{
+									inputs[j].value = 0.1;
+								}
 							}
 						}
 						rowString += inputs[j].value;
@@ -252,13 +255,16 @@ function SearchStringBuilder(searchBox)
 					var soundId = clonedNode.querySelector('.search-control.search-sound-id');
 					soundId.value =  this.cloneTarget.querySelector('.search-control.search-sound-id').value;
 					var soundVolume = clonedNode.querySelector('.search-control.search-volume');
-					if(soundVolume.value > 1)
+					if(soundVolume.value != '')
 					{
-						soundVolume.value = 1;
-					}
-					else if(soundVolume.value < 0.1)
-					{
-						inputs[j].value = 0.1;
+						if(soundVolume.value > 1)
+						{
+							soundVolume.value = 1;
+						}
+						else if(soundVolume.value < 0.1)
+						{
+							inputs[j].value = 0.1;
+						}
 					}
 					var testSoundButton = clonedNode.querySelector('.button.test-sound-button');
 					testSoundButton.soundId = soundId;
