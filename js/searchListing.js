@@ -67,7 +67,6 @@ function SearchStringBuilder(searchBox)
 				var rowString = '';
 				for(var j = 0; j < inputs.length; j++)
 				{
-					console.log(inputs[j]);
 					rowString += '[';
 					if(inputs[j].type =='checkbox')
 					{
@@ -82,12 +81,22 @@ function SearchStringBuilder(searchBox)
 					}
 					else
 					{
+						if(inputs[j].classList.contains('search-volume'))
+						{
+							if(inputs[j].value > 1)
+							{
+								inputs[j].value = 1;
+							}
+							else if(inputs[j].value < 0.1)
+							{
+								inputs[j].value = 0.1;
+							}
+						}
 						rowString += inputs[j].value;
 					}
 					rowString += ']';
 				}
 				searchString += rowString;
-				console.log(rowString);
 			}
 		}
 		return searchString;
@@ -190,6 +199,7 @@ function SearchStringBuilder(searchBox)
 			var soundVolume = document.createElement('input');
 			var testSoundButton = document.createElement('div');
 			testSoundButton.classList.add('button');
+			testSoundButton.classList.add('test-sound-button');
 			testSoundButton.append(document.createTextNode('?'));
 			testSoundButton.title = 'Test Sound';
 			testSoundButton.soundId = soundId;
@@ -230,13 +240,33 @@ function SearchStringBuilder(searchBox)
 			
 			var addNewButton = document.createElement('div');
 			addNewButton.classList.add('button');
+			addNewButton.classList.add('add-new-button');
+			
 			addNewButton.append(document.createTextNode('Add New'));
 			addNewButton.cloneTarget = newRow;
 			addNewButton.onclick = function()
 			{
 				var clonedNode = this.cloneTarget.cloneNode(true);
 				if(clonedNode.querySelector('input[type="text"]').value.trim() != '')
-				{
+				{				
+					var soundId = clonedNode.querySelector('.search-control.search-sound-id');
+					soundId.value =  this.cloneTarget.querySelector('.search-control.search-sound-id').value;
+					var soundVolume = clonedNode.querySelector('.search-control.search-volume');
+					if(soundVolume.value > 1)
+					{
+						soundVolume.value = 1;
+					}
+					else if(soundVolume.value < 0.1)
+					{
+						inputs[j].value = 0.1;
+					}
+					var testSoundButton = clonedNode.querySelector('.button.test-sound-button');
+					testSoundButton.soundId = soundId;
+					testSoundButton.soundVolume = soundVolume;
+					testSoundButton.onclick = function()
+					{
+						playSound(this.soundId.value, this.soundVolume.value);
+					};
 					var removeButton = document.createElement('div');
 					removeButton.classList.add('button');
 					removeButton.append(document.createTextNode('Remove'));
@@ -246,11 +276,11 @@ function SearchStringBuilder(searchBox)
 						this.removeTarget.parentElement.removeChild(this.removeTarget);
 					}
 					
-					var addButton = clonedNode.querySelector('.button');
+					var addButton = clonedNode.querySelector('.button.add-new-button');
 					addButton.parentNode.append(removeButton);
 					addButton.parentElement.removeChild(addButton);
 					document.getElementById('search-body-content').querySelector('.us-table').append(clonedNode);
-					var fields = this.cloneTarget.querySelectorAll('input[type="text"');
+					var fields = this.cloneTarget.querySelectorAll('.search-control');
 					for(var j = 0; j < fields.length; j++)
 					{
 						var field = fields[j];
