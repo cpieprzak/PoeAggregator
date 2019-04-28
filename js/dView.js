@@ -23,7 +23,7 @@ function dView(result, searchInfo)
 	overrides['item.shaper'] = '';
 	overrides['item.elder'] = '';
 	if(searchInfo != null)
-	{
+	{		
 		var searchLink = document.createElement('a');
 		var league = document.getElementById('league').value;
 		searchLink.href = 'https://www.pathofexile.com/trade/search/' + league + '/' + searchInfo.searchUrlPart;
@@ -276,6 +276,26 @@ function dView(result, searchInfo)
 	newNode.id = 'tmp-id';
 	var fields = newNode.querySelectorAll('.template-field');
 	newNode.id = '';
+	
+	var refreshButton = document.createElement('div');
+	refreshButton.classList.add('button');
+	refreshButton.gggid = result.id;
+	refreshButton.searchInfo = searchInfo.cloneNode(true);
+	refreshButton.refreshTarget = newNode;
+	refreshButton.title = 'Refresh';
+	refreshButton.append(document.createTextNode('Refresh'));
+	refreshButton.onclick = function ()
+	{
+		var msg = this.gggid + ' ' + this.searchInfo.searchUrlPart;
+
+		this.searchInfo.refreshTarget = this.refreshTarget;
+		var itemUrl = 'https://www.pathofexile.com/api/trade/fetch/' + this.gggid;
+		itemUrl += '?query=' + this.searchInfo.searchUrlPart;
+		
+		callAjax(itemUrl, refreshItem, this.searchInfo);
+	}
+	overrides['refresh-button'] = refreshButton;
+	
 	if(fields != null && fields.length > 0)
 	{
 		for(var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++)
@@ -354,10 +374,6 @@ function dView(result, searchInfo)
 	{
 		oldVersions[p].classList.add('outdated');
 	}
-	
-	var refreshButton = document.createElement('div');
-	refreshButton.classList.add('refresh-button');
-	refreshButton.gggid = result.id;
 	
 	return newNode;
 }
@@ -654,3 +670,19 @@ function scrollToTop()
 {
 	document.getElementById('display-window').scrollTo(0, 0);
 }
+
+function refreshItem(data, searchInfo) 
+{
+	var json = JSON.parse(data);
+	var display = document.getElementById('display-window');
+	var results = json.result;
+	var oldNode = searchInfo.refreshTarget;
+	for(var resultIndex = 0; resultIndex < results.length; resultIndex++)
+	{	
+		var result = results[resultIndex];
+		var refreshedItem = dView(result, searchInfo);
+		display.insertBefore(refreshedItem, oldNode);
+		oldNode.parentNode.removeChild(oldNode);
+		allDisplayedItems.push(refreshedItem);
+	}
+} 
