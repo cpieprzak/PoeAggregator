@@ -213,13 +213,12 @@ input, textarea, select {
 		max-width: 50vw;
 	}
 	
-	.composite-display-text 
+	.condensed .composite-display-text 
 	{
 	    max-width: 25vw;
-	    text-align: left;
 	}
 	
-	.detail-mod-panel
+	.condensed .detail-mod-panel
 	{
 	    max-width: 25vw;
 	    text-align: right;
@@ -723,7 +722,12 @@ a:visited {
 
 .composite-display-text
 {
-	
+    text-align: left;	
+}
+
+.detail-mod-panel
+{
+    text-align: right;
 }
 
 .outdated
