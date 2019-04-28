@@ -116,6 +116,15 @@ function startSockets()
 		var providedSearches = listingManager.searches;
 		if(providedSearches != null && providedSearches.length > 0)
 		{
+			var activeCount = 0;
+			for(var i = 0; i < providedSearches.length; i++)
+			{
+				if(providedSearches[i].active == '1')
+				{
+					activeCount++;
+				}
+			}
+			
 			for(var i = 0; i < providedSearches.length; i++)
 			{
 				var searchInfo = providedSearches[i];
@@ -127,7 +136,7 @@ function startSockets()
 					searchSocket.onopen = function(event)
 					{
 						openSockets++;
-						document.getElementById('socket-count').value = openSockets + '/' + providedSearches.length;
+						document.getElementById('socket-count').value = openSockets + '/' + activeCount;
 					};
 					searchSocket.onerror = function(event)
 					{
