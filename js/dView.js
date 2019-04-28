@@ -4,6 +4,7 @@ function dView(result, searchInfo, display)
 	var icon = document.createElement("img");
 	icon.src = result.item.icon;
 	overrides['icon'] = icon;
+	console.log(result);
 
 	var whisperButtonText = 'Whisper';
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
@@ -348,7 +349,13 @@ function dView(result, searchInfo, display)
 			}
 		}
 	}
-
+	var gggId = 'ggg-id-' + result.id;
+	var oldVersions = document.querySelectorAll('.' + gggId);
+	for(var p = 0; p < oldVersions.length; p++)
+	{
+		oldVersions[p].classList.add('outdated');
+	}
+	newNode.classList.add(gggId);
 	display.insertBefore(newNode, lastItem);
 	lastItem = newNode;
 

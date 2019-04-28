@@ -376,25 +376,21 @@ li:hover {
 
 .r-Normal {
 	color: #C8C8C8;
-	text-decoration: underline;
 	font-weight: bold;
 }
 
 .r-Magic {
 	color: #8888FF;
-	text-decoration: underline;
 	font-weight: bold;
 }
 
 .r-Rare {
 	color: #FFFF77;
-	text-decoration: underline;
 	font-weight: bold;
 }
 
 .r-Unique {
 	color: #AF6020;
-	text-decoration: underline;
 	font-weight: bold;
 }
 
@@ -709,4 +705,15 @@ a:visited {
 	flex-wrap: wrap;
 	justify-content: space-between;
 	text-align: center;
+}
+
+.outdated
+{
+	background-color: #0a0b0c !important;
+    text-decoration: line-through !important;
+	opacity: .5;
+}
+.outdated .template-field
+{
+    text-decoration: line-through !important;
 }
