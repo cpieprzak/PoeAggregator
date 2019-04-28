@@ -608,6 +608,15 @@ a:visited {
 	font-size:  1.15rem;
 }
 
+.item-price
+{
+	color: #ffffff;
+}
+
+.item-price .default-text
+{
+	color: #E9CF9F;
+}
 .all-item-properties
 {
 	

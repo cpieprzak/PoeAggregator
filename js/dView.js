@@ -5,16 +5,18 @@ function dView(result, searchInfo, display)
 	icon.src = result.item.icon;
 	overrides['icon'] = icon;
 
-	overrides['whisper-button'] = buildCopyButton('Whisper', result.listing.whisper);
+	var whisperButtonText = 'Whisper';
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
 	if(result.listing.account.name)
 	{
+		whisperButtonText += ' ' + result.listing.account.lastCharacterName;
 		var profileLink = document.createElement('a');
 		profileLink.href = 'https://www.pathofexile.com/account/view-profile/' + result.listing.account.name;
 		profileLink.appendChild(document.createTextNode(result.listing.account.name));
 		profileLink.target = '_blank';
 		overrides['account-profile'] = profileLink;
 	}
+	overrides['whisper-button'] = buildCopyButton(whisperButtonText, result.listing.whisper);
 
 	overrides['item.corrupted'] = '';
 	overrides['item.mirrored'] = '';
