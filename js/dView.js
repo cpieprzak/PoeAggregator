@@ -341,7 +341,6 @@ function makeModList(compositeMods)
 		{
 			var compositeMod = compositeMods[i];
 			var li = document.createElement('li');
-			li.classList.add('m-' + compositeMod.affixType);
 			var aDiv = document.createElement('span');
 			aDiv.classList.add('mod-display-text');
 			aDiv.append(document.createTextNode(compositeMod.displayText));
@@ -353,9 +352,9 @@ function makeModList(compositeMods)
 				{
 					var itemMod = itemMods[j];
 					var modBox = document.createElement('span');
-					if(itemMod.modType != null  && itemMod.modType.length > 0)
+					if(itemMod.affixType != null  && itemMod.affixType.length > 0)
 					{
-						modBox.classList.add(itemMod.modType);
+						modBox.classList.add('at-' + itemMod.affixType);
 					}
 					if(itemMod.modTier != '' || itemMod.modName != ' ' || itemMod.modRangeString != null)
 					{
@@ -424,7 +423,7 @@ function findValue(field, object, objectPath, depth)
 
 function outputPropertyValues(propValues)
 {
-	var returnValue = '{';
+	var returnValue = '';
 	var isFirst = true;
 	for(var index = 0; index < propValues.length; index++)
 	{
@@ -442,13 +441,13 @@ function outputPropertyValues(propValues)
 			returnValue += value[0];
 		}
 	}
-	returnValue += '}';
+	returnValue += '';
 	return returnValue;
 }
 
 
 
-function ItemMod(modName, modTier, modRangeString)
+function ItemMod(modName, modTier, modRangeString, modType)
 {
 	this.modName = modName;
 	this.modTier = modTier;
@@ -466,7 +465,14 @@ function ItemMod(modName, modTier, modRangeString)
 		}
 		else if(modTier.startsWith('R'))
 		{
-			this.affixType ='crafted';
+			if(modType == 'veiled')
+			{
+				this.affixType ='veiled';
+			}
+			else
+			{
+				this.affixType ='crafted';
+			}
 		}
 	}
 }
@@ -502,9 +508,21 @@ function getMods(item, modType)
 					if(hashes[modType])
 					{
 						for(var i = 0; i < hashes[modType].length; i++)
-						{		
-							fullMods[i].compositeModKey = hashes[modType][i][0];
-							hashToMod[fullMods[i].compositeModKey] = fullMods[i];
+						{	
+							try
+							{
+								fullMods[i].compositeModKey = hashes[modType][i][0];
+								hashToMod[fullMods[i].compositeModKey] = fullMods[i];
+							}
+							catch
+							{
+								console.log("unknown extended error");
+								console.log(item);
+							}
+							if (modType == "veiled")
+							{
+								veiledHashes.push(hashes[modType][i][0]);
+							}
 						}
 					}
 				}
@@ -524,55 +542,61 @@ function getMods(item, modType)
 								if(moreModInfo.magnitudes)
 								{
 									var modMagnitudes = moreModInfo.magnitudes;
-									if(modMagnitudes != null && modMagnitudes.length > 0)
-									{
+								    if(modMagnitudes != null && modMagnitudes.length > 0)
+								    {
 										var keyToCompositeMods = [];
 										for(var v = 0; v < modMagnitudes.length; v++)
-										{	
-											var modHashKey = modMagnitudes[v].hash;
-											var modMin = modMagnitudes[v].min;
-											var modMax = modMagnitudes[v].max;
-											var modRange = '';
-											if(modMin != modMax)
+										{  
+										    var modHashKey = modMagnitudes[v].hash;
+										    var modMin = modMagnitudes[v].min;
+										    var modMax = modMagnitudes[v].max;
+											if (modMax < 0)
 											{
-												modRange = '('+ modMin + '-' + modMax + ')';
-												
-											}
-
-											if(modMin != 0 || modMax != 0)
-											{
-												var itemMod = keyToCompositeMods[modHashKey];
-												
-												if(itemMod == null)
-												{
-													var itemMod = new ItemMod(modName, modTier, modRange);
+												var temp = modMin;
+												modMin = -modMax;
+												modMax = -temp;
+											}											
+										    var modRange = '';
+										    if(modMin != modMax)
+										    {
+										        modRange = '('+ modMin + '-' + modMax + ')';										       
+										    }
+					 
+										    if(modMin != 0 || modMax != 0)
+										    {
+										        var itemMod = keyToCompositeMods[modHashKey];
+										       
+										        if(itemMod == null)
+										        {
+										            var itemMod = new ItemMod(modName, modTier, modRange);
 													try
 													{
-														hashToMod[modHashKey].mods.push(itemMod);
-													}
+											            hashToMod[modHashKey].mods.push(itemMod);
+										            }
 													catch(err)
 													{
-														console.log(err);
+														console.log("no mod for hash:"); 
+														console.log(item);
 													}
-													keyToCompositeMods[modHashKey] = itemMod;
-												}
-												else
-												{
-													if(modRange != '')
-													{
-														itemMod.modRangeString += ' - ' + modRange;
-													}
-												}	
-											}										
+										            keyToCompositeMods[modHashKey] = itemMod;
+										        }
+										        else
+										        {
+										            if(modRange != '')
+										            {
+										                itemMod.modRangeString += ' - ' + modRange;
+										            }
+										        }  
+										    }                                      
 										}
 									}
-									else if (modType == "veiled")
-									{
-										var modHashKey = veiledHashes[i]
-										var modRange = '';
-										var itemMod = new ItemMod(modName, modTier, modRange);
-										hashToMod[modHashKey].mods.push(itemMod);
-									}
+								}
+								else if (modType == "veiled")
+								{
+									var modHashKey = veiledHashes[i]
+									var modRange = '';
+									var itemMod = new ItemMod(modName, modTier, modRange, modType);
+									hashToMod[modHashKey].mods.push(itemMod);
 								}
 							}
 						}

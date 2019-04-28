@@ -14,6 +14,11 @@ body {
 	padding: 0px;
 }
 
+body.small 
+{
+	font-size: 13px;
+}
+
 .hidden {
 	display: none !important;
 }
@@ -35,9 +40,8 @@ img[onclick] {
 }
 
 .icon-wrapper img {
-	margin: .25rem;
-	margin-left: 0rem;
 	max-height: 3rem;
+	max-width: 3rem;
 }
 
 input, textarea, select {
@@ -182,6 +186,11 @@ input, textarea, select {
 	text-align: left;
 }
 
+.item-display:nth-child(odd)
+{
+	background-color: #22242a;
+}
+
 .searchinfo {
 	position: absolute;
 	top: 0px;
@@ -231,17 +240,30 @@ input, textarea, select {
 
 .implicit-mods li {
 	color: #958e87;
-	border-bottom: 1px dotted #003300;
+	border-bottom: 1px solid #958e87;
 }
 
 .explicit-mods {
 	color: #5476FF;
 }
 
-ul {
+ul 
+{
 	display: block;
 	margin-top: 0px;
 	margin-bottom: 3px;
+}
+
+.item-mods
+{
+	display:inline-block;
+	padding-top: .25rem;
+	padding-bottom: .25rem;
+}
+
+.item-mods ul
+{
+	padding-left: 1rem;
 }
 
 ul li {
@@ -252,12 +274,14 @@ li:hover {
 	background-color: #2d3139;
 }
 
-.crafted-mods {
+.crafted-mods 
+{
 	color: #99B4FF;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
 }
 
-.fractured-mods {
+.fractured-mods
+{
 	color: #A29162;
 }
 
@@ -432,9 +456,11 @@ a:visited {
 	display: inline-block;
 }
 
-.icon-wrapper {
+.icon-wrapper 
+{
 	position: relative;
 	display: inline-block;
+    text-align: center;
 }
 
 .icon-wrapper .stack-text {
@@ -557,5 +583,32 @@ a:visited {
 	height: 100%;
 	border-left: 1px solid #E9CF9F;
 	box-sizing: border-box;
+	
+}
+
+.template-field.icon
+{
+	height: 3rem;
+	width: 3rem;
+}
+
+
+.item-mods .at-prefix
+{
+	color: #ec7676;
+}
+
+.item-mods .at-suffix
+{
+	color: #7aaff1;
+}
+
+.item-name-plate
+{
+	font-size:  1.15rem;
+}
+
+.all-item-properties
+{
 	
 }
