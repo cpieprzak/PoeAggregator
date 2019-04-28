@@ -689,3 +689,16 @@ a:visited {
 	background-color: rgba(0,0,0,.5);
 	text-shadow: 1px 1px 1px #000000;
 }
+
+.req-str .data-value span
+{
+	border: 1px solid #990000; 
+}
+.req-int .data-value span
+{
+	border: 1px solid #003399; 
+}
+.req-dex .data-value span
+{
+	border: 1px solid #004d00; 
+}

@@ -215,6 +215,27 @@ function dView(result, searchInfo, display)
 					overrides[overrideKey] = propertyValues;
 				}
 			}				
+		}
+		overrides['requirements.label'] = '';
+		if(result.item.requirements)
+		{
+			overrides['requirements.label'] = 'Requires';
+			for(var k = 0; k < result.item.requirements.length; k++)
+			{
+				var property = result.item.requirements[k];
+				if(property != null && property.name)
+				{
+					var propertyName = property.name;
+					var overrideKey = 'item.requirements.' + propertyName;
+					var propertyValues = '';
+					if(property.values)
+					{
+						var propValues = property.values;
+						propertyValues = outputPropertyValues(propValues);
+					}
+					overrides[overrideKey] = propertyValues;
+				}
+			}				
 		}	
 		if(result.item.additionalProperties)
 		{
