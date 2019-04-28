@@ -141,6 +141,7 @@ function startSockets()
 					searchSocket.onerror = function(event)
 					{
 						var errorMsg = this.searchpart + ' has experienced an error.';
+						console.log(event.data);
 						alert(errorMsg);
 					};
 					searchSocket.onclose = function(event)

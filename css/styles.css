@@ -247,9 +247,25 @@ input, textarea, select {
 	font-weight: bold;
 }
 
+.extra-status
+{
+	display: inline-block;
+}
 .mirrored {
 	color: #0073e6;
 	font-weight: bold;
+}
+
+.elder
+{
+	color: #4b8250;
+	font-weight: bold;	
+}
+
+.shaped
+{
+	color: #b45fff;
+	font-weight: bold;	
 }
 
 .implicit-mods li {

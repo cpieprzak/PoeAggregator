@@ -20,6 +20,8 @@ function dView(result, searchInfo, display)
 
 	overrides['item.corrupted'] = '';
 	overrides['item.mirrored'] = '';
+	overrides['item.shaper'] = '';
+	overrides['item.elder'] = '';
 	if(searchInfo != null)
 	{
 		var searchLink = document.createElement('a');
@@ -47,6 +49,15 @@ function dView(result, searchInfo, display)
 
 	if(result.item)
 	{
+		
+		if(result.item.shaper)
+		{
+			overrides['item.shaped'] = '(Shaped)';
+		}		
+		if(result.item.elder)
+		{
+			overrides['item.elder'] = '(Elder)';
+		}
 		var resultItem = result.item;
 		var itemKeys = Object.keys(resultItem);
 		var itemKeyPanel = document.createElement('div');
