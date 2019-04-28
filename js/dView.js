@@ -1,10 +1,9 @@
-function dView(result, searchInfo, display)
+function dView(result, searchInfo)
 {
 	var overrides = [];
 	var icon = document.createElement("img");
 	icon.src = result.item.icon;
 	overrides['icon'] = icon;
-	console.log(result);
 
 	var whisperButtonText = 'Whisper';
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
@@ -355,20 +354,12 @@ function dView(result, searchInfo, display)
 	{
 		oldVersions[p].classList.add('outdated');
 	}
-	newNode.classList.add(gggId);
-	display.insertBefore(newNode, lastItem);
-	lastItem = newNode;
-
-	allDisplayedItems.push(lastItem);
-	if(allDisplayedItems.length > maxItemsDisplayed)
-	{
-		var oldestItem = allDisplayedItems.shift();
-		if(oldestItem != null)
-		{
-			oldestItem.parentNode.removeChild(oldestItem);
-			oldestItem = null;			
-		}
-	}
+	
+	var refreshButton = document.createElement('div');
+	refreshButton.classList.add('refresh-button');
+	refreshButton.gggid = result.id;
+	
+	return newNode;
 }
 
 function makeModList(compositeMods)

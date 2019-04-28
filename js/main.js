@@ -215,7 +215,20 @@ function addItem(data, searchInfo)
 	for(var resultIndex = 0; resultIndex < results.length; resultIndex++)
 	{	
 		var result = results[resultIndex];
-		dView(result, searchInfo, display);
+		var newNode = dView(result, searchInfo);
+		display.insertBefore(newNode, lastItem);
+		lastItem = newNode;
+
+		allDisplayedItems.push(lastItem);
+		if(allDisplayedItems.length > maxItemsDisplayed)
+		{
+			var oldestItem = allDisplayedItems.shift();
+			if(oldestItem != null)
+			{
+				oldestItem.parentNode.removeChild(oldestItem);
+				oldestItem = null;			
+			}
+		}
 	}
 } 
 
