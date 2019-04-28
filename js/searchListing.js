@@ -48,7 +48,7 @@ function SearchStringBuilder(searchBox)
 	this.generateSearchString = function()
 	{
 		var searchString = '';
-		var searchRows = this.bodyContent.querySelectorAll('.us-table-row');
+		var searchRows = this.bodyContent.querySelectorAll('.search-row');
 		var isFirstRow = true;
 		for(var i = 0; i < searchRows.length; i++)
 		{
@@ -64,26 +64,30 @@ function SearchStringBuilder(searchBox)
 					searchString += ',\n';
 				}
 				var inputs = searchRow.querySelectorAll('.search-control');
+				var rowString = '';
 				for(var j = 0; j < inputs.length; j++)
 				{
-					searchString += '[';
+					console.log(inputs[j]);
+					rowString += '[';
 					if(inputs[j].type =='checkbox')
 					{
 						if(inputs[j].checked)
 						{
-							searchString += '1';
+							rowString += '1';
 						}
 						else
 						{
-							searchString += '0';
+							rowString += '0';
 						}
 					}
 					else
 					{
-						searchString += inputs[j].value;
+						rowString += inputs[j].value;
 					}
-					searchString += ']';
+					rowString += ']';
 				}
+				searchString += rowString;
+				console.log(rowString);
 			}
 		}
 		return searchString;
