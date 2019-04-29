@@ -70,16 +70,7 @@
 									</div>
 								</div>
 								<div class='us-table-row'>
-									<div class='us-table-cell item-price'>
-										<span class='item-price'>
-											<span class='template-field' tf='listing.price.type'>
-												<span class='default-text'>Unpriced</span>
-												<span class='if-present'></span>
-												<span class='data-target'></span>
-											</span>
-											<span class='template-field bold' tf='listing.price.amount'></span>
-											<span class='template-field bold' tf='listing.price.currency'></span>											
-										</span>										
+									<div class='us-table-cell'>									
 										<span class='template-field' tf='item.sockets'></span>
 									</div>
 								</div>
@@ -217,6 +208,20 @@
 						<div class='template-field veiled-mods' tf='item.veiledMods' title='Veiled'> </div>
 					</div>
 				</div>
+				
+				<span class='item-price'>
+					<span class='template-field' tf='listing.price.type'>
+						<span class='default-text'>Unpriced</span>
+						<span class='if-present'></span>
+						<span class='data-target'></span>
+					</span>
+					<span class='template-field bold' tf='listing.price.amount'></span>	
+					<span class='template-field bold' tf='listing.price.currency.img'>
+						<span class='if-present'>x</span>
+						<span class='data-target'></span>
+					</span>											
+				</span>	
+				
 				<span class='template-field' tf='whisper-button'></span>
 				<span class='template-field account-profile' tf='account-profile'>
 					<span class='if-present'>View Account:</span>
@@ -231,6 +236,5 @@
 		<script type="text/javascript" src="./js/searchListing.js"></script>
 		<script type="text/javascript" src="./js/dView.js"></script>
 		<script type="text/javascript" src="./js/main.js"></script>
-		
 	</body>
 </html>

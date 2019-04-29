@@ -293,12 +293,18 @@ input, textarea, select {
 	font-weight: bold;	
 }
 
+.currency-img
+{
+	height: 1.5rem;
+    vertical-align: middle;
+}
 .implicit-mods li {
-	color: #958e87;
-	border-bottom: 1px solid #958e87;
+	color: #958e87;	
+    text-decoration: underline dotted;
 }
 
-.explicit-mods {
+.explicit-mods 
+{
 	color: #5476FF;
 }
 

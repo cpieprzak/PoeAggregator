@@ -7,6 +7,22 @@ function dView(result, searchInfo)
 
 	var whisperButtonText = 'Whisper';
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
+	
+	
+	overrides['listing.price.currency.img'] = '';
+	if(result.listing.price)
+	{
+		var currencyType = result.listing.price.currency;
+		if(currencyType)
+		{
+			var currencyImg = document.createElement('img');
+			currencyImg.title = currencyType;
+			currencyImg.classList.add('currency-img');
+			currencyImg.src = currencyImages[currencyType];
+			overrides['listing.price.currency.img'] = currencyImg;
+		}
+	}
+	
 	if(result.listing.account.name)
 	{
 		whisperButtonText += ' ' + result.listing.account.lastCharacterName;
@@ -22,20 +38,15 @@ function dView(result, searchInfo)
 	overrides['item.mirrored'] = '';
 	overrides['item.shaper'] = '';
 	overrides['item.elder'] = '';
+	overrides['search-comment'] = '';
+	
 	if(searchInfo != null)
 	{		
+		overrides['search-comment'] = searchInfo.searchComment;
 		var searchLink = document.createElement('a');
 		var league = document.getElementById('league').value;
 		searchLink.href = 'https://www.pathofexile.com/trade/search/' + league + '/' + searchInfo.searchUrlPart;
 		var searchText = searchInfo.searchUrlPart;
-		if(searchInfo.searchComment != null)
-		{
-			var searchComment = searchInfo.searchComment;
-			if(searchComment.length > 0)
-			{
-				searchText += ' (' + searchComment + ')';
-			}
-		}
 		searchLink.appendChild(document.createTextNode(searchText));
 		searchLink.target = '_blank';
 		overrides['searchinfo'] = searchLink;
@@ -116,7 +127,7 @@ function dView(result, searchInfo)
 			
 			var currentSocketGroup = 0;
 			var startSocketGroup = document.createElement('span');
-			startSocketGroup.append(document.createTextNode('{'));
+			startSocketGroup.append(document.createTextNode(' {'));
 
 			var socketLink = document.createElement('span');
 			socketLink.classList.add('socket-link');
@@ -175,27 +186,27 @@ function dView(result, searchInfo)
 		}
 		if(result.item.implicitMods)
 		{
-			overrides['item.implicitMods'] = makeModList(getMods(result.item, 'implicit'));
+			overrides['item.implicitMods'] = makeModList(getMods(result.item, 'implicit'), 'implicit');
 		}
 		if(result.item.fracturedMods)
 		{				
-			overrides['item.fracturedMods'] = makeModList(getMods(result.item, 'fractured'));
+			overrides['item.fracturedMods'] = makeModList(getMods(result.item, 'fractured'), 'fractured');
 		}
 		if(result.item.explicitMods)
 		{
-			overrides['item.explicitMods'] = makeModList(getMods(result.item, 'explicit'));		
+			overrides['item.explicitMods'] = makeModList(getMods(result.item, 'explicit'), 'explicit');		
 		}
 		if(result.item.craftedMods)
 		{
-			overrides['item.craftedMods'] = makeModList(getMods(result.item, 'crafted'));					
+			overrides['item.craftedMods'] = makeModList(getMods(result.item, 'crafted'), 'crafted');					
 		}
 		if(result.item.enchantMods)
 		{
-			overrides['item.enchantMods'] = makeModList(getMods(result.item, 'enchant'));		
+			overrides['item.enchantMods'] = makeModList(getMods(result.item, 'enchant'), 'enchant');		
 		}
 		if(result.item.veiledMods)
 		{
-			overrides['item.veiledMods'] = makeModList(getMods(result.item, 'veiled'));
+			overrides['item.veiledMods'] = makeModList(getMods(result.item, 'veiled'), 'veiled');
 		}
 		if(result.item.properties)
 		{
@@ -378,7 +389,7 @@ function dView(result, searchInfo)
 	return newNode;
 }
 
-function makeModList(compositeMods)
+function makeModList(compositeMods, affixListType)
 {
 	var modlist = '';
 	var veiledHashes = [];
@@ -393,7 +404,12 @@ function makeModList(compositeMods)
 			compositeModPanel.classList.add('composite-mod-panel');
 			var compositeText = document.createElement('span');
 			compositeText.classList.add('composite-display-text');
-			compositeText.append(document.createTextNode(compositeMod.displayText));
+			var compositeModDisplayText = compositeMod.displayText;
+			if(affixListType == 'veiled')
+			{
+				compositeModDisplayText = 'Veiled ' + compositeModDisplayText;
+			}
+			compositeText.append(document.createTextNode(compositeModDisplayText));
 			compositeModPanel.append(compositeText);
 			
 
@@ -500,6 +516,7 @@ function outputPropertyValues(propValues)
 		}
 	}
 	returnValue += '';
+	
 	return returnValue;
 }
 
