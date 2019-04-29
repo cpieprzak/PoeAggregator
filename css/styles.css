@@ -514,8 +514,11 @@ a:visited {
 	padding: .25rem;
 }
 
-.template-field.icon {
+.template-field.icon
+ {
 	display: inline-block;
+	height: 3rem;
+	width: 3rem;
 }
 
 .icon-wrapper 
@@ -647,13 +650,6 @@ a:visited {
 	box-sizing: border-box;
 	
 }
-
-.template-field.icon
-{
-	height: 3rem;
-	width: 3rem;
-}
-
 
 .item-mods .at-prefix
 {

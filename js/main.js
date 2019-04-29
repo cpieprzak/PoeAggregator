@@ -85,7 +85,12 @@ function updateTimes()
 		else
 		{
 			var timeInMinutes = ageInSeconds / 60;
-			text = Math.round(timeInMinutes) + ' minutes ago';
+			var minutesString = 'minutes';
+			if(timeInMinutes < 2)
+			{
+				minutesString = 'minute';
+			}
+			text = Math.round(timeInMinutes) + ' ' + minutesString + ' ago';
 		
 		}
 		time.innerHTML = text;
