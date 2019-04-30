@@ -400,7 +400,8 @@ function dView(result, searchInfo)
 	{
 		oldVersions[p].classList.add('outdated');
 	}
-	
+
+	newNode.classList.add(gggId);
 	return newNode;
 }
 
