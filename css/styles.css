@@ -738,6 +738,13 @@ a:visited {
     text-decoration: line-through !important;
 	opacity: .5;
 }
+
+.not-verified
+{
+	background-color: #0a0b0c !important;
+    text-decoration: line-through !important;
+	opacity: .5;
+}
 .outdated .template-field
 {
     text-decoration: line-through !important;

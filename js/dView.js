@@ -291,6 +291,14 @@ function dView(result, searchInfo)
 
 	var template = document.getElementById('item-template');
 	var newNode = template.cloneNode(true);
+	if(result.item.verified)
+	{
+		newNode.classList.add('verified');
+	}
+	else
+	{
+		newNode.classList.add('not-verified');
+	}
 	newNode.id = 'tmp-id';
 	var fields = newNode.querySelectorAll('.template-field');
 	newNode.id = '';
@@ -706,6 +714,10 @@ function refreshItem(data, searchInfo)
 		var result = results[resultIndex];
 		var refreshedItem = dView(result, searchInfo);
 		display.insertBefore(refreshedItem, oldNode);
+		if(lastItem == oldNode)
+		{
+			lastItem = refreshedItem;
+		}		
 		oldNode.parentNode.removeChild(oldNode);
 		allDisplayedItems.push(refreshedItem);
 	}
