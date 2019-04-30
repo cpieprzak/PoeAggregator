@@ -19,7 +19,14 @@ function dView(result, searchInfo)
 			currencyImg.title = currencyType;
 			currencyImg.classList.add('currency-img');
 			currencyImg.src = currencyImages[currencyType];
-			overrides['listing.price.currency.img'] = currencyImg;
+			if(currencyImg.src == null || currencyImg.src.length < 1)
+			{
+				overrides['listing.price.currency.img'] = currencyType;
+			}
+			else
+			{
+				overrides['listing.price.currency.img'] = currencyImg;
+			}
 		}
 	}
 	
