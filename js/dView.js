@@ -714,6 +714,12 @@ function refreshItem(data, searchInfo)
 	{	
 		var result = results[resultIndex];
 		var refreshedItem = dView(result, searchInfo);
+
+		var origCreateDate = oldNode.querySelector('.create-date');
+		var refreshedCreateDate = refreshedItem.querySelector('.create-date');
+		refreshedCreateDate.innerHTML = '';
+		refreshedCreateDate.append(document.createTextNode('Refreshing...'));
+		refreshedCreateDate.createDate = origCreateDate.createDate;
 		display.insertBefore(refreshedItem, oldNode);
 		if(lastItem == oldNode)
 		{

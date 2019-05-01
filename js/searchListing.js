@@ -176,15 +176,43 @@ function SearchStringBuilder(searchBox)
 			newCell.append(activeCheckBox);
 			newRow.append(newCell);
 			
+			var urlPanel = document.createElement('div');
+			urlPanel.classList.add('us-table');
+			var urlRow = document.createElement('div');
+			urlRow.classList.add('us-table-row');
+			urlPanel.append(urlRow);
+			var urlCell = document.createElement('div');
+			urlCell.classList.add('us-table-cell');
+			urlRow.append(urlCell);
+			
 			var newUrl = document.createElement('input');
 			newUrl.classList.add('search-control');
 			newUrl.type = 'text';
 			newUrl.value = '';
 			newUrl.classList.add('search-url');
-			newCell = document.createElement('div');
-			newCell.classList.add('us-table-cell');
-			newCell.append(newUrl);
-			newRow.append(newCell);
+			urlCell.append(newUrl);
+			
+			var goButton = document.createElement('span');
+			goButton.append(document.createTextNode('Go'));
+			goButton.classList.add('button');
+			goButton.urlBox = newUrl;
+			goButton.onclick = function()
+			{
+				if(this.urlBox.value != null && this.urlBox.value.trim().length > 0)
+				{
+					var league = document.getElementById('league').value;
+					var url = 'https://www.pathofexile.com/trade/search/' + league + '/' + this.urlBox.value;
+					
+					window.open(url, '_blank');
+				}
+			};
+
+			urlCell = document.createElement('div');
+			urlCell.classList.add('us-table-cell');
+			urlCell.append(goButton);
+			urlRow.append(urlCell);
+
+			newRow.append(urlPanel);
 			
 			var comment = document.createElement('input');
 			comment.classList.add('search-control');
@@ -435,15 +463,44 @@ function SearchStringBuilder(searchBox)
 			newCell.append(activeCheckBox);
 			newRow.append(newCell);
 			
+			var urlPanel = document.createElement('div');
+			urlPanel.classList.add('us-table');
+			var urlRow = document.createElement('div');
+			urlRow.classList.add('us-table-row');
+			urlPanel.append(urlRow);
+			var urlCell = document.createElement('div');
+			urlCell.classList.add('us-table-cell');
+			urlRow.append(urlCell);
+			
 			var newUrl = document.createElement('input');
 			newUrl.classList.add('search-control');
 			newUrl.type = 'text';
 			newUrl.value = currentSearch.searchUrlPart;
 			newUrl.classList.add('search-url');
-			newCell = document.createElement('div');
-			newCell.classList.add('us-table-cell');
-			newCell.append(newUrl);
-			newRow.append(newCell);
+			urlCell.append(newUrl);
+			
+			var goButton = document.createElement('span');
+			goButton.append(document.createTextNode('Go'));
+			goButton.classList.add('button');
+			goButton.urlBox = newUrl;
+			goButton.onclick = function()
+			{
+				if(this.urlBox.value != null && this.urlBox.value.trim().length > 0)
+				{
+					var league = document.getElementById('league').value;
+					var url = 'https://www.pathofexile.com/trade/search/' + league + '/' + this.urlBox.value;
+					
+					window.open(url, '_blank');
+				}
+			};
+
+			urlCell = document.createElement('div');
+			urlCell.classList.add('us-table-cell');
+			urlCell.append(goButton);
+			urlRow.append(urlCell);
+
+			newRow.append(urlPanel);
+			
 			
 			var comment = document.createElement('input');
 			comment.classList.add('search-control');
