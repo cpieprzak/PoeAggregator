@@ -402,7 +402,6 @@ function dView(result, searchInfo)
 	}
 	
 	newNode.allText = JSON.stringify(newNode).toLowerCase() + getTextFromNode(newNode).toLowerCase();
-	console.log(newNode.allText);
 	var filterText = filterBox.value.toLowerCase().trim();
 	if(newNode.allText && filterText.length > 0)
 	{
@@ -417,7 +416,6 @@ function dView(result, searchInfo)
 		}			
 	}
 	
-	console.log(newNode.allText);
 
 	newNode.classList.add(gggId);
 	newNode.classList.add('unviewed');
