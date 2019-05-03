@@ -401,7 +401,8 @@ function dView(result, searchInfo)
 		oldVersions[p].classList.add('outdated');
 	}
 	
-	newNode.allText = JSON.stringify(result).toLowerCase();
+	newNode.allText = JSON.stringify(newNode).toLowerCase() + getTextFromNode(newNode).toLowerCase();
+	console.log(newNode.allText);
 	var filterText = filterBox.value.toLowerCase().trim();
 	if(newNode.allText && filterText.length > 0)
 	{
