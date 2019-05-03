@@ -400,8 +400,32 @@ function dView(result, searchInfo)
 	{
 		oldVersions[p].classList.add('outdated');
 	}
+	
+	newNode.allText = JSON.stringify(result).toLowerCase();
+	var filterText = filterBox.value.toLowerCase().trim();
+	if(newNode.allText && filterText.length > 0)
+	{
+		var itemText = newNode.allText;
+		if(itemText.indexOf(filterText) > -1)
+		{
+			newNode.classList.remove('hidden');
+		}
+		else
+		{
+			newNode.classList.add('hidden');
+		}			
+	}
+	
+	console.log(newNode.allText);
 
 	newNode.classList.add(gggId);
+	newNode.classList.add('unviewed');
+	newNode.onmouseover = function(event)
+	{
+		this.classList.remove('unviewed');
+		this.onmouseover = null;
+	}
+	
 	return newNode;
 }
 
@@ -729,3 +753,21 @@ function refreshItem(data, searchInfo)
 		allDisplayedItems.push(refreshedItem);
 	}
 } 
+
+function getTextFromNode(node)
+{
+	var text = '';
+	if(node.children && node.children.size > 0)
+	{
+		var children = node.children;
+		for(var i = 0; i < children.length; i++)
+		{
+			text += getTextFromNode(children[i]);
+		}
+	}
+	if(node.textContent)
+	{
+		text += node.textContent.trim();
+	}
+	return text;
+}

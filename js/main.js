@@ -372,3 +372,25 @@ function toggleView()
 		targetElement.classList.add(targetClass);	
 	}
 }
+
+var filterBox = document.getElementById('filter-box');
+filterBox.onkeyup = function()
+{
+	var filterText = this.value.toLowerCase().trim();
+	for(var i = 0; i < allDisplayedItems.length; i++)
+	{
+		var item = allDisplayedItems[i];
+		if(item.allText)
+		{
+			var itemText = item.allText;
+			if(itemText.indexOf(filterText) > -1)
+			{
+				item.classList.remove('hidden');
+			}
+			else
+			{
+				item.classList.add('hidden');
+			}			
+		}
+	}
+};

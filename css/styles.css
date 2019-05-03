@@ -749,3 +749,24 @@ a:visited {
 {
     text-decoration: line-through !important;
 }
+
+.display-window-wrapper .item-display.unviewed .searchinfo
+{
+	
+	animation-duration: 3s;
+	animation-name: flash-new;
+	animation-iteration-count: infinite;
+  	animation-direction: alternate;
+}
+
+@keyframes flash-new 
+{
+	from
+	{
+		background-color: #09111d;
+	}
+	to
+	{
+		background-color: #2d0b11;
+	}
+}
