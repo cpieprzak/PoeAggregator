@@ -24,6 +24,7 @@ function loadLocalData()
 			{
 				storedField.value = storedValue; 
 			}
+			storedField.lastSavedValue = storedValue;
 		}
 	} 
 } 

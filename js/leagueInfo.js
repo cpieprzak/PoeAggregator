@@ -2,6 +2,7 @@ var loadLeagues = function(data, parameters)
 {
 	var leagues = JSON.parse(data);
 	var leagueSelect = document.getElementById('league');
+	var selectedIndex = 0;
 	for(var i = 0; i < leagues.length; i++)
 	{
 		var league = leagues[i];
@@ -16,9 +17,12 @@ var loadLeagues = function(data, parameters)
 		}
 		option.value = league.id;
 		option.append(document.createTextNode(league.id));
+		if(leagueSelect.lastSavedValue && leagueSelect.lastSavedValue == league.id)
+		{
+			selectedIndex = i;
+		}
 		leagueSelect.append(option);
 	}
-
-	loadLocalData();
+	leagueSelect.selectedIndex = selectedIndex;
 };
 callAjax('https://api.pathofexile.com/leagues',loadLeagues);
