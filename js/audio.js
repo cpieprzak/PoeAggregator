@@ -25,23 +25,6 @@ function populateSounds(){
 }
 populateSounds();
 
-function initialiseLocalData() 
-{ 
-	var storedFields = ['searches','league','notification-sound'];
-	
-	for(var key in storedFields)
-	{
-		var storedField = storedFields[key];
-		var storedValue = window.localStorage.getItem(storedField); 
-		if(storedValue != null && storedValue.trim().length > 0)
-		{
-			document.getElementById(storedField).value = storedValue; 
-		}
-	} 
-} 
-initialiseLocalData();
-
-
 function playSound(soundId, volume)
 {
 	if(volume == null || volume == '')

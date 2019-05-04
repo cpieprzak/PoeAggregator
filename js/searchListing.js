@@ -378,12 +378,13 @@ function SearchStringBuilder(searchBox)
 			saveButton.addEventListener('click', function(event)
 			{
 				searchBox.value = searchStringBuilder.generateSearchString();
-				var fields = this.newRow.querySelectorAll('input[type="text"');
+				var fields = this.newRow.querySelectorAll('input,select');
 				for(var j = 0; j < fields.length; j++)
 				{
 					var field = fields[j];
-					field.value ='';
-				}
+					field.value = '';
+				}				
+				saveLocalData();
 				ssb.classList.add('hidden');	
 			});
 			
@@ -396,7 +397,7 @@ function SearchStringBuilder(searchBox)
 			cancelButton.cancelTarget = newRow;
 			cancelButton.addEventListener('click', function(event)
 			{
-				var fields = this.cancelTarget.querySelectorAll('input[type="text"');
+				var fields = this.cancelTarget.querySelectorAll('input,select');
 				for(var j = 0; j < fields.length; j++)
 				{
 					var field = fields[j];

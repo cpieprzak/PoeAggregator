@@ -168,12 +168,9 @@ function startSockets()
 		socketCounterBox.classList.add('active');
 		
 		var league = document.getElementById('league').value;
-		window.localStorage.setItem('league', league);
 		var socketUrl = "wss://pathofexile.com/api/trade/live/" + league + '/';
 		var searchesString = document.getElementById('searches').value;
-		window.localStorage.setItem('searches', searchesString);
 		var soundId = document.getElementById('notification-sound').value;
-		window.localStorage.setItem('notification-sound', soundId);
 
 		var listingManager = new ListingManager(searchesString);
 		var providedSearches = listingManager.searches;

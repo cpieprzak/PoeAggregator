@@ -1,5 +1,6 @@
 function dView(result, searchInfo)
 {
+	//console.log(result);
 	var overrides = [];
 	var icon = document.createElement("img");
 	icon.src = result.item.icon;
