@@ -15,7 +15,7 @@ function loadLocalData()
 				{
 					if(storedField.options[j].value == storedValue)
 					{
-						selectedIndex = j; 
+						selectedIndex = j;
 					}
 				}
 				storedField.selectedIndex = selectedIndex;
