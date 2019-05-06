@@ -2,15 +2,14 @@ function dView(result, searchInfo)
 {
 	//console.log(result);
 	var overrides = [];
-	var icon = document.createElement("img");
+	var icon = document.createElement('img');
 	icon.src = result.item.icon;
 	overrides['icon'] = icon;
 
 	var whisperButtonText = 'Whisper';
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
-	
-	
 	overrides['listing.price.currency.img'] = '';
+	overrides['listing.price.chaos.equiv'] = '';
 	if(result.listing.price)
 	{
 		var currencyType = result.listing.price.currency;
@@ -28,6 +27,25 @@ function dView(result, searchInfo)
 			{
 				overrides['listing.price.currency.img'] = currencyImg;
 			}
+			if(result.listing.price.amount && currencyRatios[currencyType] != null)
+			{
+				var chaosEquiv = currencyRatios[currencyType] * result.listing.price.amount;
+				chaosEquiv = +chaosEquiv.toFixed(2);
+				var equivPanel = document.createElement('span');
+				var equivText = document.createElement('span');
+				equivText.append(document.createTextNode('(~' + chaosEquiv));
+				equivPanel.append(equivText);
+				var chaosImg = document.createElement('img');
+				chaosImg.title = 'chaos';
+				chaosImg.classList.add('currency-img');
+				chaosImg.src = currencyImages['chaos'];
+				equivPanel.append(chaosImg);
+				equivText = document.createElement('span');
+				equivText.append(document.createTextNode(')'));
+				equivPanel.append(equivText);				
+				
+				overrides['listing.price.chaos.equiv'] = equivPanel;				
+			}			
 		}
 	}
 	
@@ -41,7 +59,6 @@ function dView(result, searchInfo)
 		overrides['account-profile'] = profileLink;
 	}
 	overrides['whisper-button'] = buildCopyButton(whisperButtonText, result.listing.whisper);
-
 	overrides['item.corrupted'] = '';
 	overrides['item.mirrored'] = '';
 	overrides['item.shaper'] = '';
@@ -49,7 +66,7 @@ function dView(result, searchInfo)
 	overrides['search-comment'] = '';
 	
 	if(searchInfo != null)
-	{		
+	{
 		overrides['search-comment'] = searchInfo.searchComment;
 		var searchLink = document.createElement('a');
 		var league = document.getElementById('league').value;
