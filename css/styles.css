@@ -566,7 +566,7 @@ a:visited {
 	
 }
 
-.ssb-background
+.modal-background
 {
 	position: fixed;
 	width: 110vw;
@@ -576,11 +576,11 @@ a:visited {
 	background-color: rgba(0,0,0,.7);
 }
 
-.ssb-content-box
+.modal-content-box
 {
 	text-align: center;
 	display: inline-block;
-	top: 15vh;
+	top: 10vh;
 	left: 15vw;
 	position: fixed;
 	width: 70vw;
@@ -591,13 +591,32 @@ a:visited {
 	min-height: 425px;
 }
 
+.modal-wrapper
+{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100vw;
+}
+#currency-ratios
+{
+	position: relative;
+	text-align: center;
+}
+#currency-ratios .modal-content-box
+{	
+	position: relative;
+	width: auto;t
+	top: 0px;
+    left: 0px;
+}
 .all-searches
 {
-	height: 50vh;
+	height: 60vh;
 	overflow-y: scroll;
 }
 
-.ssb-header
+.modal-header
 {		
 	height: 1rem;
 	line-height: 1rem;
@@ -608,14 +627,14 @@ a:visited {
     font-weight: bold;
 }
 
-.ssb-content-box input
+.modal-content-box input
 {
 	display: inline-block;
 	margin: 0px;
 	padding: 0px;
 	width: 100%;
 }
-.ssb-content-box select
+.modal-content-box select
 {
 	display: inline-block;
 	margin: 0px;
@@ -623,7 +642,7 @@ a:visited {
 	width: 100%;
 }
 
-.ssb-footer
+.modal-footer
 {	
 	display: block;
 	height: 1.5rem;
@@ -635,7 +654,7 @@ a:visited {
     font-weight: bold;
 }
 
-.ssb-footer .button
+.modal-footer .button
 {
 	display: inline-block;
 	width: auto;
@@ -643,6 +662,24 @@ a:visited {
 	margin-left: .25rem;
 	margin-right: .25rem;
 	
+}
+
+#currency-body-modal
+{
+	max-height: 70vh;
+	overflow-y: scroll;
+}
+
+#currency-body-modal label
+{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+#currency-body-modal input
+{
+	width: auto;
 }
 
 .search-color div

@@ -29,7 +29,7 @@ function dView(result, searchInfo)
 			}
 			if(result.listing.price.amount && currencyRatios[currencyType] != null)
 			{
-				var chaosEquiv = currencyRatios[currencyType] * result.listing.price.amount;
+				var chaosEquiv = currencyRatios[currencyType].value * result.listing.price.amount;
 				chaosEquiv = +chaosEquiv.toFixed(2);
 				var equivPanel = document.createElement('span');
 				var equivText = document.createElement('span');

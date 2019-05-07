@@ -57,189 +57,33 @@ currencyImages['splinter-esh'] = 'https://web.poecdn.com/image/Art/2DItems/Curre
 currencyImages['splinter-uul'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/Breach/BreachShardPhysical.png?v=25f31f4a5e1ba4540cb7bfa03b82c1e8';
 currencyImages['splinter-chayula'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/Breach/BreachShardChaos.png?v=2c18cbe5384375bbe4643cd8b83ea32d';
 
-function addValues(arrays, value)
+var loadCurrency = function()
 {
-	if(arrays == null)
-	{
-		arrays = [];
-	}
-	arrays.push(value);
-	return arrays;
+	var league = document.getElementById('league').value;
+	var currencyUrl = 'https://api.poe.watch/get?league=' + league + '&category=currency';
+	callAjax(currencyUrl, loadCurrencyAjax);
 }
-tags['Orb of Alteration'] = addValues(tags['Orb of Alteration'],'alt');
-tags['Orb of Fusing'] = addValues(tags['Orb of Fusing'],'fuse');
-tags['Orb of Fusing'] = addValues(tags['Orb of Fusing'],'fus');
-tags['Orb of Alchemy'] = addValues(tags['Orb of Alchemy'],'alch');
-tags['Orb of Alchemy'] = addValues(tags['Orb of Alchemy'],'alchemy');
-tags['Chaos Orb'] = addValues(tags['Chaos Orb'],'chaos');
-tags['Chaos Orb'] = addValues(tags['Chaos Orb'],'choas');
-tags['Gemcutter\'s Prism'] = addValues(tags['Gemcutter\'s Prism'],'gemc');
-tags['Gemcutter\'s Prism'] = addValues(tags['Gemcutter\'s Prism'],'gcp');
-tags['Exalted Orb'] = addValues(tags['Exalted Orb'],'exa');
-tags['Exalted Orb'] = addValues(tags['Exalted Orb'],'ex');
-tags['Exalted Orb'] = addValues(tags['Exalted Orb'],'exalted');
-tags['Chromatic Orb'] = addValues(tags['Chromatic Orb'],'chrom');
-tags['Chromatic Orb'] = addValues(tags['Chromatic Orb'],'chrome');
-tags['Jeweller\'s Orb'] = addValues(tags['Jeweller\'s Orb'],'jew');
-tags['Orb of Chance'] = addValues(tags['Orb of Chance'],'chance');
-tags['Orb of Chance'] = addValues(tags['Orb of Chance'],'chanc');
-tags['Cartographer\'s Chisel'] = addValues(tags['Cartographer\'s Chisel'],'chisel');
-tags['Cartographer\'s Chisel'] = addValues(tags['Cartographer\'s Chisel'],'cart');
-tags['Orb of Scouring'] = addValues(tags['Orb of Scouring'],'scour');
-tags['Blessed Orb'] = addValues(tags['Blessed Orb'],'blesse');
-tags['Orb of Regret'] = addValues(tags['Orb of Regret'],'regret');
-tags['Orb of Regret'] = addValues(tags['Orb of Regret'],'regr');
-tags['Regal Orb'] = addValues(tags['Regal Orb'],'regal');
-tags['Regal Orb'] = addValues(tags['Regal Orb'],'rega');
-tags['Divine Orb'] = addValues(tags['Divine Orb'],'divine');
-tags['Divine Orb'] = addValues(tags['Divine Orb'],'div');
-tags['Vaal Orb'] = addValues(tags['Vaal Orb'],'vaal');
-tags['Scroll of Wisdom'] = addValues(tags['Scroll of Wisdom'],'wis');
-tags['Portal Scroll'] = addValues(tags['Portal Scroll'],'port');
-tags['Armourer\'s Scrap'] = addValues(tags['Armourer\'s Scrap'],'armour');
-tags['Blacksmith\'s Whetstone'] = addValues(tags['Blacksmith\'s Whetstone'],'blacksmith');
-tags['Blacksmith\'s Whetstone'] = addValues(tags['Blacksmith\'s Whetstone'],'whetstone');
-tags['Glassblower\'s Bauble'] = addValues(tags['Glassblower\'s Bauble'],'glass');
-tags['Glassblower\'s Bauble'] = addValues(tags['Glassblower\'s Bauble'],'bauble');
-tags['Orb of Transmutation'] = addValues(tags['Orb of Transmutation'],'tra');
-tags['Orb of Augmentation'] = addValues(tags['Orb of Augmentation'],'aug');
-tags['Mirror of Kalandra'] = addValues(tags['Mirror of Kalandra'],'mir');
-tags['Mirror of Kalandra'] = addValues(tags['Mirror of Kalandra'],'kal');
-tags['Eternal Orb'] = addValues(tags['Eternal Orb'],'ete');
-tags['Perandus Coin'] = addValues(tags['Perandus Coin'],'coin');
-tags['Perandus Coin'] = addValues(tags['Perandus Coin'],'coins');
-tags['Perandus Coin'] = addValues(tags['Perandus Coin'],'perandus');
-tags['Silver Coin'] = addValues(tags['Silver Coin'],'silver');
-tags['Sacrifice at Dusk'] = addValues(tags['Sacrifice at Dusk'],'dusk');
-tags['Sacrifice at Midnight'] = addValues(tags['Sacrifice at Midnight'],'mid');
-tags['Sacrifice at Dawn'] = addValues(tags['Sacrifice at Dawn'],'dawn');
-tags['Sacrifice at Noon'] = addValues(tags['Sacrifice at Noon'],'noon');
-tags['Mortal Grief'] = addValues(tags['Mortal Grief'],'grie');
-tags['Mortal Rage'] = addValues(tags['Mortal Rage'],'rage');
-tags['Mortal Hope'] = addValues(tags['Mortal Hope'],'hope');
-tags['Mortal Ignorance'] = addValues(tags['Mortal Ignorance'],'ign');
-tags['Eber\'s Key'] = addValues(tags['Eber\'s Key'],'eber');
-tags['Yriel\'s Key'] = addValues(tags['Yriel\'s Key'],'yriel');
-tags['Inya\'s Key'] = addValues(tags['Inya\'s Key'],'inya');
-tags['Volkuur\'s Key'] = addValues(tags['Volkuur\'s Key'],'volkuur');
-tags['Offering to the Goddess'] = addValues(tags['Offering to the Goddess'],'offer');
-tags['Fragment of the Hydra'] = addValues(tags['Fragment of the Hydra'],'hydra');
-tags['Fragment of the Phoenix'] = addValues(tags['Fragment of the Phoenix'],'phoenix');
-tags['Fragment of the Phoenix'] = addValues(tags['Fragment of the Phoenix'],'phenix');
-tags['Fragment of the Phoenix'] = addValues(tags['Fragment of the Phoenix'],'pheon');
-tags['Fragment of the Minotaur'] = addValues(tags['Fragment of the Minotaur'],'minot');
-tags['Fragment of the Chimera'] = addValues(tags['Fragment of the Chimera'],'chimer');
-tags['Apprentice Cartographer\'s Sextant'] = addValues(tags['Apprentice Cartographer\'s Sextant'],'apprentice-sextant');
-tags['Journeyman Cartographer\'s Sextant'] = addValues(tags['Journeyman Cartographer\'s Sextant'],'journeyman-sextant');
-tags['Master Cartographer\'s Sextant'] = addValues(tags['Master Cartographer\'s Sextant'],'master-sextant');
-tags['Sacrifice set'] = addValues(tags['Sacrifice set'],'sacrifice-set');
-tags['Mortal set'] = addValues(tags['Mortal set'],'mortal-set');
-tags['Pale Court set'] = addValues(tags['Pale Court set'],'pale-court-set');
-tags['Shaper set'] = addValues(tags['Shaper set'],'shaper-set');
-tags['Splinter of Xoph'] = addValues(tags['Splinter of Xoph'],'splinter-xoph');
-tags['Splinter of Xoph'] = addValues(tags['Splinter of Xoph'],'splinter-of-xoph');
-tags['Splinter of Tul'] = addValues(tags['Splinter of Tul'],'splinter-tul');
-tags['Splinter of Tul'] = addValues(tags['Splinter of Tul'],'splinter-of-tul');
-tags['Splinter of Esh'] = addValues(tags['Splinter of Esh'],'splinter-esh');
-tags['Splinter of Esh'] = addValues(tags['Splinter of Esh'],'splinter-of-esh');
-tags['Splinter of Uul-Netol'] = addValues(tags['Splinter of Uul-Netol'],'splinter-uul-netol');
-tags['Splinter of Uul-Netol'] = addValues(tags['Splinter of Uul-Netol'],'splinter-of-uul-netol');
-tags['Splinter of Chayula'] = addValues(tags['Splinter of Chayula'],'splinter-chayula');
-tags['Splinter of Chayula'] = addValues(tags['Splinter of Chayula'],'splinter-of-chayula');
-tags['Blessing of Xoph'] = addValues(tags['Blessing of Xoph'],'blessing-xoph');
-tags['Blessing of Xoph'] = addValues(tags['Blessing of Xoph'],'blessing-of-xoph');
-tags['Blessing of Tul'] = addValues(tags['Blessing of Tul'],'blessing-tul');
-tags['Blessing of Tul'] = addValues(tags['Blessing of Tul'],'blessing-of-tul');
-tags['Blessing of Esh'] = addValues(tags['Blessing of Esh'],'blessing-esh');
-tags['Blessing of Esh'] = addValues(tags['Blessing of Esh'],'blessing-of-esh');
-tags['Blessing of Uul-Netol'] = addValues(tags['Blessing of Uul-Netol'],'blessing-uul-netol');
-tags['Blessing of Uul-Netol'] = addValues(tags['Blessing of Uul-Netol'],'blessing-of-uul-netol');
-tags['Blessing of Chayula'] = addValues(tags['Blessing of Chayula'],'blessing-chayula');
-tags['Blessing of Chayula'] = addValues(tags['Blessing of Chayula'],'blessing-of-chayula');
-tags['Xoph\'s Breachstone'] = addValues(tags['Xoph\'s Breachstone'],'xophs-breachstone');
-tags['Tul\'s Breachstone'] = addValues(tags['Tul\'s Breachstone'],'tuls-breachstone');
-tags['Esh\'s Breachstone'] = addValues(tags['Esh\'s Breachstone'],'eshs-breachstone');
-tags['Uul-Netol\'s Breachstone'] = addValues(tags['Uul-Netol\'s Breachstone'],'uul-netol-breachstone');
-tags['Chayula\'s Breachstone'] = addValues(tags['Chayula\'s Breachstone'],'chayulas-breachstone');
-tags['Essence of Delirium'] = addValues(tags['Essence of Delirium'],'essence-of-delirium');
-tags['Essence of Horror'] = addValues(tags['Essence of Horror'],'essence-of-horror');
-tags['Essence of Hysteria'] = addValues(tags['Essence of Hysteria'],'essence-of-hysteria');
-tags['Essence of Insanity'] = addValues(tags['Essence of Insanity'],'essence-of-insanity');
-tags['Screaming Essence of Anger'] = addValues(tags['Screaming Essence of Anger'],'screaming-essence-of-anger');
-tags['Shrieking Essence of Anger'] = addValues(tags['Shrieking Essence of Anger'],'shrieking-essence-of-anger');
-tags['Deafening Essence of Anger'] = addValues(tags['Deafening Essence of Anger'],'deafening-essence-of-anger');
-tags['Screaming Essence of Anguish'] = addValues(tags['Screaming Essence of Anguish'],'screaming-essence-of-anguish');
-tags['Shrieking Essence of Anguish'] = addValues(tags['Shrieking Essence of Anguish'],'shrieking-essence-of-anguish');
-tags['Deafening Essence of Anguish'] = addValues(tags['Deafening Essence of Anguish'],'deafening-essence-of-anguish');
-tags['Screaming Essence of Contempt'] = addValues(tags['Screaming Essence of Contempt'],'screaming-essence-of-contempt');
-tags['Shrieking Essence of Contempt'] = addValues(tags['Shrieking Essence of Contempt'],'shrieking-essence-of-contempt');
-tags['Deafening Essence of Contempt'] = addValues(tags['Deafening Essence of Contempt'],'deafening-essence-of-contempt');
-tags['Screaming Essence of Doubt'] = addValues(tags['Screaming Essence of Doubt'],'screaming-essence-of-doubt');
-tags['Shrieking Essence of Doubt'] = addValues(tags['Shrieking Essence of Doubt'],'shrieking-essence-of-doubt');
-tags['Deafening Essence of Doubt'] = addValues(tags['Deafening Essence of Doubt'],'deafening-essence-of-doubt');
-tags['Screaming Essence of Dread'] = addValues(tags['Screaming Essence of Dread'],'screaming-essence-of-dread');
-tags['Shrieking Essence of Dread'] = addValues(tags['Shrieking Essence of Dread'],'shrieking-essence-of-dread');
-tags['Deafening Essence of Dread'] = addValues(tags['Deafening Essence of Dread'],'deafening-essence-of-dread');
-tags['Screaming Essence of Envy'] = addValues(tags['Screaming Essence of Envy'],'screaming-essence-of-envy');
-tags['Shrieking Essence of Envy'] = addValues(tags['Shrieking Essence of Envy'],'shrieking-essence-of-envy');
-tags['Deafening Essence of Envy'] = addValues(tags['Deafening Essence of Envy'],'deafening-essence-of-envy');
-tags['Screaming Essence of Fear'] = addValues(tags['Screaming Essence of Fear'],'screaming-essence-of-fear');
-tags['Shrieking Essence of Fear'] = addValues(tags['Shrieking Essence of Fear'],'shrieking-essence-of-fear');
-tags['Deafening Essence of Fear'] = addValues(tags['Deafening Essence of Fear'],'deafening-essence-of-fear');
-tags['Screaming Essence of Greed'] = addValues(tags['Screaming Essence of Greed'],'screaming-essence-of-greed');
-tags['Shrieking Essence of Greed'] = addValues(tags['Shrieking Essence of Greed'],'shrieking-essence-of-greed');
-tags['Deafening Essence of Greed'] = addValues(tags['Deafening Essence of Greed'],'deafening-essence-of-greed');
-tags['Screaming Essence of Hatred'] = addValues(tags['Screaming Essence of Hatred'],'screaming-essence-of-hatred');
-tags['Shrieking Essence of Hatred'] = addValues(tags['Shrieking Essence of Hatred'],'shrieking-essence-of-hatred');
-tags['Deafening Essence of Hatred'] = addValues(tags['Deafening Essence of Hatred'],'deafening-essence-of-hatred');
-tags['Screaming Essence of Loathing'] = addValues(tags['Screaming Essence of Loathing'],'screaming-essence-of-loathing');
-tags['Shrieking Essence of Loathing'] = addValues(tags['Shrieking Essence of Loathing'],'shrieking-essence-of-loathing');
-tags['Deafening Essence of Loathing'] = addValues(tags['Deafening Essence of Loathing'],'deafening-essence-of-loathing');
-tags['Screaming Essence of Misery'] = addValues(tags['Screaming Essence of Misery'],'screaming-essence-of-misery');
-tags['Shrieking Essence of Misery'] = addValues(tags['Shrieking Essence of Misery'],'shrieking-essence-of-misery');
-tags['Deafening Essence of Misery'] = addValues(tags['Deafening Essence of Misery'],'deafening-essence-of-misery');
-tags['Screaming Essence of Rage'] = addValues(tags['Screaming Essence of Rage'],'screaming-essence-of-rage');
-tags['Shrieking Essence of Rage'] = addValues(tags['Shrieking Essence of Rage'],'shrieking-essence-of-rage');
-tags['Deafening Essence of Rage'] = addValues(tags['Deafening Essence of Rage'],'deafening-essence-of-rage');
-tags['Screaming Essence of Scorn'] = addValues(tags['Screaming Essence of Scorn'],'screaming-essence-of-scorn');
-tags['Shrieking Essence of Scorn'] = addValues(tags['Shrieking Essence of Scorn'],'shrieking-essence-of-scorn');
-tags['Deafening Essence of Scorn'] = addValues(tags['Deafening Essence of Scorn'],'deafening-essence-of-scorn');
-tags['Screaming Essence of Sorrow'] = addValues(tags['Screaming Essence of Sorrow'],'screaming-essence-of-sorrow');
-tags['Shrieking Essence of Sorrow'] = addValues(tags['Shrieking Essence of Sorrow'],'shrieking-essence-of-sorrow');
-tags['Deafening Essence of Sorrow'] = addValues(tags['Deafening Essence of Sorrow'],'deafening-essence-of-sorrow');
-tags['Screaming Essence of Spite'] = addValues(tags['Screaming Essence of Spite'],'screaming-essence-of-spite');
-tags['Shrieking Essence of Spite'] = addValues(tags['Shrieking Essence of Spite'],'shrieking-essence-of-spite');
-tags['Deafening Essence of Spite'] = addValues(tags['Deafening Essence of Spite'],'deafening-essence-of-spite');
-tags['Screaming Essence of Suffering'] = addValues(tags['Screaming Essence of Suffering'],'screaming-essence-of-suffering');
-tags['Shrieking Essence of Suffering'] = addValues(tags['Shrieking Essence of Suffering'],'shrieking-essence-of-suffering');
-tags['Deafening Essence of Suffering'] = addValues(tags['Deafening Essence of Suffering'],'deafening-essence-of-suffering');
-tags['Screaming Essence of Torment'] = addValues(tags['Screaming Essence of Torment'],'screaming-essence-of-torment');
-tags['Shrieking Essence of Torment'] = addValues(tags['Shrieking Essence of Torment'],'shrieking-essence-of-torment');
-tags['Deafening Essence of Torment'] = addValues(tags['Deafening Essence of Torment'],'deafening-essence-of-torment');
-tags['Screaming Essence of Woe'] = addValues(tags['Screaming Essence of Woe'],'screaming-essence-of-woe');
-tags['Shrieking Essence of Woe'] = addValues(tags['Shrieking Essence of Woe'],'shrieking-essence-of-woe');
-tags['Deafening Essence of Woe'] = addValues(tags['Deafening Essence of Woe'],'deafening-essence-of-woe');
-tags['Screaming Essence of Wrath'] = addValues(tags['Screaming Essence of Wrath'],'screaming-essence-of-wrath');
-tags['Shrieking Essence of Wrath'] = addValues(tags['Shrieking Essence of Wrath'],'shrieking-essence-of-wrath');
-tags['Deafening Essence of Wrath'] = addValues(tags['Deafening Essence of Wrath'],'deafening-essence-of-wrath');
-tags['Screaming Essence of Zeal'] = addValues(tags['Screaming Essence of Zeal'],'screaming-essence-of-zeal');
-tags['Shrieking Essence of Zeal'] = addValues(tags['Shrieking Essence of Zeal'],'shrieking-essence-of-zeal');
-tags['Deafening Essence of Zeal'] = addValues(tags['Deafening Essence of Zeal'],'deafening-essence-of-zeal');
-tags['Remnant of Corruption'] = addValues(tags['Remnant of Corruption'],'remnant-of-corruption');
-tags['Divine Vessel'] = addValues(tags['Divine Vessel'],'divine-vessel');
-tags['Orb of Annulment'] = addValues(tags['Orb of Annulment'],'orb-of-annulment');
-tags['Orb of Binding'] = addValues(tags['Orb of Binding'],'orb-of-binding');
-tags['Orb of Horizons'] = addValues(tags['Orb of Horizons'],'orb-of-horizons');
-tags['Harbinger\'s Orb'] = addValues(tags['Harbinger\'s Orb'],'harbingers-orb');
-tags['Engineer\'s Orb'] = addValues(tags['Engineer\'s Orb'],'engineers-orb');
-tags['Ancient Orb'] = addValues(tags['Ancient Orb'],'ancient-orb');
-tags['Annulment Shard'] = addValues(tags['Annulment Shard'],'annulment-shard');
-tags['Mirror Shard'] = addValues(tags['Mirror Shard'],'mirror-shard');
-tags['Exalted Shard'] = addValues(tags['Exalted Shard'],'exalted-shard');
 
-var loadCurrency = function(data, parameters)
+currencyRatios = [];
+var mapCurrencyInputs = function mapCurrencyInputs()
 {
-	currencyRatios = [];
+	var currencyInputs = document.querySelectorAll('#currency-body-modal input');
+	for (var i = 0; i < currencyInputs.length; i++)
+	{
+		var cssClasses = currencyInputs[i].classList;
+		for (var j = 0; j < cssClasses.length; j++)
+		{
+			var cssClass = cssClasses[j];
+			if(cssClass != null && cssClass != 'local-data' && cssClass.length > 0)
+			{
+				currencyRatios[cssClass] = currencyInputs[i];
+			}
+		}
+	}
+}
+mapCurrencyInputs();
+var loadCurrencyAjax = function(data, parameters)
+{
 	var pulledRatios = JSON.parse(data);
 	for (var i = 0; i < pulledRatios.length; i++)
 	{
@@ -248,13 +92,7 @@ var loadCurrency = function(data, parameters)
 		var medianPrice = currencyRatio.median;
 		var acceptedTags = tags[currencyName];
 		
-		if(acceptedTags != null)
-		{
-			for(var j = 0; j < acceptedTags.length; j++)
-			{
-				var tagShortName = acceptedTags[j];
-				currencyRatios[tagShortName] = medianPrice;
-			}
-		}
+		var input = document.getElementById(currencyName);
+		input.value = medianPrice;
 	}
 };

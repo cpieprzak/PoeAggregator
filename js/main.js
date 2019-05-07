@@ -110,13 +110,12 @@ function startSockets()
 		var socketCounterBox = document.getElementById('socket-count');
 		socketCounterBox.classList.add('active');
 		
-		var league = document.getElementById('league').value;
-		var currencyUrl = 'https://api.poe.watch/get?league=' + league + '&category=currency';
-		if(currencyRatios == null || currencyRatios.length < 1)
+		var exPrice = document.getElementById('Exalted Orb');
+		if(exPrice.value == null || exPrice.value.length < 1)
 		{
-			callAjax(currencyUrl, loadCurrency);
+			loadCurrency();
 		}
-		
+		var league = document.getElementById('league').value;
 		var socketUrl = "wss://pathofexile.com/api/trade/live/" + league + '/';
 		var searchesString = document.getElementById('searches').value;
 		var soundId = document.getElementById('notification-sound').value;
@@ -133,6 +132,7 @@ function startSockets()
 					activeCount++;
 				}
 			}
+			
 			
 			for(var i = 0; i < providedSearches.length; i++)
 			{
@@ -290,6 +290,15 @@ function showHide()
 	}
 }
 
+function showCurrencyRatios()
+{
+	document.getElementById('currency-ratios').classList.remove('hidden');
+}
+
+function hideCurrencyRatios()
+{
+	document.getElementById('currency-ratios').classList.add('hidden');
+}
 
 function toggleFontSize()
 {

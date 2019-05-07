@@ -7,6 +7,7 @@ function ListingManager(listingString)
 		for (var i = 0; i < listedSearches.length; i++)
 		{
 			var newListing = new SearchListing(listedSearches[i]);
+			console.log(newListing);
 			this.searches.push(newListing);
 		}
 	}
@@ -127,7 +128,7 @@ function SearchStringBuilder(searchBox)
 			ssb.id = 'search-string-builder';
 			var ssbBackground = document.createElement('div');
 			ssbBackground.ssb = ssb;
-			ssbBackground.classList.add('ssb-background');
+			ssbBackground.classList.add('modal-background');
 			ssbBackground.onclick = function closeSsb(event)
 			{
 				ssb.classList.add('hidden');	
@@ -135,9 +136,9 @@ function SearchStringBuilder(searchBox)
 			ssb.append(ssbBackground);
 			
 			var ssbContent = document.createElement('div');
-			ssbContent.classList.add('ssb-content-box');
+			ssbContent.classList.add('modal-content-box');
 			var ssbHeader = document.createElement('div');
-			ssbHeader.classList.add('ssb-header');
+			ssbHeader.classList.add('modal-header');
 			ssbHeader.append(document.createTextNode('Modify Searches'));
 			ssbContent.append(ssbHeader);
 			this.reloadContent();
@@ -353,7 +354,7 @@ function SearchStringBuilder(searchBox)
 			
 
 			var ssbFooter = document.createElement('div');
-			ssbFooter.classList.add('ssb-footer');
+			ssbFooter.classList.add('modal-footer');
 			ssbContent.append(ssbFooter);			
 
 			var footerButtons = document.createElement('div');
