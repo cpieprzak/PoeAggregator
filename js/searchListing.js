@@ -7,7 +7,6 @@ function ListingManager(listingString)
 		for (var i = 0; i < listedSearches.length; i++)
 		{
 			var newListing = new SearchListing(listedSearches[i]);
-			console.log(newListing);
 			this.searches.push(newListing);
 		}
 	}
