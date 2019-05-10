@@ -621,6 +621,10 @@ a:visited {
 	margin-top: .5rem
 }
 
+#league, #filter-box
+{
+	width: 6rem;
+}
 .modal-header
 {		
 	background-color: #2c6ace;
