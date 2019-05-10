@@ -358,6 +358,40 @@ function SearchStringBuilder(searchBox)
 
 			var footerButtons = document.createElement('div');
 			
+			var sortButton = document.createElement('input');
+			sortButton.type = "button";
+			sortButton.className = "button";
+			sortButton.value = 'Sort Actives';
+			sortButton.addEventListener('click', function(event)
+			{
+				var searchTable = document.getElementById('all-searches-table');
+				var actives = [];
+				var inactives = [];
+				var searchRows = searchTable.querySelectorAll('.search-row');
+				for(var i = 0; i < searchRows.length; i++)
+				{
+					var row = searchRows[i];
+					var activeInput = row.querySelector('.search-active');
+					if (activeInput.checked)
+					{
+						actives.push(row);
+					}
+					else
+					{
+						inactives.push(row);
+					}
+				}
+				for(var i = 0; i < actives.length; i++)
+				{
+					searchTable.append(actives[i]);
+				}
+				for(var i = 0; i < inactives.length; i++)
+				{
+					searchTable.append(inactives[i]);
+				}
+			});
+			footerButtons.append(sortButton);
+			
 			var copyButton = document.createElement('input');
 			copyButton.type = "button";
 			copyButton.className = "button";
@@ -427,6 +461,7 @@ function SearchStringBuilder(searchBox)
 		this.bodyContent.classList.add('all-searches');
 		var searchTable = document.createElement('div');
 		searchTable.classList.add('us-table');
+		searchTable.id = 'all-searches-table';
 		this.bodyContent.append(searchTable);
 		var headerRow = document.createElement('div');
 		headerRow.classList.add('search-header-row');
