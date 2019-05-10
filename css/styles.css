@@ -179,6 +179,52 @@ input, textarea, select {
 	white-space: nowrap;
 }
 
+.row-position-panel
+{
+	text-align: center;
+	padding-right: .125rem;
+	margin-top: .125rem;
+	margin-bottom: .125rem;
+}
+.up-button
+{
+	margin-left: .1rem;
+	box-sizing: border-box;
+	display: block;
+	width: 0; 
+	height: .5rem; 
+	margin-bottom: .25rem; 
+	border-left: .3rem solid transparent;
+	border-right: .3rem solid transparent;	  
+	border-bottom: .5rem solid transparent;
+}
+.down-button
+{
+	margin-left: .1rem;
+	box-sizing: border-box;
+	display: block;
+	width: 0; 
+	height: .5rem; 
+	border-top: .5rem solid transparent;
+	border-left: .3rem solid transparent;
+	border-right: .3rem solid transparent;	  
+}
+
+.search-row:hover .up-button
+{
+	border-bottom: .5rem solid #2c6ace;
+}
+
+.search-row:hover .down-button
+{
+	border-top: .5rem solid #2c6ace;
+}
+
+.add-new-search .row-position-panel
+{
+	display: none;
+}
+
 .button:hover
 {
 	background-color: #1f4c93;
