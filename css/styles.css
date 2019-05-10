@@ -197,6 +197,7 @@ input, textarea, select {
 	border-left: .3rem solid transparent;
 	border-right: .3rem solid transparent;	  
 	border-bottom: .5rem solid transparent;
+	cursor: pointer;
 }
 .down-button
 {
@@ -207,14 +208,22 @@ input, textarea, select {
 	height: .5rem; 
 	border-top: .5rem solid transparent;
 	border-left: .3rem solid transparent;
-	border-right: .3rem solid transparent;	  
+	border-right: .3rem solid transparent;	 
+	cursor: pointer; 
 }
 
 .search-row:hover .up-button
 {
 	border-bottom: .5rem solid #2c6ace;
 }
-
+.search-row:hover .up-button:hover
+{
+	border-bottom: .5rem solid #008000;
+}
+.search-row:hover .down-button:hover
+{
+	border-top: .5rem solid #008000;
+}
 .search-row:hover .down-button
 {
 	border-top: .5rem solid #2c6ace;
