@@ -314,8 +314,8 @@ function SearchStringBuilder(searchBox)
 			
 			var color = document.createElement('input');
 			color.classList.add('search-control');
-			color.type = 'text';
-			color.value = '';
+			color.type = 'color';
+			color.value = '#1C1E23';
 			color.classList.add('search-color');
 			newCell = document.createElement('div');
 			newCell.classList.add('us-table-cell');
@@ -331,7 +331,7 @@ function SearchStringBuilder(searchBox)
 			addNewButton.onclick = function()
 			{
 				var clonedNode = this.cloneTarget.cloneNode(true);
-				if(clonedNode.querySelector('input[type="text"]').value.trim() != '')
+				if(clonedNode.querySelector('input').value.trim() != '')
 				{				
 					var soundId = clonedNode.querySelector('.search-control.search-sound-id');
 					soundId.value =  this.cloneTarget.querySelector('.search-control.search-sound-id').value;
@@ -751,7 +751,7 @@ function SearchStringBuilder(searchBox)
 			
 			var color = document.createElement('input');
 			color.classList.add('search-control');
-			color.type = 'text';
+			color.type = 'color';
 			color.value = currentSearch.color;
 			color.classList.add('search-color');
 			newCell = document.createElement('div');
