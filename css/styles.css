@@ -616,15 +616,31 @@ a:visited {
 	overflow-y: scroll;
 }
 
+#all-searches-table
+{
+	margin-top: .5rem
+}
+
 .modal-header
 {		
-	height: 1rem;
-	line-height: 1rem;
 	background-color: #2c6ace;
 	padding: .5rem;
     border-radius: 1rem 1rem 0px 0px;
     color: white;
     font-weight: bold;
+    position: relative;
+}
+
+.filter-panel
+{
+	position: absolute;
+	top: .25rem;
+	left: 1rem;
+}
+
+.modal-content-box .filter-panel  input
+{
+	width: 8rem;
 }
 
 .modal-content-box input

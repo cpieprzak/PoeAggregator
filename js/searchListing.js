@@ -134,11 +134,42 @@ function SearchStringBuilder(searchBox)
 			} 
 			ssb.append(ssbBackground);
 			
+			var filterPanel = document.createElement('div');
+			filterPanel.classList.add('filter-panel');
+			var filterInput = document.createElement('input');
+			filterInput.type = 'text';
+			filterInput.value = 'Filter By Comment';
+			filterInput.onclick = function()
+			{
+				this.value =  '';
+			}
+			filterInput.onkeyup = function()
+			{
+				var searchTable = document.getElementById('all-searches-table');
+				var searchRows = searchTable.querySelectorAll('.search-row');
+				for(var i = 0; i < searchRows.length; i++)
+				{
+					var filterText = this.value.toLowerCase();
+					var row = searchRows[i];
+					var commentInput = row.querySelector('.search-comment');
+					var commentText = commentInput.value.toLowerCase();
+					if (commentText.indexOf(filterText) > -1)
+					{
+						row.classList.remove('hidden');
+					}
+					else
+					{
+						row.classList.add('hidden');
+					}
+				}
+			};
+			filterPanel.append(filterInput);
 			var ssbContent = document.createElement('div');
 			ssbContent.classList.add('modal-content-box');
 			var ssbHeader = document.createElement('div');
 			ssbHeader.classList.add('modal-header');
 			ssbHeader.append(document.createTextNode('Modify Searches'));
+			ssbHeader.append(filterPanel);
 			ssbContent.append(ssbHeader);
 			this.reloadContent();
 			ssbContent.append(this.bodyContent);
