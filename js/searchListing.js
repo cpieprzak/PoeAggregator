@@ -331,7 +331,7 @@ function SearchStringBuilder(searchBox)
 			addNewButton.onclick = function()
 			{
 				var clonedNode = this.cloneTarget.cloneNode(true);
-				if(clonedNode.querySelector('input').value.trim() != '')
+				if(clonedNode.querySelector('.search-url').value.trim() != '')
 				{				
 					var soundId = clonedNode.querySelector('.search-control.search-sound-id');
 					soundId.value =  this.cloneTarget.querySelector('.search-control.search-sound-id').value;
