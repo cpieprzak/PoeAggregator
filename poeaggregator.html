@@ -95,9 +95,7 @@
 						</div>
 					</div>
 				</div>
-				<div class='all-item-properties'>
-					<div class='template-field bold' tf='item.pseudoMods'></div>
-					
+				<div class='all-item-properties'>					
 					<div>
 						<span class='template-field' tf='requirements.label'></span>
 						<span class='template-field' tf='item.requirements.Level'>
@@ -220,7 +218,7 @@
 						<div class='template-field veiled-mods' tf='item.veiledMods' title='Veiled'> </div>
 					</div>
 				</div>
-				
+						
 				<span class='item-price'>
 					<span class='template-field' tf='listing.price.type'>
 						<span class='default-text'>Unpriced</span>
@@ -233,7 +231,12 @@
 						<span class='data-target'></span>
 					</span>	
 					<span class='template-field bold' tf='listing.price.chaos.equiv'></span>										
-				</span>	
+				</span>
+				<span class='template-field bold item-price' tf='item.total-sum-per-chaos'>				
+					<span class='if-present'>(</span>
+					<span class='data-target'></span>			
+					<span class='if-present'>s/c)</span>
+				</span>		
 				
 				<span class='template-field' tf='whisper-button'></span>
 				<span class='template-field account-profile' tf='account-profile'>
@@ -241,6 +244,10 @@
 					<span class='data-target'></span>
 				</span>
 				<span class='template-field' tf='copy-item-button'></span>
+				<span class='template-field bold' tf='item.total-sum'>	
+					<span class='if-present item-price'>Sum: </span>
+					<span class='data-target item-price'></span>
+				</span>	
 				<div class='template-field item-key-panel' tf='itemKeyPanel'></div>	
 			</div>
 		</div>		

@@ -10,6 +10,9 @@ function dView(result, searchInfo)
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
 	overrides['listing.price.currency.img'] = '';
 	overrides['listing.price.chaos.equiv'] = '';
+	overrides['item.total-sum'] = '';
+	overrides['item.sum-per-chaos'] = '';
+    var chaosEquiv = null;
 	if(result.listing.price)
 	{
 		var currencyType = result.listing.price.currency;
@@ -29,7 +32,7 @@ function dView(result, searchInfo)
 			}
 			if(result.listing.price.amount && currencyRatios[currencyType] != null)
 			{
-				var chaosEquiv = currencyRatios[currencyType].value * result.listing.price.amount;
+				chaosEquiv = currencyRatios[currencyType].value * result.listing.price.amount;
 				chaosEquiv = +chaosEquiv.toFixed(2);
 				var equivPanel = document.createElement('span');
 				var equivText = document.createElement('span');
@@ -45,7 +48,34 @@ function dView(result, searchInfo)
 				equivPanel.append(equivText);				
 				
 				overrides['listing.price.chaos.equiv'] = equivPanel;				
-			}			
+			}
+			else if(currencyType == 'chaos')
+			{
+				chaosEquiv = result.listing.price.amount;
+			}
+		}
+	}
+
+	overrides['item.total-sum-per-chaos'] = '';
+	if(result.item.pseudoMods)
+	{
+		var pseudoMods = result.item.pseudoMods;
+		var totalSum = 0;
+		for(var i = 0; i < pseudoMods.length; i++)
+		{
+			var pseudoMod = pseudoMods[i];
+			var sumName = 'Sum: ';
+			if(pseudoMod.indexOf(sumName) > -1)
+			{
+				pseudoMod = pseudoMod.replace(sumName,'');
+				totalSum += Number.parseFloat(pseudoMod);
+			}
+		}
+		overrides['item.total-sum'] = +totalSum.toFixed(2);
+		if(chaosEquiv != null)
+		{
+
+			overrides['item.total-sum-per-chaos'] = +(totalSum / chaosEquiv).toFixed(2);
 		}
 	}
 	
