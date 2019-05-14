@@ -882,3 +882,11 @@ a:visited {
 		background-color: #2d0b11;
 	}
 }
+#auto-load + .button
+{	
+	background-color: #a40000;
+}
+#auto-load:checked + .button
+{
+	background-color: #008000;
+}

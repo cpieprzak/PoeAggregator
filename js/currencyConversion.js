@@ -96,3 +96,14 @@ var loadCurrencyAjax = function(data, parameters)
 		input.value = medianPrice;
 	}
 };
+
+var autoRefresh = function()
+{
+	var autoLoad = document.getElementById('auto-load');
+	if(autoLoad.checked)
+	{
+		loadCurrency();
+	}
+};
+
+setInterval(autoRefresh, 5 * 60 * 1000);

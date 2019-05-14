@@ -20,6 +20,13 @@ function loadLocalData()
 				}
 				storedField.selectedIndex = selectedIndex;
 			}
+			else if(storedField.type && storedField.type.toLowerCase() === 'checkbox')
+			{
+				if(storedValue != null && storedValue.length > 0)
+				{
+					storedField.checked = true;
+				}
+			}
 			else
 			{
 				storedField.value = storedValue; 
@@ -37,5 +44,12 @@ function saveLocalData()
 	{
 		var field = fieldsToSave[i];
 		window.localStorage.setItem(field.id, field.value);
+		if(field.type && field.type.toLowerCase() === 'checkbox')
+		{
+			if(!field.checked)
+			{
+				window.localStorage.setItem(field.id, '');
+			}
+		}
 	}
 }

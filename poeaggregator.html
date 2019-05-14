@@ -210,12 +210,12 @@
 				</div>	
 				<div>
 					<div class='v-top item-mods t-left'>
-						<div class='template-field enchant-mods' tf='item.enchantMods' title='Enchant'> </div>
-						<div class='template-field implicit-mods' tf='item.implicitMods' title='Implicit'> </div>
-						<div class='template-field fractured-mods' tf='item.fracturedMods' title='Fractured'> </div>
-						<div class='template-field explicit-mods' tf='item.explicitMods' title='Explicit'> </div>
-						<div class='template-field crafted-mods' tf='item.craftedMods' title='Crafted'> </div>
-						<div class='template-field veiled-mods' tf='item.veiledMods' title='Veiled'> </div>
+						<div class='template-field enchant-mods' 	tf='item.enchantMods' 	title='Enchant'> </div>
+						<div class='template-field implicit-mods' 	tf='item.implicitMods' 	title='Implicit'> </div>
+						<div class='template-field fractured-mods' 	tf='item.fracturedMods' title='Fractured'> </div>
+						<div class='template-field explicit-mods' 	tf='item.explicitMods' 	title='Explicit'> </div>
+						<div class='template-field crafted-mods' 	tf='item.craftedMods' 	title='Crafted'> </div>
+						<div class='template-field veiled-mods' 	tf='item.veiledMods' 	title='Veiled'> </div>
 					</div>
 				</div>
 						
@@ -477,6 +477,7 @@
 					</div>
 					<div class="modal-footer">
 						<div>
+							<input class="hidden local-data" type="checkbox" value="auto-load" id="auto-load"/><label for="auto-load" class="button">Auto</label>
 							<div class="button" onclick="loadCurrency()">Load from PoEWatch</div>
 							<div class="button" onclick="hideCurrencyRatios()">Close</div>
 						</div>
