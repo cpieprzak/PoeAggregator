@@ -300,6 +300,25 @@ function hideCurrencyRatios()
 	document.getElementById('currency-ratios').classList.add('hidden');
 }
 
+
+function showHide(elementId)
+{
+	var element = document.getElementById(elementId);
+	if(element != null)
+	{
+		var classList = element.classList;
+		var hidden = 'hidden';
+		if(classList.contains(hidden))
+		{
+			classList.remove(hidden);
+		}
+		else
+		{
+			classList.add(hidden);
+		}
+	}	
+}
+
 function toggleFontSize()
 {
 	var body = document.querySelector('body');

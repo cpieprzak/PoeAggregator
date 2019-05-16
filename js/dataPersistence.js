@@ -37,9 +37,14 @@ function loadLocalData()
 } 
 loadLocalData();
 
-function saveLocalData()
+function saveLocalData(id)
 {
-	var fieldsToSave = document.querySelectorAll('.local-data');
+	var target = document;
+	if(id != null)
+	{
+		target = document.getElementById(id);
+	}
+	var fieldsToSave = target.querySelectorAll('.local-data');
 	for(var i = 0; i < fieldsToSave.length; i++)
 	{
 		var field = fieldsToSave[i];

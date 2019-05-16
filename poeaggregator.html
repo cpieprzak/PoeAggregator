@@ -7,29 +7,21 @@
 		<div class="all-screen" >	
 			<div class="control-panel flex-item">			
 				<div class="control-panel-items">
+					<span class='button' onclick="showCurrencyRatios()" >Currency Ratios</span>
 					<label class='nowrap'>Filter<input type='text' id='filter-box' value='' /></label>		
-					<span class='button' onclick="toggleFontSize()" >Font Size</span>
-					<span class='button' onclick="toggleView()" >View</span>
+					<span class='button' onclick="showHide('settings-modal')" >Settings</span>
 					<select class="local-data" id="league">
 					</select>
-					<label class='nowrap'>Alert Sound
-						<select class="local-data" id='notification-sound'>
-							<option value="" selected></option>
-							<option value="woop">woop</option>
-							<option value="gong">gong</option>
-						</select>
-					</label>
 					<label class='nowrap'>Searches<input type='text' class="local-data" id='searches' value='[1][WWZbim][Her Mask][1][.1][]' /></label>
-					<label class='nowrap'>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>
-					<label class='nowrap'>Queue Size<input type='text' value='0' id='queue-count' disabled /></label>
 				
 					<span class='nowrap'>
+						<label class='nowrap'>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>
+						<label class='nowrap'>Queue Size<input type='text' value='0' id='queue-count' disabled /></label>
 						<span class='button' onclick="startSockets()" >Start</span>
 						<span class='button' onclick="stopSockets()" >Stop</span>
 						<span class='button' onclick="clearDisplay()" >Clear</span>
-					</span>
-					<span class='button' onclick="saveLocalData()" >Save Settings</span>
-					<span class='button' onclick="showCurrencyRatios()" >Currency Ratios</span>
+					</span>	
+					<span class='button' onclick="showHide('notes-modal')" >Notes</span>
 				</div>
 			</div>	
 			<div class='display-window-wrapper flex-item condensed' id='display-window'>
@@ -251,6 +243,53 @@
 				<div class='template-field item-key-panel' tf='itemKeyPanel'></div>	
 			</div>
 		</div>		
+		
+		<div class="modal-wrapper">
+			<div class="hidden" id="settings-modal">
+				<div class="modal-background" onclick="showHide('settings-modal')"></div>
+				<div class="modal-content-box">
+					<div class="modal-header">Settings</div>
+					<div class="modal-body">	
+						<div>	
+							<label class='nowrap'>Default Alert Sound
+								<select class="local-data" id='notification-sound'>
+									<option value="" selected></option>
+									<option value="woop">woop</option>
+									<option value="gong">gong</option>
+								</select>
+							</label>	
+							
+							<span class='button' onclick="saveLocalData()" >Save Settings</span>
+							<span class='button' onclick="toggleFontSize()" >Font Size</span>
+							<span class='button' onclick="toggleView()" >View</span>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div>
+							<div class="button" onclick="showHide('settings-modal')">Close</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal-wrapper">
+			<div class="hidden" id="notes-modal">
+				<div class="modal-background" onclick="showHide('notes-modal')"></div>
+				<div class="modal-content-box">
+					<div class="modal-header">Notes</div>
+					<div class="modal-body">	
+						<textarea class="notes local-data"></textarea>
+					</div>
+					<div class="modal-footer">
+						<div>
+							<div class="button" onclick="saveLocalData('notes-modal');showHide('notes-modal');">Save</div>
+							<div class="button" onclick="showHide('notes-modal')">Close</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		
 		<div class="modal-wrapper">
 			<div class="hidden" id="currency-ratios">
@@ -485,7 +524,6 @@
 				</div>
 			</div>
 		</div>
-		
 			
 		<script type="text/javascript" src="./js/audio.js"></script>
 		<script type="text/javascript" src="./js/searchListing.js"></script>
