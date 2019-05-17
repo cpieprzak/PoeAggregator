@@ -6,6 +6,7 @@ var maxItemsDisplayed = 300;
 var allDisplayedItems = [];
 var hasActiveSockets = false;
 var currencyRatios = [];
+var genericId = 0;
 
 function ItemRequest(searchInfo, listings)
 {	
@@ -368,3 +369,116 @@ filterBox.onkeyup = function()
 		}
 	}
 };
+
+function makeDraggable(element, dropClass)
+{
+
+	if(element.id == null || element.id.length < 1)
+	{
+		element.id = 'genericId-' + genericId;
+		genericId++;
+	}	
+	element.dropTarget = dropClass;
+	element.draggable = true;
+	element.ondragstart = dragStart;
+	element.ondragover = dragOver;
+	element.ondragleave = dragLeave;
+	element.ondrop = drop;
+}
+
+function dragOver(e)
+{
+	e.preventDefault();
+	var dropDestination = e.target;
+	var dropClass = this.dropTarget;
+	if (dropClass != null) 
+	{
+		while (!dropDestination.classList.contains(dropClass) && dropDestination.parentElement != null) 
+		{
+			dropDestination = dropDestination.parentElement;
+		}
+	}
+	var parent = dropDestination.parentElement;
+	var rect = dropDestination.getBoundingClientRect();
+	var offsetHeight = dropDestination.offsetHeight;
+	var y = e.clientY - rect.top;
+	if ((y / offsetHeight) > .5) {
+		dropDestination.classList.remove('drop-top');
+		dropDestination.classList.add('drop-bottom');
+	} else {
+		dropDestination.classList.remove('drop-bottom');
+		dropDestination.classList.add('drop-top');
+	}
+
+}
+
+function dragLeave(e)
+{
+	e.preventDefault();
+	var dropDestination = e.target;
+	var dropClass = this.dropTarget;
+	if (dropClass != null) 
+	{
+		while (!dropDestination.classList.contains(dropClass) && dropDestination.parentElement != null) 
+		{
+			dropDestination = dropDestination.parentElement;
+		}
+	}
+
+	dropDestination.classList.remove('drop-bottom');
+	dropDestination.classList.remove('drop-top');
+}
+function dragStart(e) 
+{
+	e.dataTransfer.setData('draggedObjectId', e.target.id);
+}
+
+function drop(e) 
+{
+	e.preventDefault();
+	var dropDestination = e.target;
+	var dropClass = this.dropTarget;
+	var dragTarget = document.getElementById(e.dataTransfer.getData('draggedObjectId'));
+	if(dragTarget != null)
+	{
+		if (dropClass != null)
+		{
+			while (!dropDestination.classList.contains(dropClass) && dropDestination.parentElement != null) 
+			{
+				dropDestination = dropDestination.parentElement;
+			}
+		}
+		var parent = dropDestination.parentElement;
+		var rect = dropDestination.getBoundingClientRect();
+		var offsetHeight = dropDestination.offsetHeight;
+		var y = e.clientY - rect.top;
+		if ((y / offsetHeight) > .5) 
+		{
+			var nextSibling = dropDestination.nextSibling;
+			if (nextSibling != null) 
+			{
+				parent.insertBefore(dragTarget, nextSibling);
+			} 
+			else 
+			{
+				parent.append(dragTarget);
+			}
+		} 
+		else 
+		{
+			parent.insertBefore(dragTarget, dropDestination);
+		}
+	}
+
+	removeAllClass('drop-bottom');
+	removeAllClass('drop-top');	
+}
+
+function removeAllClass(targetClass)
+{
+	var targets = document.querySelectorAll('.' + targetClass);
+	for(var i = 0; i < targets.length; i++)
+	{
+		targets[i].classList.remove(targetClass);
+	}
+}

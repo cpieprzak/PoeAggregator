@@ -4,7 +4,9 @@ html
 	margin: 0px;
 	padding: 0px;
 }
-body {
+
+body
+{
 	font-size: 16px;
 	vertical-align: middle;
 	color: #7F7F70;
@@ -61,6 +63,11 @@ input, textarea, select {
 .us-table {
 	display: table;
 	width: 100%;
+	user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
 }
 
 .us-inline-table {
@@ -68,7 +75,7 @@ input, textarea, select {
 }
 
 .us-table-row {
-	display: table-row;
+	display: table-row;	
 }
 
 .us-table-cell {
@@ -230,7 +237,10 @@ textarea.notes
 	border-right: .3rem solid transparent;	 
 	cursor: pointer; 
 }
-
+.search-row:hover 
+{
+	background-color: #c0c0c0;
+}
 .search-row:hover .up-button
 {
 	border-bottom: .5rem solid #2c6ace;
@@ -914,4 +924,14 @@ a:visited {
 #auto-load:checked + .button
 {
 	background-color: #008000;
+}
+
+.drop-top > .us-table-cell
+{
+	border-top: 5px solid red;
+}
+
+.drop-bottom > .us-table-cell
+{
+	border-bottom: 5px solid red;
 }

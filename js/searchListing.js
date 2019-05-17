@@ -195,14 +195,6 @@ function SearchStringBuilder(searchBox)
 			newRow.classList.add('search-row');
 			
 			var newCell = null;
-			
-			var rowPositionPanel = document.createElement('div');
-			rowPositionPanel.classList.add('row-position-panel');	
-			
-			newCell = document.createElement('div');
-			newCell.classList.add('us-table-cell');
-			newCell.append(rowPositionPanel);
-			newRow.append(newCell);
 
 			var activeCheckBox = document.createElement('input');
 			activeCheckBox.classList.add('search-control');
@@ -362,61 +354,22 @@ function SearchStringBuilder(searchBox)
 					{
 						this.removeTarget.parentElement.removeChild(this.removeTarget);
 					}
-					var rowPositionPanel = clonedNode.querySelector('.row-position-panel');
-					var upButton = document.createElement('span');
-					upButton.classList.add('up-button');
-					upButton.row = clonedNode;
-					upButton.onclick = function()
-					{
-						var searchTable = document.getElementById('all-searches-table');
-						var searchRows = searchTable.querySelectorAll('.search-row');
-						var index = -1;
-						for(var i = 0; i < searchRows.length; i++)
-						{
-							var row = searchRows[i];
-							if(this.row == row)
-							{
-								index = i;
-							}
-						}
-						if(index  > 0)
-						{
-							var previousRow = searchRows[index -1];
-							previousRow.parentNode.insertBefore(searchRows[index], previousRow);
-						}
-					};			
-					rowPositionPanel.append(upButton);
-					var downButton = document.createElement('span');
-					downButton.classList.add('down-button');
-					downButton.row = clonedNode;
-					downButton.onclick = function()
-					{
-						var searchTable = document.getElementById('all-searches-table');
-						var searchRows = searchTable.querySelectorAll('.search-row');
-						var index = -1;
-						for(var i = 0; i < searchRows.length; i++)
-						{
-							var row = searchRows[i];
-							if(this.row == row)
-							{
-								index = i;
-							}
-						}
-						if(index > -1 && index < searchRows.length -1)
-						{
-							if(index == searchRows.length - 2)
-							{
-								searchTable.append(searchRows[index]);
-							}
-							else
-							{
-								var nextRow = searchRows[index + 2];
-								nextRow.parentNode.insertBefore(searchRows[index], nextRow);
-							}
-						}
-					};			
-					rowPositionPanel.append(downButton);
 					var addButton = clonedNode.querySelector('.button.add-new-button');
+
+					
+					var rowInputs = clonedNode.querySelectorAll('input[type="text"]');
+					for(var a = 0; a < rowInputs.length; a++)
+					{
+						rowInputs[a].searchRow = clonedNode;
+						rowInputs[a].onfocus = function()
+						{
+							this.searchRow.draggable = false;
+						};
+						rowInputs[a].onblur = function()
+						{
+							this.searchRow.draggable = true;
+						};
+					}
 					addButton.parentNode.append(removeButton);
 					addButton.parentElement.removeChild(addButton);
 					document.getElementById('search-body-content').querySelector('.us-table').append(clonedNode);
@@ -426,6 +379,8 @@ function SearchStringBuilder(searchBox)
 						var field = fields[j];
 						field.value = '';
 					}
+					
+					makeDraggable(clonedNode,'search-row');
 				}
 				else
 				{
@@ -558,7 +513,7 @@ function SearchStringBuilder(searchBox)
 		var headerRow = document.createElement('div');
 		headerRow.classList.add('search-header-row');
 		headerRow.classList.add('us-table-row');
-		var headerText = ['','Active', 'Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
+		var headerText = ['Active', 'Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
 		for (var i = 0; i < headerText.length; i++)
 		{
 			var cell = document.createElement('div');
@@ -576,67 +531,6 @@ function SearchStringBuilder(searchBox)
 			newRow.classList.add('us-table-row');
 			
 			var newCell = null;
-			
-			var rowPositionPanel = document.createElement('div');
-			rowPositionPanel.classList.add('row-position-panel');
-			var upButton = document.createElement('span');
-			upButton.classList.add('up-button');
-			upButton.row = newRow;
-			upButton.onclick = function()
-			{
-				var searchTable = document.getElementById('all-searches-table');
-				var searchRows = searchTable.querySelectorAll('.search-row');
-				var index = -1;
-				for(var i = 0; i < searchRows.length; i++)
-				{
-					var row = searchRows[i];
-					if(this.row == row)
-					{
-						index = i;
-					}
-				}
-				if(index  > 0)
-				{
-					var previousRow = searchRows[index -1];
-					previousRow.parentNode.insertBefore(searchRows[index], previousRow);
-				}
-			};			
-			rowPositionPanel.append(upButton);
-			var downButton = document.createElement('span');
-			downButton.classList.add('down-button');
-			downButton.row = newRow;
-			downButton.onclick = function()
-			{
-				var searchTable = document.getElementById('all-searches-table');
-				var searchRows = searchTable.querySelectorAll('.search-row');
-				var index = -1;
-				for(var i = 0; i < searchRows.length; i++)
-				{
-					var row = searchRows[i];
-					if(this.row == row)
-					{
-						index = i;
-					}
-				}
-				if(index > -1 && index < searchRows.length -1)
-				{
-					if(index == searchRows.length - 2)
-					{
-						searchTable.append(searchRows[index]);
-					}
-					else
-					{
-						var nextRow = searchRows[index + 2];
-						nextRow.parentNode.insertBefore(searchRows[index], nextRow);
-					}
-				}
-			};			
-			rowPositionPanel.append(downButton);
-			
-			newCell = document.createElement('div');
-			newCell.classList.add('us-table-cell');
-			newCell.append(rowPositionPanel);
-			newRow.append(newCell);
 			
 			var activeCheckBox = document.createElement('input');
 			activeCheckBox.classList.add('search-control');
@@ -772,7 +666,22 @@ function SearchStringBuilder(searchBox)
 			newCell.append(removeButton);
 			newRow.append(newCell);
 			
+			var rowInputs = newRow.querySelectorAll('input[type="text"]');
+			for(var a = 0; a < rowInputs.length; a++)
+			{
+				rowInputs[a].searchRow = newRow;
+				rowInputs[a].onfocus = function()
+				{
+					this.searchRow.draggable = false;
+				};
+				rowInputs[a].onblur = function()
+				{
+					this.searchRow.draggable = true;
+				};
+			}
+			
 			searchTable.append(newRow);
+			makeDraggable(newRow,'search-row');
 		}
 	};
 }
