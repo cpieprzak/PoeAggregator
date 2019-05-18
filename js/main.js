@@ -351,24 +351,72 @@ function toggleView()
 var filterBox = document.getElementById('filter-box');
 filterBox.onkeyup = function()
 {
-	var filterText = this.value.toLowerCase().trim();
 	for(var i = 0; i < allDisplayedItems.length; i++)
 	{
 		var item = allDisplayedItems[i];
-		if(item.allText)
-		{
-			var itemText = item.allText;
-			if(itemText.indexOf(filterText) > -1)
-			{
-				item.classList.remove('hidden');
-			}
-			else
-			{
-				item.classList.add('hidden');
-			}			
-		}
+		filterItem(item);		
 	}
 };
+
+var minValue = 0;
+var minValueBox = document.getElementById('min-value-box');
+minValueBox.onkeyup = function()
+{
+	var minValueString = this.value;
+	if(minValueString != null && minValueString.trim().length > 0)
+	{
+		try
+		{
+			minValue = parseFloat(minValueString);
+		}
+		catch
+		{
+			minValue = 0;
+		}
+	}
+	else
+	{
+		minValue = 0;	
+	}
+	for(var i = 0; i < allDisplayedItems.length; i++)
+	{
+		var item = allDisplayedItems[i];
+		filterItem(item);		
+	}
+};
+
+function filterItem(item)
+{
+	var filterText = filterBox.value.toLowerCase().trim();
+	var showItem = true;
+	if(item.allText)
+	{
+		var itemText = item.allText;
+		if(itemText.indexOf(filterText) < 0)
+		{
+			showItem = false;
+		}			
+	}
+	if(minValue > 0)
+	{
+		if(item.totalItemValue && item.totalItemValue > minValue)
+		{
+			
+		}
+		else
+		{
+			showItem = false;
+		}
+	}
+	if(showItem)
+	{
+		item.classList.remove('hidden');
+	}
+	else
+	{
+		item.classList.add('hidden');
+	}		
+}
 
 function makeDraggable(element, dropClass)
 {

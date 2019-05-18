@@ -1,5 +1,9 @@
 function dView(result, searchInfo)
 {
+
+
+	var template = document.getElementById('item-template');
+	var newNode = template.cloneNode(true);
 	//console.log(result);
 	var overrides = [];
 	var icon = document.createElement('img');
@@ -74,8 +78,8 @@ function dView(result, searchInfo)
 		overrides['item.total-sum'] = +totalSum.toFixed(2);
 		if(chaosEquiv != null)
 		{
-
-			overrides['item.total-sum-per-chaos'] = +(totalSum / chaosEquiv).toFixed(2);
+			newNode.totalItemValue = totalSum / chaosEquiv;
+			overrides['item.total-sum-per-chaos'] = +(newNode.totalItemValue).toFixed(2);
 		}
 	}
 	
@@ -336,9 +340,6 @@ function dView(result, searchInfo)
 	var itemNamePlate = document.createElement('span');
 	itemNamePlate.append(document.createTextNode(result.item.name));
 	overrides['item.name'] = itemNamePlate;
-
-	var template = document.getElementById('item-template');
-	var newNode = template.cloneNode(true);
 	if(result.item.verified)
 	{
 		newNode.classList.add('verified');
@@ -450,19 +451,7 @@ function dView(result, searchInfo)
 	}
 	
 	newNode.allText = JSON.stringify(newNode).toLowerCase() + getTextFromNode(newNode).toLowerCase();
-	var filterText = filterBox.value.toLowerCase().trim();
-	if(newNode.allText && filterText.length > 0)
-	{
-		var itemText = newNode.allText;
-		if(itemText.indexOf(filterText) > -1)
-		{
-			newNode.classList.remove('hidden');
-		}
-		else
-		{
-			newNode.classList.add('hidden');
-		}			
-	}
+	filterItem(newNode);
 	
 
 	newNode.classList.add(gggId);
