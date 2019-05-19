@@ -227,7 +227,7 @@ function addItem(data, searchInfo)
 	{	
 		var result = results[resultIndex];
 		var newNode = dView(result, searchInfo);
-		display.insertBefore(newNode, lastItem);
+		display.insertBefore(newNode, display.firstChild);
 		lastItem = newNode;
 
 		allDisplayedItems.push(lastItem);
@@ -583,4 +583,64 @@ function removeAllClass(targetClass)
 	{
 		targets[i].classList.remove(targetClass);
 	}
+}
+
+function orderBySum()
+{
+	allDisplayedItems.sort(
+		function(a, b)
+		{
+			var returnValue = 0;
+			if(a.totalSum && !b.totalSum)
+			{
+				returnValue = -1;
+			}
+			else if(!a.totalSum && b.totalSum)
+			{
+				returnValue = 1;
+			}
+			else if(a.totalSum && b.totalSum)
+			{
+				returnValue = b.totalSum - a.totalSum;
+			}
+			
+			return returnValue;
+		}
+	);
+	
+	var displayWindow = document.getElementById('display-window');
+	for(var i = 0; i < allDisplayedItems.length; i++)
+	{
+		displayWindow.append(allDisplayedItems[i]);
+	}
+}
+
+function orderByValue()
+{
+	allDisplayedItems.sort(
+			function(a, b)
+			{
+				var returnValue = 0;
+				if(a.totalItemValue && !b.totalItemValue)
+				{
+					returnValue = -1;
+				}
+				else if(!a.totalItemValue && b.totalItemValue)
+				{
+					returnValue = 1;
+				}
+				else if(a.totalItemValue && b.totalItemValue)
+				{
+					returnValue = b.totalItemValue - a.totalItemValue;
+				}
+				
+				return returnValue;
+			}
+		);
+		
+		var displayWindow = document.getElementById('display-window');
+		for(var i = 0; i < allDisplayedItems.length; i++)
+		{
+			displayWindow.append(allDisplayedItems[i]);
+		}
 }
