@@ -181,7 +181,7 @@ function SearchStringBuilder(searchBox)
 			var headerRow = document.createElement('div');
 			headerRow.classList.add('search-header-row');
 			headerRow.classList.add('us-table-row');
-			var headerText = ['','Active', 'Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
+			var headerText = ['Active', 'Url', 'Comment', 'Sound', 'Volume', 'Color', ''];
 			for (var i = 0; i < headerText.length; i++)
 			{
 				var cell = document.createElement('div');
