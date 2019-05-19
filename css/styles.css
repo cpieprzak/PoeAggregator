@@ -136,8 +136,13 @@ input, textarea, select {
 
 .control-panel label
 {
-	margin-right: 1rem;
-	margin-left: 1rem;	
+	margin-right: .2rem;
+	margin-left: .2rem;	
+}
+
+.control-panel input[type="text"]
+{
+	width: 5rem;
 }
 
 .flex-item

@@ -372,6 +372,33 @@ filterBox.onkeyup = function()
 	}
 };
 
+var minSum = 0;
+var minSumBox = document.getElementById('min-sum-box');
+minSumBox.onkeyup = function()
+{
+	var minSumString = this.value;
+	if(minSumString != null && minSumString.trim().length > 0)
+	{
+		try
+		{
+			minSum = parseFloat(minSumString);
+		}
+		catch
+		{
+			minSum = 0;
+		}
+	}
+	else
+	{
+		minSum = 0;	
+	}
+	for(var i = 0; i < allDisplayedItems.length; i++)
+	{
+		var item = allDisplayedItems[i];
+		filterItem(item);		
+	}
+};
+
 var minValue = 0;
 var minValueBox = document.getElementById('min-value-box');
 minValueBox.onkeyup = function()
@@ -422,6 +449,19 @@ function filterItem(item)
 			showItem = false;
 		}
 	}
+	if(minSum > 0)
+	{
+		if(item.totalSum && item.totalSum > minSum)
+		{
+			
+		}
+		else
+		{
+			showItem = false;
+		}
+	}
+	
+	
 	if(showItem)
 	{
 		item.classList.remove('hidden');

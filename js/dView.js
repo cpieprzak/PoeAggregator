@@ -76,6 +76,7 @@ function dView(result, searchInfo)
 			}
 		}
 		overrides['item.total-sum'] = +totalSum.toFixed(2);
+		newNode.totalSum = totalSum;
 		if(chaosEquiv != null)
 		{
 			newNode.totalItemValue = totalSum / chaosEquiv;
