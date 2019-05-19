@@ -33,6 +33,10 @@ function loadLocalData()
 			}
 			storedField.lastSavedValue = storedValue;
 		}
+		if(storedField.onblur)
+		{
+			storedField.onblur();
+		}
 	} 
 } 
 loadLocalData();

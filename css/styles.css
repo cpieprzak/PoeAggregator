@@ -60,7 +60,8 @@ input, textarea, select {
 	height: 1.5rem;
 }
 
-.us-table {
+.us-table
+{
 	display: table;
 	width: 100%;
 	user-select: none;
@@ -70,7 +71,8 @@ input, textarea, select {
     -o-user-select: none;
 }
 
-.us-inline-table {
+.us-inline-table 
+{
 	display: inline-table;
 }
 
@@ -737,7 +739,7 @@ a:visited {
 	width: 8rem;
 }
 
-.modal-content-box input
+.modal-content-box .us-table-cell input
 {
 	display: inline-block;
 	margin: 0px;

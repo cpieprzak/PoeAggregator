@@ -334,6 +334,20 @@ function toggleFontSize()
 	}
 }
 
+function updateMaxItemsDisplayed()
+{
+	var input = document.getElementById('max-items-displayed-box');
+	var maxString = input.value;
+	try
+	{
+		maxItemsDisplayed = parseInt(maxString);
+	}
+	catch
+	{
+		maxItemsDisplayed = 300;
+	}	
+}
+
 function toggleView()
 {
 	var targetElement = document.getElementById('display-window');
