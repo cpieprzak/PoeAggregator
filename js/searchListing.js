@@ -76,7 +76,15 @@ function filterSearches()
 		var row = searchRows[i];
 		var commentInput = row.querySelector('.search-comment');
 		var commentText = commentInput.value.toLowerCase();
-		if (commentText.indexOf(filterText) > -1)
+		var categoryInput = row.querySelector('.search-category');
+		var categoryText = categoryInput.value.toLowerCase();
+		var shown = false;
+		if (commentText.indexOf(filterText) > -1 || categoryText.indexOf(filterText) > -1)
+		{
+			shown = true;
+		}
+		
+		if(shown)
 		{
 			row.classList.remove('hidden');
 		}

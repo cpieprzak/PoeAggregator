@@ -474,7 +474,6 @@ function filterItem(item)
 
 function makeDraggable(element, dropClass)
 {
-
 	if(element.id == null || element.id.length < 1)
 	{
 		element.id = 'genericId-' + genericId;
