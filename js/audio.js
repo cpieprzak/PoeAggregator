@@ -6,21 +6,26 @@ function populateSounds(){
 	{
 		sounds['' + i] = new Audio('./audio/' + i +'.wav');
 	}
-	var soundSelect = document.getElementById('notification-sound');
-	soundSelect.innerHTML = '';
-	var blankOption = document.createElement('option');
-	soundSelect.append(blankOption);
-	for (var key in sounds)
+	var soundSelects = document.querySelectorAll('select.search-sounds');
+	for(var i = 0; i < soundSelects.length; i++)
 	{
-		var newOption = document.createElement('option');
-		newOption.value = key;
-		newOption.append(document.createTextNode(key));
-		soundSelect.append(newOption);
-	}
-	soundSelect.playSound = function()
-	{
-		var soundId = this.value;
-		sounds[soundId].play();
+		var soundSelect = soundSelects[i];
+		soundSelect.innerHTML = '';
+		var blankOption = document.createElement('option');
+		soundSelect.append(blankOption);
+		
+		for (var key in sounds)
+		{
+			var newOption = document.createElement('option');
+			newOption.value = key;
+			newOption.append(document.createTextNode(key));
+			soundSelect.append(newOption);
+		}
+		soundSelect.playSound = function()
+		{
+			var soundId = this.value;
+			sounds[soundId].play();
+		}
 	}
 }
 populateSounds();

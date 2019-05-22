@@ -942,3 +942,58 @@ a:visited {
 {
 	border-bottom: 5px solid red;
 }
+
+.drop-down-wrapper
+{
+	position: relative;
+	display: inline-block;
+}
+
+.drop-down + .drop-down-display
+{
+	box-sizing: border-box;
+	display: none;
+	position: absolute;
+	top: 1.5rem;
+	left: 0px;
+	border: 1px solid black;
+	background: white;
+	min-width: 100%;
+	max-height: 6rem;
+	overflow-y: auto;
+}
+
+.drop-down:focus + .drop-down-display
+{
+	display: inline-block;
+}
+
+.drop-down + .drop-down-display:HOVER
+{
+	display: inline-block;
+}
+
+.drop-down.option-chosen + .drop-down-display
+{
+	display: none;
+}
+
+.drop-down-option
+{
+	box-sizing: border-box;
+	cursor: pointer;
+	text-align: left;
+	padding-left: .25rem;
+	padding-right: .25rem;
+	border-top: 1px solid rgba(0,0,0,.5);
+}
+
+.drop-down-option:FIRST-CHILD
+{
+	border-top: none;
+}
+
+.drop-down-option:hover, .drop-down-option.selected
+{
+	background-color: rgba(0,0,0,.5);
+}
