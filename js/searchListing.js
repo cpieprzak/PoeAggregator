@@ -23,7 +23,7 @@ function SearchListing(listingString)
 	
 	if(listingString != null)
 	{
-		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume',	'color'];
+		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'grouping'];
 		var searchParts = listingString.trim().split('[');
 		for (var i = 0; i < searchParts.length; i++)
 		{
@@ -120,10 +120,31 @@ function addNewSearchRow()
 	var newRow = document.getElementById('new-search-row');
 	var searchRow = newRow.cloneNode(true);
 	searchRow.id = '';
-	var addNewButton = searchRow.querySelector('.add-new-button');
-	replaceWithRemoveButton(addNewButton, searchRow);	
-	makeDraggable(searchRow,'search-row');
-	searchesTable.append(searchRow);
+	if(searchRow.querySelector('.search-url').value.trim() != '')
+	{
+		var addNewButton = searchRow.querySelector('.add-new-button');
+		replaceWithRemoveButton(addNewButton, searchRow);	
+		
+		var soundVolume = searchRow.querySelector('.search-control.search-volume');
+		if(soundVolume.value != '')
+		{
+			if(soundVolume.value > 1)
+			{
+				soundVolume.value = 1;
+			}
+			else if(soundVolume.value < 0.1)
+			{
+				soundVolume.value = 0.1;
+			}
+		}
+		
+		makeDraggable(searchRow,'search-row');
+		searchesTable.append(searchRow);
+	}
+	else
+	{
+		alert('A Url is required for a search entry');
+	}
 }
 
 function testSound(element)
