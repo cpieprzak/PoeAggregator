@@ -20,10 +20,11 @@ function SearchListing(listingString)
 	this.soundId = '';
 	this.soundVolume = 0.25;
 	this.color = '#1c1e23';
+	this.searchCategory = '';
 	
 	if(listingString != null)
 	{
-		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'grouping'];
+		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'searchCategory'];
 		var searchParts = listingString.trim().split('[');
 		for (var i = 0; i < searchParts.length; i++)
 		{
@@ -46,6 +47,7 @@ function SearchListing(listingString)
 		clonedNode.soundId = this.soundId;
 		clonedNode.soundVolume = this.soundVolume;
 		clonedNode.color = this.color;
+		clonedNode.searchCategory = this.searchCategory;
 		
 		return clonedNode;
 	}
@@ -221,6 +223,9 @@ function openSearchesModal()
 		var colorBox = searchRow.querySelector('.search-color');
 		colorBox.value = search.color;
 
+		var categoryBox = searchRow.querySelector('.search-category');
+		categoryBox.value = search.searchCategory;		
+
 		var addNewButton = searchRow.querySelector('.add-new-button');
 		replaceWithRemoveButton(addNewButton, searchRow);	
 		makeDraggable(searchRow,'search-row');
@@ -256,6 +261,77 @@ function saveSearchString()
 	searchInput.value = generateSearchString();
 	saveLocalData('search-wrapper');
 	showHide('search-string-builder');
+}
+
+function activateSearches()
+{
+	var searchesTable =  document.getElementById('all-searches-table');
+	var searchRows = searchesTable.querySelectorAll('.search-row');
+	for(var i = 0; i < searchRows.length; i++)
+	{
+		var searchRow = searchRows[i];
+		if(!searchRow.classList.contains('hidden'))
+		{
+			var activeBox = searchRow.querySelector('.search-active');
+			activeBox.checked = true;	
+		}
+		
+	}
+}
+
+function deactivateSearches()
+{
+	var searchesTable =  document.getElementById('all-searches-table');
+	var searchRows = searchesTable.querySelectorAll('.search-row');
+	for(var i = 0; i < searchRows.length; i++)
+	{
+		var searchRow = searchRows[i];
+		if(!searchRow.classList.contains('hidden'))
+		{
+			var activeBox = searchRow.querySelector('.search-active');
+			activeBox.checked = false;	
+		}
+		
+	}
+}
+
+function sortSearchesByCategory()
+{
+	var searchesTable =  document.getElementById('all-searches-table');
+	var searchRows = searchesTable.querySelectorAll('.search-row');
+	var categories = [];
+	for(var i = 0; i < searchRows.length; i++)
+	{
+		var searchRow = searchRows[i];
+		var categoryBox = searchRow.querySelector('.search-category');
+		var categoryName = categoryBox.value;
+		if(categories[categoryName] == null)
+		{
+			categories[categoryName] = [];
+		}	
+		categories[categoryName].push(searchRow);
+	}
+	var categoryNames = Object.keys(categories);
+	if(categoryNames != null)
+	{
+		categoryNames = categoryNames.sort(function(a, b) 
+		{
+		    if(a === "" || a === null) return 1;
+		    if(b === "" || b === null) return -1;
+		    if(a === b) return 0;
+		    return a < b ? -1 : 1;
+		});
+	}
+	for(var i = 0; i < categoryNames.length; i++)
+	{
+		var categoryName = categoryNames[i];
+		var orderedRows = categories[categoryName];
+		for(var j = 0; j < orderedRows.length; j++)
+		{
+			var orderedRow = orderedRows[j];
+			searchesTable.append(orderedRow);
+		}
+	}
 }
 
 function generateSearchString()

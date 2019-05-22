@@ -486,6 +486,20 @@ function makeDraggable(element, dropClass)
 	element.ondragover = dragOver;
 	element.ondragleave = dragLeave;
 	element.ondrop = drop;
+	
+	var rowInputs = element.querySelectorAll('input[type="text"]');
+	for(var i = 0; i < rowInputs.length; i++)
+	{
+		rowInputs[i].searchRow = element;
+		rowInputs[i].onfocus = function()
+		{
+			this.searchRow.draggable = false;
+		};
+		rowInputs[i].onblur = function()
+		{
+			this.searchRow.draggable = true;
+		};
+	}
 }
 
 function dragOver(e)

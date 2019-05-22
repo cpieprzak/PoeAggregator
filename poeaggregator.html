@@ -350,6 +350,7 @@
 							<div class="us-table-cell">Sound</div>
 							<div class="us-table-cell">Volume</div>
 							<div class="us-table-cell">Color</div>
+							<div class="us-table-cell">Category</div>
 							<div class="us-table-cell"></div>
 						</div>
 					</div>
@@ -362,6 +363,7 @@
 						<div class="us-table-cell">Sound</div>
 						<div class="us-table-cell">Volume</div>
 						<div class="us-table-cell">Color</div>
+						<div class="us-table-cell">Category</div>
 						<div class="us-table-cell"></div>
 					</div>
 					<div class="us-table-row search-row" id="new-search-row">
@@ -401,6 +403,10 @@
 						<div class="us-table-cell">
 							<input class="search-control search-color" type="color">
 						</div>
+						<div class="us-table-cell">
+							<input class="search-control search-category" type="text">
+						</div>
+						
 						<div class="us-table-cell button-cell">
 							<div class="button add-new-button" onclick="addNewSearchRow()">
 								Add New
@@ -410,7 +416,10 @@
 				</div>
 				<div class="modal-footer">
 					<div>
+						<input type="button" class="button" value="Activate" onclick="activateSearches();">
+						<input type="button" class="button" value="Dectivate" onclick="deactivateSearches();">
 						<input type="button" class="button" value="Sort Actives" onclick="sortActiveSearches();">
+						<input type="button" class="button" value="Sort Categories" onclick="sortSearchesByCategory();">
 						<input type="button" class="button" value="Copy" onclick="copySearchString();">
 						<input type="button" class="button" value="Save" onclick="saveSearchString();">
 						<input type="button" class="button" value="Cancel" onclick="showHide('search-string-builder')">
@@ -645,8 +654,9 @@
 					<div class="modal-footer">
 						<div>
 							<input class="hidden local-data" type="checkbox" value="auto-load" id="auto-load"/><label for="auto-load" class="button">Auto</label>
-							<div class="button" onclick="loadCurrency()">Load from PoEWatch</div>
-							<div class="button" onclick="hideCurrencyRatios()">Close</div>
+							<div class="button" onclick="loadCurrency();">Load from PoEWatch</div>
+							<div class="button" onclick="saveLocalData('currency-ratios');hideCurrencyRatios();">Save</div>
+							<div class="button" onclick="hideCurrencyRatios();">Close</div>
 						</div>
 					</div>
 				</div>
