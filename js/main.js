@@ -489,15 +489,15 @@ function makeDraggable(element, dropClass)
 	var rowInputs = element.querySelectorAll('input[type="text"]');
 	for(var i = 0; i < rowInputs.length; i++)
 	{
-		rowInputs[i].searchRow = element;
+		rowInputs[i].searchRow = element;		
 		rowInputs[i].onfocus = function()
 		{
 			this.searchRow.draggable = false;
 		};
-		rowInputs[i].onblur = function()
+		rowInputs[i].addEventListener("blur", function()
 		{
 			this.searchRow.draggable = true;
-		};
+		});
 	}
 }
 

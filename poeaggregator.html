@@ -325,7 +325,8 @@
 				</div>
 			</div>
 		</div>
-		
+		<datalist id="search-categories">
+		</datalist>
 		<div class="hidden" id="search-string-builder">
 			<div class="modal-background" onclick="showHide('search-string-builder')"></div>
 			<div class="modal-content-box">
@@ -336,8 +337,8 @@
 							id="search-filter"
 							type="text" 
 							value="Filter Searches"
-							onclick="clearSearchFilter();"
-							onkeyup="filterSearches();"
+							list="search-categories"
+							autocomplete="off"
 						/>
 					</div>
 				</div>
@@ -404,7 +405,7 @@
 							<input class="search-control search-color" type="color">
 						</div>
 						<div class="us-table-cell">
-							<input class="search-control search-category" type="text">
+							<input class="search-control search-category" type="text" list="search-categories">
 						</div>
 						
 						<div class="us-table-cell button-cell">
