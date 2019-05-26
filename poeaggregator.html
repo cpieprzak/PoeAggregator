@@ -16,12 +16,15 @@
 					<span class='button' onclick="showHide('settings-modal')" >Settings</span>
 					<select class="local-data" id="league">
 					</select>
-					<label class='nowrap' id='search-wrapper'>
+					<span class='nowrap' id='search-wrapper'>
 						Searches
 						<input type='text' class="local-data" id='searches' value='[1][WWZbim][Her Mask][1][.1][]' />
 						<span class="button" onclick="openSearchesModal();">Searches</span>
-					</label>
-					
+						<label>
+							<span class="button">Load</span>
+							<input type="file" class="hidden" id='load-searches' />
+						</label>
+					</span>
 				
 					<span class='nowrap'>
 						<label class='nowrap'>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>

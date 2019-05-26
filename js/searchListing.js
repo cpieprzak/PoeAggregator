@@ -459,3 +459,31 @@ function remakeCategories()
 		searchCategoriesList.append(category);
 	}
 }
+
+var loadFileInput = document.getElementById("load-searches");
+
+
+loadFileInput.addEventListener('change', function () 
+{
+	var searchString = document.getElementById("searches");
+	searchString.value = '';
+	if (this.files && this.files[0]) 
+	{
+		var searchFile = this.files[0];
+		var reader = new FileReader();
+    
+		reader.addEventListener('load', function(e) 
+		{
+			searchString.value += e.target.result;
+		});
+		
+		reader.addEventListener('loadend', function(e) 
+		{
+			this.loadFileInput = null;
+			openSearchesModal();
+		});
+		
+		reader.readAsText(searchFile);
+
+	}   
+});
