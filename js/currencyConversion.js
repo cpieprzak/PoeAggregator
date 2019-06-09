@@ -93,7 +93,10 @@ var loadCurrencyAjax = function(data, parameters)
 		var acceptedTags = tags[currencyName];
 		
 		var input = document.getElementById(currencyName);
-		input.value = medianPrice;
+		if(input != null)
+		{
+			input.value = medianPrice;
+		}
 	}
 };
 
