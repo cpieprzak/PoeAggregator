@@ -123,6 +123,7 @@ function startSockets()
 
 		var listingManager = new ListingManager(searchesString);
 		var providedSearches = listingManager.searches;
+
 		if(providedSearches != null && providedSearches.length > 0)
 		{
 			var activeCount = 0;
@@ -133,7 +134,6 @@ function startSockets()
 					activeCount++;
 				}
 			}
-			
 			
 			for(var i = 0; i < providedSearches.length; i++)
 			{
@@ -156,12 +156,18 @@ function startSockets()
 					};
 					searchSocket.onclose = function(event)
 					{
+						console.log('Closing...');
+						console.log(event);
+						
 						openSockets--;
 						if(openSockets < 1)
 						{
 							document.getElementById('socket-count').value = 0;
 						}
-						document.getElementById('socket-count').value = openSockets + '/' + socketsToOpen;
+						else
+						{
+							document.getElementById('socket-count').value = openSockets + '/' + activeCount;
+						}
 					};
 					searchSocket.onmessage = function (event) 
 					{
@@ -201,13 +207,13 @@ function clearDisplay()
 
 function stopSockets() 
 {
-			
 	if(sockets != null && sockets.length > 0)
 	{
 		for(var i = 0; i < sockets.length; i++)
 		{
 	  		sockets[i].close();
 		}
+		sockets = [];
 	}	
 	requestManager.itemRequests = [];
 	document.getElementById('queue-count').value = requestManager.itemRequests.length;
