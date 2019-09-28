@@ -252,22 +252,42 @@ function dView(result, searchInfo)
 		{				
 			overrides['item.fracturedMods'] = makeModList(getMods(result.item, 'fractured'), 'fractured');
 		}
+
+		var modCountPanel = document.createElement('span');
 		if(result.item.explicitMods)
 		{
-			overrides['item.explicitMods'] = makeModList(getMods(result.item, 'explicit'), 'explicit');		
+			var explicits = getMods(result.item, 'explicit');
+			overrides['item.explicitMods'] = makeModList(explicits, 'explicit');	
+
+			var modCountPanel = document.createElement('span');
+			var prefixCount = document.createElement('span');
+			prefixCount.classList.add('at-prefix');
+			prefixCount.append(document.createTextNode('' + explicits.prefixCount));
+			modCountPanel.append(prefixCount);
+			var suffixCount = document.createElement('span');
+			suffixCount.classList.add('at-suffix');
+			suffixCount.append(document.createTextNode('' + explicits.suffixCount));
+			modCountPanel.append(suffixCount);			
 		}
 		if(result.item.craftedMods)
 		{
-			overrides['item.craftedMods'] = makeModList(getMods(result.item, 'crafted'), 'crafted');					
+			var mods = getMods(result.item, 'crafted');
+			overrides['item.craftedMods'] = makeModList(mods, 'crafted');	
+			var cCount = document.createElement('span');
+			cCount.classList.add('crafted-mods');
+			cCount.append(document.createTextNode('C'));
+			modCountPanel.append(cCount);				
 		}
 		if(result.item.enchantMods)
 		{
 			overrides['item.enchantMods'] = makeModList(getMods(result.item, 'enchant'), 'enchant');		
-		}
+		}p
 		if(result.item.veiledMods)
 		{
 			overrides['item.veiledMods'] = makeModList(getMods(result.item, 'veiled'), 'veiled');
 		}
+
+		overrides['item.modCount'] = modCountPanel;	
 		if(result.item.properties)
 		{
 			for(var k = 0; k < result.item.properties.length; k++)
@@ -635,12 +655,18 @@ function CompositeMod(modType, displayText)
 	this.displayText = displayText;
 	this.compositeModKey = '';
 	this.mods = [];
+	this.prefixCount = 0;
+	this.suffixCount = 0;
 }
 
 function getMods(item, modType)
 {
 	var veiledHashes = [];
 	var fullMods = [];
+
+	var prefixCount = 0;
+	var suffixCount = 0;
+	
 	if(item[modType + 'Mods'])
 	{
 		var basicModText = item[modType + 'Mods'];
@@ -684,12 +710,23 @@ function getMods(item, modType)
 					{
 						var moreModInfoListing = item.extended.mods[modType];
 						if(moreModInfoListing != null && moreModInfoListing.length > 0)
-						{
+						{							
 							for(var i = 0; i < moreModInfoListing.length; i++)
-							{		
+							{
 								var moreModInfo = moreModInfoListing[i];
 								var modName = moreModInfo.name;
 								var modTier = moreModInfo.tier;
+								if(modTier)
+								{
+									if(modTier.startsWith('P'))
+									{
+										prefixCount++;
+									}
+									else if(modTier.startsWith('S'))
+									{
+										suffixCount++;										
+									}
+								}
 								
 								if(moreModInfo.magnitudes)
 								{
@@ -699,7 +736,7 @@ function getMods(item, modType)
 										var keyToCompositeMods = [];
 										for(var v = 0; v < modMagnitudes.length; v++)
 										{  
-										    var modHashKey = modMagnitudes[v].hash;
+										    var modHashKey = modMagnitudes[v].hash;											
 										    var modMin = modMagnitudes[v].min;
 										    var modMax = modMagnitudes[v].max;
 											if (modMax < 0)
@@ -757,6 +794,10 @@ function getMods(item, modType)
 			}
 		}			
 	}
+
+	fullMods.prefixCount = prefixCount;
+	fullMods.suffixCount = suffixCount;
+	
 	return fullMods;
 }
 
