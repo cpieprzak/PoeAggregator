@@ -3,7 +3,7 @@ function WebSocketWrapper(url, searchInfo)
 	this.url = url;
 	this.searchInfo = searchInfo;
 	this.socket = null;
-	this.timeoutDelay = 5000;
+	this.timeoutDelay = 10000;
 	this.reconnect = function(event)
 	{
 		if(event)
@@ -16,10 +16,9 @@ function WebSocketWrapper(url, searchInfo)
 					console.log(event);
 					var tmpFunction = function()
 					{
-						wsr.connect();
+						this.connect();
 					};
-					tmpFunction.wsr = this;
-					setTimeout(tmpFunction, this.timeoutDelay);
+					setTimeout(tmpFunction.bind(this), this.timeoutDelay);
 				}
 				else
 				{
