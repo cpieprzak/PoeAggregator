@@ -52,13 +52,20 @@ function saveLocalData(id)
 	for(var i = 0; i < fieldsToSave.length; i++)
 	{
 		var field = fieldsToSave[i];
-		window.localStorage.setItem(field.id, field.value);
-		if(field.type && field.type.toLowerCase() === 'checkbox')
+		if(field.type && field.type.toLowerCase() === 'SELECT')
+		{
+			window.localStorage.setItem(field.id, field.options[field.selectedIndex].value);
+		}
+		else if(field.type && field.type.toLowerCase() === 'checkbox')
 		{
 			if(!field.checked)
 			{
 				window.localStorage.setItem(field.id, '');
 			}
+		}
+		else
+		{
+			window.localStorage.setItem(field.id, field.value);
 		}
 	}
 }

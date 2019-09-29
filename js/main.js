@@ -1,6 +1,7 @@
 var lastItem = null;
 var sockets = [];
 var openSockets = 0;
+var activeCount = 0;
 var socketsToOpen = 0;
 var maxItemsDisplayed = 300;
 var allDisplayedItems = [];
@@ -107,6 +108,7 @@ function startSockets()
 	}
 	else
 	{
+		activeCount = 0;
 		hasActiveSockets = true;
 		var socketCounterBox = document.getElementById('socket-count');
 		socketCounterBox.classList.add('active');
@@ -126,7 +128,6 @@ function startSockets()
 
 		if(providedSearches != null && providedSearches.length > 0)
 		{
-			var activeCount = 0;
 			for(var i = 0; i < providedSearches.length; i++)
 			{
 				if(providedSearches[i].active == '1')
@@ -141,40 +142,8 @@ function startSockets()
 				if(searchInfo.active == '1')
 				{
 					var webSocketUrl = socketUrl + searchInfo.searchUrlPart;
-					var searchSocket = new WebSocket(webSocketUrl);
-					searchSocket.searchInfo = searchInfo;
-					searchSocket.onopen = function(event)
-					{
-						openSockets++;
-						document.getElementById('socket-count').value = openSockets + '/' + activeCount;
-					};
-					searchSocket.onerror = function(event)
-					{
-						var errorMsg = this.searchpart + ' has experienced an error.';
-						console.log(event.data);
-						alert(errorMsg);
-					};
-					searchSocket.onclose = function(event)
-					{
-						console.log('Closing...');
-						console.log(event);
-						
-						openSockets--;
-						if(openSockets < 1)
-						{
-							document.getElementById('socket-count').value = 0;
-						}
-						else
-						{
-							document.getElementById('socket-count').value = openSockets + '/' + activeCount;
-						}
-					};
-					searchSocket.onmessage = function (event) 
-					{
-						var json = JSON.parse(event.data);
-						var itemRequest = new ItemRequest(this.searchInfo, json.new);
-						requestManager.addRequest(itemRequest);
-					}
+					var searchSocket = new WebSocketWrapper(webSocketUrl, searchInfo);		
+					searchSocket.connect();
 					sockets.push(searchSocket);
 				}				
 			}

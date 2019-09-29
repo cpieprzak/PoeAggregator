@@ -258,16 +258,17 @@ function dView(result, searchInfo)
 		{
 			var explicits = getMods(result.item, 'explicit');
 			overrides['item.explicitMods'] = makeModList(explicits, 'explicit');	
-
-			var modCountPanel = document.createElement('span');
 			var prefixCount = document.createElement('span');
 			prefixCount.classList.add('at-prefix');
 			prefixCount.append(document.createTextNode('' + explicits.prefixCount));
-			modCountPanel.append(prefixCount);
 			var suffixCount = document.createElement('span');
 			suffixCount.classList.add('at-suffix');
 			suffixCount.append(document.createTextNode('' + explicits.suffixCount));
-			modCountPanel.append(suffixCount);			
+			if(explicits.prefixCount > 0 || explicits.suffixCount > 0)
+			{
+				modCountPanel.append(prefixCount);
+				modCountPanel.append(suffixCount);
+			}
 		}
 		if(result.item.craftedMods)
 		{
@@ -281,7 +282,7 @@ function dView(result, searchInfo)
 		if(result.item.enchantMods)
 		{
 			overrides['item.enchantMods'] = makeModList(getMods(result.item, 'enchant'), 'enchant');		
-		}p
+		}
 		if(result.item.veiledMods)
 		{
 			overrides['item.veiledMods'] = makeModList(getMods(result.item, 'veiled'), 'veiled');

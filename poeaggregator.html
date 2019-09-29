@@ -6,7 +6,7 @@
 	<body class='small'>
 		<div class="all-screen" >	
 			<div class="control-panel flex-item">			
-				<div class="control-panel-items">
+				<div class="control-panel-items" id='control-panel'>
 					<span class='button' onclick="showCurrencyRatios()" >Currency Ratios</span>
 					<span>
 						<label class='nowrap'>Filter<input type='text' id='filter-box' value='' /></label>		
@@ -14,7 +14,7 @@
 						<label class='nowrap'>Min Value<input type='text' id='min-value-box' value='' /></label>		
 					</span>	
 					<span class='button' onclick="showHide('settings-modal')" >Settings</span>
-					<select class="local-data" id="league">
+					<select class="local-data" id="league" onchange="saveLocalData('control-panel')">
 					</select>
 					<span class='nowrap' id='search-wrapper'>
 						Searches
@@ -101,6 +101,7 @@
 				</div>
 				<div class='all-item-properties'>					
 					<div>
+						<span class='template-field' 	tf='item.modCount' 		title='Mod Counts'> </span>
 						<span class='template-field' tf='requirements.label'></span>
 						<span class='template-field' tf='item.requirements.Level'>
 							<span class='if-present'>lvl:</span>
@@ -214,7 +215,6 @@
 				</div>	
 				<div>
 					<div class='v-top item-mods t-left'>
-						<div class='template-field enchant-mods' 	tf='item.modCount' 		title='Mod Counts'> </div>
 						<div class='template-field enchant-mods' 	tf='item.enchantMods' 	title='Enchant'> </div>
 						<div class='template-field implicit-mods' 	tf='item.implicitMods' 	title='Implicit'> </div>
 						<div class='template-field fractured-mods' 	tf='item.fracturedMods' title='Fractured'> </div>
@@ -672,6 +672,7 @@
 		<script type="text/javascript" src="./js/searchListing.js"></script>
 		<script type="text/javascript" src="./js/dView.js"></script>
 		<script type="text/javascript" src="./js/main.js"></script>
+		<script type="text/javascript" src="./js/webSocketWrapper.js"></script>		
 		<script type="text/javascript" src="./js/leagueInfo.js"></script>
 		<script type="text/javascript" src="./js/dataPersistence.js"></script>	
 		<script type="text/javascript" src="./js/currencyConversion.js"></script>	
