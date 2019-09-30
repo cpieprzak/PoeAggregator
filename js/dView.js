@@ -503,6 +503,22 @@ function makeModList(compositeMods, affixListType)
 			var compositeText = document.createElement('span');
 			compositeText.classList.add('composite-display-text');
 			var compositeModDisplayText = compositeMod.displayText;
+			if(compositeModDisplayText)
+			{
+				var modCssClass = compositeModDisplayText.toLowerCase().trim();
+				modCssClass = modCssClass.replace(/[^a-zA-Z]/gi, '_');
+				modCssClass = modCssClass.replace(/_+/g,'-');
+				if(modCssClass.startsWith('-'))
+				{
+					modCssClass = modCssClass.substring(1);
+				}
+				if(modCssClass.endsWith('-'))
+				{
+					modCssClass = modCssClass.substring(0,modCssClass.length-1);
+				}
+				
+				compositeText.classList.add(modCssClass);
+			}
 			if(affixListType == 'veiled')
 			{
 				compositeModDisplayText = 'Veiled ' + compositeModDisplayText;
