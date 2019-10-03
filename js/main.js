@@ -1,5 +1,4 @@
 var lastItem = null;
-var sockets = [];
 var openSockets = 0;
 var activeCount = 0;
 var socketsToOpen = 0;
@@ -100,56 +99,6 @@ function updateTimes()
 	}
 }
 setInterval(updateTimes, 1000);
-function startSockets() 
-{	
-	if(hasActiveSockets)
-	{
-		return false;
-	}
-	else
-	{
-		activeCount = 0;
-		hasActiveSockets = true;
-		var socketCounterBox = document.getElementById('socket-count');
-		socketCounterBox.classList.add('active');
-		
-		var exPrice = document.getElementById('Exalted Orb');
-		if(exPrice.value == null || exPrice.value.length < 1)
-		{
-			loadCurrency();
-		}
-		var league = document.getElementById('league').value;
-		var socketUrl = "wss://pathofexile.com/api/trade/live/" + league + '/';
-		var searchesString = document.getElementById('searches').value;
-		var soundId = document.getElementById('notification-sound').value;
-
-		var listingManager = new ListingManager(searchesString);
-		var providedSearches = listingManager.searches;
-
-		if(providedSearches != null && providedSearches.length > 0)
-		{
-			for(var i = 0; i < providedSearches.length; i++)
-			{
-				if(providedSearches[i].active == '1')
-				{
-					activeCount++;
-				}
-			}
-			
-			for(var i = 0; i < providedSearches.length; i++)
-			{
-				var searchInfo = providedSearches[i];
-				if(searchInfo.active == '1')
-				{
-					var webSocketUrl = socketUrl + searchInfo.searchUrlPart;
-					var searchSocket = new WebSocketWrapper(webSocketUrl, searchInfo);		
-					searchSocket.connect();
-					sockets.push(searchSocket);
-				}				
-			}
-		}		
-	}
-} 
 
 function callAjax(url, callback, searchInfo)
 {
@@ -174,21 +123,42 @@ function clearDisplay()
 	lastItem = null;
 }
 
+function startSockets() 
+{	
+	if(hasActiveSockets)
+	{
+		return false;
+	}
+	else
+	{
+		activeCount = 0;
+		hasActiveSockets = true;		
+		var exPrice = document.getElementById('Exalted Orb');
+		if(exPrice.value == null || exPrice.value.length < 1)
+		{
+			loadCurrency();
+		}
+		var league = document.getElementById('league').value;
+		var socketUrl = "wss://pathofexile.com/api/trade/live/" + league + '/';
+		var searchesString = document.getElementById('searches').value;
+		var soundId = document.getElementById('notification-sound').value;
+
+		var listingManager = new ListingManager(searchesString);
+		var providedSearches = listingManager.searches;
+
+		if(providedSearches != null && providedSearches.length > 0)
+		{
+			SearchConnectionManager.start(providedSearches, socketUrl);
+		}		
+	}
+} 
+
 function stopSockets() 
 {
-	if(sockets != null && sockets.length > 0)
-	{
-		for(var i = 0; i < sockets.length; i++)
-		{
-	  		sockets[i].close();
-		}
-		sockets = [];
-	}	
+	hasActiveSockets = false;
+	SearchConnectionManager.stop();
 	requestManager.itemRequests = [];
 	document.getElementById('queue-count').value = requestManager.itemRequests.length;
-	var socketCounterBox = document.getElementById('socket-count');
-	socketCounterBox.classList.remove('active');
-	hasActiveSockets = false;
 } 
 
 var frameType = ["Normal","Magic","Rare","Unique","Gem","Currency","DivinationCard","Quest","Prophecy","Relic"];

@@ -1,7 +1,6 @@
 var sounds = [];
-function populateSounds(){
-	sounds['woop'] = new Audio('http://poe.trade//static/notification.mp3');
-	sounds['gong'] = new Audio('https://web.poecdn.com/audio/trade/gong.mp3');
+function populateSounds()
+{
 	for(var i = 1; i < 14; i++)
 	{
 		sounds['' + i] = new Audio('./audio/' + i +'.wav');
