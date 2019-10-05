@@ -739,7 +739,7 @@ a:visited {
 	left: 1rem;
 }
 
-.modal-content-box .filter-panel  input
+.modal-content-box .filter-panel  input[type="text"]
 {
 	width: 8rem;
 }
@@ -750,6 +750,11 @@ a:visited {
 	margin: 0px;
 	padding: 0px;
 	width: 100%;
+}
+
+.modal-content-box .us-table-cell input.search-volume
+{
+	width: 3rem;
 }
 .modal-content-box select
 {

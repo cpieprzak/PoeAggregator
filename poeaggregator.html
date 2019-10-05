@@ -347,7 +347,14 @@
 							list="search-categories"
 							autocomplete="off"
 						/>
+						<div class="button" onclick="activateSearches();" title="Activate All Visible Searches">
+							+
+						</div>
+						<div class="button" onclick="deactivateSearches();" title="Deactivate All Visible Searches">
+							-
+						</div>
 					</div>
+					
 				</div>
 				<div id="search-body-content" class="all-searches">
 					<div class="us-table" id="all-searches-table">
@@ -429,8 +436,6 @@
 				</div>
 				<div class="modal-footer">
 					<div>
-						<input type="button" class="button" value="Activate" onclick="activateSearches();">
-						<input type="button" class="button" value="Dectivate" onclick="deactivateSearches();">
 						<input type="button" class="button" value="Sort Actives" onclick="sortActiveSearches();">
 						<input type="button" class="button" value="Sort Categories" onclick="sortSearchesByCategory();">
 						<input type="button" class="button" value="Copy" onclick="copySearchString();">
