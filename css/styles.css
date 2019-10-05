@@ -296,6 +296,7 @@ textarea.notes
 	.item-display 
 	{		
 		min-width: 45vw;
+		max-width: 45vw;
 	}
 	
 	.item-mods ul
