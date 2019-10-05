@@ -199,6 +199,27 @@ function openTradeWebsite(element)
 	}	
 }
 
+function runActiveSearches()
+{
+	var searchTable = document.getElementById('all-searches-table');
+	var actives = [];
+	var inactives = [];
+	var searchRows = searchTable.querySelectorAll('.search-row');
+	for(var i = 0; i < searchRows.length; i++)
+	{
+		var row = searchRows[i];
+		var activeInput = row.querySelector('.search-active');
+		if (activeInput.checked)
+		{
+			actives.push(row);
+		}
+	}
+	for(var i = 0; i < actives.length; i++)
+	{
+		runSearch(actives[i]);
+	}
+}
+
 function loadSearchItems(element)
 {
 	var parent = element.parentNode;
@@ -206,7 +227,13 @@ function loadSearchItems(element)
 	{
 		parent = parent.parentNode;
 	}
-	var urlBox = parent.querySelector('.search-url');
+	runSearch(parent);
+	
+}
+
+function runSearch(searchRow)
+{
+	var urlBox = searchRow.querySelector('.search-url');
 	if(urlBox.value != null && urlBox.value.trim().length > 0)
 	{
 		var league = document.getElementById('league').value;
