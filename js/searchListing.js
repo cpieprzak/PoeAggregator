@@ -199,6 +199,30 @@ function openTradeWebsite(element)
 	}	
 }
 
+function loadSearchItems(element)
+{
+	var parent = element.parentNode;
+	while(!parent.classList.contains('search-row'))
+	{
+		parent = parent.parentNode;
+	}
+	var urlBox = parent.querySelector('.search-url');
+	if(urlBox.value != null && urlBox.value.trim().length > 0)
+	{
+		var league = document.getElementById('league').value;
+		var url = 'https://www.pathofexile.com/api/trade/search/' + league + '/' + urlBox.value;
+		
+		var getSearchResults = function(data, searchInfo)
+		{
+		    var json = JSON.parse(data);
+		    var results = json.result;
+		    var searchinfo = new SearchListing();
+		    requestManager.addRequest(new ItemRequest(searchinfo,results));
+		};
+		callAjax(url, getSearchResults);
+	}	
+}
+
 function openSearchesModal()
 {
 	var searchId = 'search-string-builder';
