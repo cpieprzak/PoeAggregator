@@ -378,7 +378,21 @@ function filterItem(item)
 	if(item.allText)
 	{
 		var itemText = item.allText;
-		if(itemText.indexOf(filterText) < 0)
+
+		if(filterText.startsWith('~'))
+		{
+			filterText = filterText.substring(1);
+			var textParts = filterText.split(' ');
+			for(var i = 0; i < textParts.length; i++)
+			{
+				if(itemText.indexOf(textParts[i]) < 0)
+				{
+					showItem = false;
+					break;
+				}		
+			}
+		}	
+		else if(itemText.indexOf(filterText) < 0)
 		{
 			showItem = false;
 		}			
