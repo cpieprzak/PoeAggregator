@@ -211,15 +211,17 @@ function loadSearchItems(element)
 	{
 		var league = document.getElementById('league').value;
 		var url = 'https://www.pathofexile.com/api/trade/search/' + league + '/' + urlBox.value;
-		
+		url += '?query=' + urlBox.value;
+
+	    var searchinfo = new SearchListing();
+	    searchinfo.searchUrlPart = urlBox.value;
 		var getSearchResults = function(data, searchInfo)
 		{
 		    var json = JSON.parse(data);
 		    var results = json.result;
-		    var searchinfo = new SearchListing();
 		    requestManager.addRequest(new ItemRequest(searchinfo,results));
 		};
-		callAjax(url, getSearchResults);
+		callAjax(url, getSearchResults.bind(searchinfo));
 	}	
 }
 
