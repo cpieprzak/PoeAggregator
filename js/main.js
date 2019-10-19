@@ -115,6 +115,14 @@ function callAjax(url, callback, searchInfo)
     xmlhttp.send();
 }
 
+function consoleOut(data)
+{
+	var json = JSON.parse(data);
+	var results = json.result;
+	console.log(json);
+}
+
+
 function clearDisplay()
 {
 	var display = document.getElementById('display-window');
@@ -346,7 +354,9 @@ minSumBox.onkeyup = function()
 
 var minValue = 0;
 var minValueBox = document.getElementById('min-value-box');
-minValueBox.onkeyup = function()
+minValueBox.onkeyup = filterItems;
+	
+var filterItems = function()
 {
 	var minValueString = this.value;
 	if(minValueString != null && minValueString.trim().length > 0)
@@ -375,7 +385,46 @@ function filterItem(item)
 {
 	var filterText = filterBox.value.toLowerCase().trim();
 	var showItem = true;
-	if(item.allText)
+
+	var requiresOpenPrefix = document.getElementById('open-prefix').value;
+	if(showItem && requiresOpenPrefix != 'either' && item.openPrefix != null)
+	{
+		if(requiresOpenPrefix == 'yes' && item.openPrefix != 1)
+		{
+			showItem = false;
+		}
+		else if(requiresOpenPrefix == 'no' && item.openPrefix != 0)
+		{
+			showItem = false;
+		}
+	}
+	var requiresOpenSuffix = document.getElementById('open-suffix').value;
+	if(showItem && requiresOpenSuffix != 'either' && item.openSuffix != null)
+	{
+		if(requiresOpenSuffix == 'yes' && item.openSuffix != 1)
+		{
+			showItem = false;
+		}
+		else if(requiresOpenSuffix == 'no' && item.openSuffix != 0)
+		{
+			showItem = false;
+		}
+	}
+	
+	var isCrafted = document.getElementById('is-crafted').value;
+	if(showItem && isCrafted != 'either' && item.isCrafted != null)
+	{
+		if(isCrafted == 'yes' && item.isCrafted != 1)
+		{
+			showItem = false;
+		}
+		else if(isCrafted == 'no' && item.isCrafted != 0)
+		{
+			showItem = false;
+		}
+	}
+	
+	if(showItem && item.allText)
 	{
 		var itemText = item.allText;
 
@@ -397,7 +446,7 @@ function filterItem(item)
 			showItem = false;
 		}			
 	}
-	if(minValue > 0)
+	if(showItem && minValue > 0)
 	{
 		if(item.totalItemValue && item.totalItemValue > minValue)
 		{
@@ -408,7 +457,7 @@ function filterItem(item)
 			showItem = false;
 		}
 	}
-	if(minSum > 0)
+	if(showItem && minSum > 0)
 	{
 		if(item.totalSum && item.totalSum > minSum)
 		{

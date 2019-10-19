@@ -1,7 +1,5 @@
 function dView(result, searchInfo)
 {
-
-
 	var template = document.getElementById('item-template');
 	var newNode = template.cloneNode(true);
 	//console.log(result);
@@ -254,6 +252,7 @@ function dView(result, searchInfo)
 		}
 
 		var modCountPanel = document.createElement('span');
+		
 		if(result.item.explicitMods)
 		{
 			var explicits = getMods(result.item, 'explicit');
@@ -264,14 +263,42 @@ function dView(result, searchInfo)
 			var suffixCount = document.createElement('span');
 			suffixCount.classList.add('at-suffix');
 			suffixCount.append(document.createTextNode('' + explicits.suffixCount));
+			newNode.openPrefix = 0;
+			newNode.openSuffix = 0;
+			newNode.isCrafted = 0;
 			if(explicits.prefixCount > 0 || explicits.suffixCount > 0)
 			{
 				modCountPanel.append(prefixCount);
 				modCountPanel.append(suffixCount);
+				
+				var maxAffix = 3;
+				if(result.item.typeLine)
+				{
+					if(result.item.typeLine.endsWith('Jewel'))
+					{
+						maxAffix = 2;
+					}
+				}
+				var isMagicItem = false;
+				if(result.item.frameType && result.item.frameType == 1)
+				{
+					maxAffix = 1;
+				}				
+
+				if(explicits.prefixCount < maxAffix)
+				{
+					newNode.openPrefix = 1;
+				}
+
+				if(explicits.suffixCount < maxAffix)
+				{
+					newNode.openSuffix = 1;
+				}
 			}
 		}
 		if(result.item.craftedMods)
 		{
+			newNode.isCrafted = 1;
 			var mods = getMods(result.item, 'crafted');
 			overrides['item.craftedMods'] = makeModList(mods, 'crafted');	
 			var cCount = document.createElement('span');

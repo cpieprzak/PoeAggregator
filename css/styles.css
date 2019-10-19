@@ -1003,3 +1003,8 @@ a:visited {
 {
 	background-color: rgba(0,0,0,.5);
 }
+
+.item-filter-controls input[type=checkbox]
+{
+	vertical-align: middle;
+}
