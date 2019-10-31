@@ -11,14 +11,14 @@ function populateSounds()
 		var soundSelect = soundSelects[i];
 		soundSelect.innerHTML = '';
 		var blankOption = document.createElement('option');
-		soundSelect.append(blankOption);
+		soundSelect.appendChild(blankOption);
 		
 		for (var key in sounds)
 		{
 			var newOption = document.createElement('option');
 			newOption.value = key;
-			newOption.append(document.createTextNode(key));
-			soundSelect.append(newOption);
+			newOption.appendChild(document.createTextNode(key));
+			soundSelect.appendChild(newOption);
 		}
 		soundSelect.playSound = function()
 		{

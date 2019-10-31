@@ -28,9 +28,9 @@ var loadLeagues = function(data, parameters)
 			}
 			
 			option.value = league.id;
-			option.append(document.createTextNode(league.id));
+			option.appendChild(document.createTextNode(league.id));
 			
-			leagueSelect.append(option);
+			leagueSelect.appendChild(option);
 			currentIndex++;
 		}
 	}

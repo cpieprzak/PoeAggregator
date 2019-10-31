@@ -147,7 +147,7 @@ function startSockets()
 			loadCurrency();
 		}
 		var league = document.getElementById('league').value;
-		var socketUrl = "wss://pathofexile.com/api/trade/live/" + league + '/';
+		var socketUrl = "wss://pathofexile.com:443/api/trade/live/" + league + '/';
 		var searchesString = document.getElementById('searches').value;
 		var soundId = document.getElementById('notification-sound').value;
 
@@ -223,7 +223,7 @@ function copyTextToClipboard(text)
 	{
 		document.execCommand('copy');
 	}
-	catch (e) 
+	catch(error) 
 	{
 		
 	}
@@ -295,7 +295,7 @@ function updateMaxItemsDisplayed()
 	{
 		maxItemsDisplayed = parseInt(maxString);
 	}
-	catch
+	catch(error)
 	{
 		maxItemsDisplayed = 300;
 	}	
@@ -336,7 +336,7 @@ minSumBox.onkeyup = function()
 		{
 			minSum = parseFloat(minSumString);
 		}
-		catch
+		catch(error)
 		{
 			minSum = 0;
 		}
@@ -365,7 +365,7 @@ var filterItems = function()
 		{
 			minValue = parseFloat(minValueString);
 		}
-		catch
+		catch(error)
 		{
 			minValue = 0;
 		}
@@ -584,7 +584,7 @@ function drop(e)
 			} 
 			else 
 			{
-				parent.append(dragTarget);
+				parent.appendChild(dragTarget);
 			}
 		} 
 		else 
@@ -632,7 +632,7 @@ function orderBySum()
 	var displayWindow = document.getElementById('display-window');
 	for(var i = 0; i < allDisplayedItems.length; i++)
 	{
-		displayWindow.append(allDisplayedItems[i]);
+		displayWindow.appendChild(allDisplayedItems[i]);
 	}
 }
 
@@ -662,6 +662,6 @@ function orderByValue()
 		var displayWindow = document.getElementById('display-window');
 		for(var i = 0; i < allDisplayedItems.length; i++)
 		{
-			displayWindow.append(allDisplayedItems[i]);
+			displayWindow.appendChild(allDisplayedItems[i]);
 		}
 }

@@ -2,6 +2,8 @@ function loadLocalData()
 { 
 	var storedFields = document.querySelectorAll('.local-data');
 	
+	
+	
 	for(var key in storedFields)
 	{
 		var storedField = storedFields[key];

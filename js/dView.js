@@ -38,16 +38,16 @@ function dView(result, searchInfo)
 				chaosEquiv = +chaosEquiv.toFixed(2);
 				var equivPanel = document.createElement('span');
 				var equivText = document.createElement('span');
-				equivText.append(document.createTextNode('(~' + chaosEquiv));
-				equivPanel.append(equivText);
+				equivText.appendChild(document.createTextNode('(~' + chaosEquiv));
+				equivPanel.appendChild(equivText);
 				var chaosImg = document.createElement('img');
 				chaosImg.title = 'chaos';
 				chaosImg.classList.add('currency-img');
 				chaosImg.src = currencyImages['chaos'];
-				equivPanel.append(chaosImg);
+				equivPanel.appendChild(chaosImg);
 				equivText = document.createElement('span');
-				equivText.append(document.createTextNode(')'));
-				equivPanel.append(equivText);				
+				equivText.appendChild(document.createTextNode(')'));
+				equivPanel.appendChild(equivText);				
 				
 				overrides['listing.price.chaos.equiv'] = equivPanel;				
 			}
@@ -131,19 +131,19 @@ function dView(result, searchInfo)
 		var itemKeys = Object.keys(resultItem);
 		var itemKeyPanel = document.createElement('div');
 		var keyTitle = document.createElement('div');
-		keyTitle.append(document.createTextNode('keys'));
-		itemKeyPanel.append(keyTitle);
+		keyTitle.appendChild(document.createTextNode('keys'));
+		itemKeyPanel.appendChild(keyTitle);
 		keyTitle.onclick = showHide;
 		var itemKeyBody = document.createElement('div');
 		
 		var timeInfo = document.createElement('div');
 		timeInfo.createDate = new Date();
 		timeInfo.classList.add('create-date');
-		timeInfo.append(document.createTextNode('A few seconds ago'));
+		timeInfo.appendChild(document.createTextNode('A few seconds ago'));
 		overrides['search-time'] = timeInfo;
 
 		itemKeyBody.classList.add('hidden');
-		itemKeyPanel.append(itemKeyBody);
+		itemKeyPanel.appendChild(itemKeyBody);
 		keyTitle.showHideTarget = itemKeyBody;
 		var showHideTarget = showHideTarget;
 		for (var keyIndex = 0; keyIndex < itemKeys.length; keyIndex++)
@@ -151,15 +151,15 @@ function dView(result, searchInfo)
 			var ikey = itemKeys[keyIndex];
 			var keyHeader = document.createElement('div');
 			keyHeader.classList.add('key-header');
-			keyHeader.append(document.createTextNode(ikey));
+			keyHeader.appendChild(document.createTextNode(ikey));
 			keyHeader.onclick = showHide;
-			itemKeyBody.append(keyHeader);
+			itemKeyBody.appendChild(keyHeader);
 
 			var keyValue = document.createElement('div');
 			keyValue.classList.add('key-value');
 			keyValue.classList.add('hidden');
-			keyValue.append(document.createTextNode(JSON.stringify(resultItem[ikey])));
-			itemKeyBody.append(keyValue);
+			keyValue.appendChild(document.createTextNode(JSON.stringify(resultItem[ikey])));
+			itemKeyBody.appendChild(keyValue);
 			keyHeader.showHideTarget = keyValue;
 		}
 		overrides['itemKeyPanel'] = itemKeyPanel;
@@ -171,29 +171,29 @@ function dView(result, searchInfo)
 			socketPanel.classList.add('socket-panel');		
 			
 			var socketInfo = document.createElement('span');
-			socketInfo.append(document.createTextNode('( '));
+			socketInfo.appendChild(document.createTextNode('( '));
 			
 			var totalSockets = document.createElement('span');
 			var socketText = itemSockets.length + 'S';
-			totalSockets.append(document.createTextNode(socketText));
+			totalSockets.appendChild(document.createTextNode(socketText));
 			totalSockets.classList.add('s-' + socketText);
-			socketInfo.append(totalSockets);
+			socketInfo.appendChild(totalSockets);
 			
-			socketInfo.append(document.createTextNode(' / '));
+			socketInfo.appendChild(document.createTextNode(' / '));
 			socketInfo.classList.add('data-value');
-			socketPanel.append(socketInfo);
+			socketPanel.appendChild(socketInfo);
 			
 			var currentSocketGroup = 0;
 			var startSocketGroup = document.createElement('span');
-			startSocketGroup.append(document.createTextNode(' {'));
+			startSocketGroup.appendChild(document.createTextNode(' {'));
 
 			var socketLink = document.createElement('span');
 			socketLink.classList.add('socket-link');
-			socketLink.append(document.createTextNode('='));
+			socketLink.appendChild(document.createTextNode('='));
 			
 			var endSocketGroup = document.createElement('span');
-			endSocketGroup.append(document.createTextNode('}'));
-			socketPanel.append(startSocketGroup.cloneNode(true));
+			endSocketGroup.appendChild(document.createTextNode('}'));
+			socketPanel.appendChild(startSocketGroup.cloneNode(true));
 			var isFirstInGroup = true;
 			var maxLinks = 1;
 			var linkCounter = 1;
@@ -204,8 +204,8 @@ function dView(result, searchInfo)
 
 				if(itemSocketGroup != currentSocketGroup)
 				{
-					socketPanel.append(endSocketGroup.cloneNode(true));
-					socketPanel.append(startSocketGroup.cloneNode(true));
+					socketPanel.appendChild(endSocketGroup.cloneNode(true));
+					socketPanel.appendChild(startSocketGroup.cloneNode(true));
 					currentSocketGroup = itemSocketGroup;
 					isFirstInGroup = true;
 					linkCounter = 1;
@@ -221,25 +221,25 @@ function dView(result, searchInfo)
 				}
 				else
 				{
-					socketPanel.append(socketLink.cloneNode(true));					
+					socketPanel.appendChild(socketLink.cloneNode(true));					
 				}
 				var itemSocketColor = itemSocket.sColour;
 				var socketNode = document.createElement('span');
 				var socketCssClass = 'socket-' + itemSocketColor;
 				socketNode.classList.add(socketCssClass);
-				socketNode.append(document.createTextNode(itemSocketColor));
-				socketPanel.append(socketNode);
+				socketNode.appendChild(document.createTextNode(itemSocketColor));
+				socketPanel.appendChild(socketNode);
 				linkCounter++;
 			}
-			socketPanel.append(endSocketGroup.cloneNode(true));
+			socketPanel.appendChild(endSocketGroup.cloneNode(true));
 
 			
 			var maxLinksBox = document.createElement('span');
 			var linkText = maxLinks + 'L';
-			maxLinksBox.append(document.createTextNode(linkText));
+			maxLinksBox.appendChild(document.createTextNode(linkText));
 			maxLinksBox.classList.add('l-' + linkText);
-			socketInfo.append(maxLinksBox);				
-			socketInfo.append(document.createTextNode(')'));
+			socketInfo.appendChild(maxLinksBox);				
+			socketInfo.appendChild(document.createTextNode(')'));
 			overrides['item.sockets'] = socketPanel;		
 		}
 		if(result.item.implicitMods)
@@ -259,17 +259,17 @@ function dView(result, searchInfo)
 			overrides['item.explicitMods'] = makeModList(explicits, 'explicit');	
 			var prefixCount = document.createElement('span');
 			prefixCount.classList.add('at-prefix');
-			prefixCount.append(document.createTextNode('' + explicits.prefixCount));
+			prefixCount.appendChild(document.createTextNode('' + explicits.prefixCount));
 			var suffixCount = document.createElement('span');
 			suffixCount.classList.add('at-suffix');
-			suffixCount.append(document.createTextNode('' + explicits.suffixCount));
+			suffixCount.appendChild(document.createTextNode('' + explicits.suffixCount));
 			newNode.openPrefix = 0;
 			newNode.openSuffix = 0;
 			newNode.isCrafted = 0;
 			if(explicits.prefixCount > 0 || explicits.suffixCount > 0)
 			{
-				modCountPanel.append(prefixCount);
-				modCountPanel.append(suffixCount);
+				modCountPanel.appendChild(prefixCount);
+				modCountPanel.appendChild(suffixCount);
 				
 				var maxAffix = 3;
 				if(result.item.typeLine)
@@ -303,8 +303,8 @@ function dView(result, searchInfo)
 			overrides['item.craftedMods'] = makeModList(mods, 'crafted');	
 			var cCount = document.createElement('span');
 			cCount.classList.add('crafted-mods');
-			cCount.append(document.createTextNode('C'));
-			modCountPanel.append(cCount);				
+			cCount.appendChild(document.createTextNode('C'));
+			modCountPanel.appendChild(cCount);				
 		}
 		if(result.item.enchantMods)
 		{
@@ -387,7 +387,7 @@ function dView(result, searchInfo)
 		}
 	}
 	var itemNamePlate = document.createElement('span');
-	itemNamePlate.append(document.createTextNode(result.item.name));
+	itemNamePlate.appendChild(document.createTextNode(result.item.name));
 	overrides['item.name'] = itemNamePlate;
 	if(result.item.verified)
 	{
@@ -407,7 +407,7 @@ function dView(result, searchInfo)
 	refreshButton.searchInfo = searchInfo.cloneNode(true);
 	refreshButton.refreshTarget = newNode;
 	refreshButton.title = 'Refresh';
-	refreshButton.append(document.createTextNode('Refresh'));
+	refreshButton.appendChild(document.createTextNode('Refresh'));
 	refreshButton.onclick = function ()
 	{
 		var msg = this.gggid + ' ' + this.searchInfo.searchUrlPart;
@@ -454,19 +454,31 @@ function dView(result, searchInfo)
 								typeof aTmpResult === 'number')
 						{
 							var textWrapper = document.createElement('span');
-							textWrapper.append(document.createTextNode(aTmpResult));
+							textWrapper.appendChild(document.createTextNode(aTmpResult));
 							
-							dataTarget.append(textWrapper);
+							dataTarget.appendChild(textWrapper);
 						}
 						else
 						{
-							dataTarget.append(aTmpResult.cloneNode(true));
+							dataTarget.appendChild(aTmpResult.cloneNode(true));
 						}
 					}	
 				}
 				else
 				{
-					field.append(aTmpResult);
+					if(typeof aTmpResult === 'string' ||
+							aTmpResult instanceof String ||
+							typeof aTmpResult === 'number')
+					{
+						var textWrapper = document.createElement('span');
+						textWrapper.appendChild(document.createTextNode(aTmpResult));
+						
+						field.appendChild(textWrapper);
+					}
+					else
+					{
+						field.appendChild(aTmpResult);
+					}
 				}
 			}
 			else
@@ -550,8 +562,8 @@ function makeModList(compositeMods, affixListType)
 			{
 				compositeModDisplayText = 'Veiled ' + compositeModDisplayText;
 			}
-			compositeText.append(document.createTextNode(compositeModDisplayText));
-			compositeModPanel.append(compositeText);
+			compositeText.appendChild(document.createTextNode(compositeModDisplayText));
+			compositeModPanel.appendChild(compositeText);
 			
 
 			var detailModPanel = document.createElement('span');
@@ -575,32 +587,32 @@ function makeModList(compositeMods, affixListType)
 						{
 							var modTier = document.createElement('span');
 							modTier.classList.add('mod-tier');
-							modTier.append(document.createTextNode(' (' + itemMod.modTier + ') '));
+							modTier.appendChild(document.createTextNode(' (' + itemMod.modTier + ') '));
 							modBox.classList.add(itemMod.modTier);
-							modBox.append(modTier);
+							modBox.appendChild(modTier);
 						}
 						if(itemMod.modName  != null && itemMod.modName  != '')
 						{
 							var modName = document.createElement('span');
 							modName.classList.add('mod-name');
-							modName.append(document.createTextNode(itemMod.modName));
-							modBox.append(modName);
+							modName.appendChild(document.createTextNode(itemMod.modName));
+							modBox.appendChild(modName);
 						}
 						if(itemMod.modRangeString  != null && itemMod.modRangeString  != '')
 						{
 							var modRange = document.createElement('span');
 							modRange.classList.add('mod-range');
-							modRange.append(document.createTextNode(' ' + itemMod.modRangeString));
-							modBox.append(modRange);
+							modRange.appendChild(document.createTextNode(' ' + itemMod.modRangeString));
+							modBox.appendChild(modRange);
 						}
-						detailModPanel.append(modBox);
+						detailModPanel.appendChild(modBox);
 					}
 				}
 			}
 			
-			compositeModPanel.append(detailModPanel);
-			li.append(compositeModPanel);
-			modlist.append(li);
+			compositeModPanel.appendChild(detailModPanel);
+			li.appendChild(compositeModPanel);
+			modlist.appendChild(li);
 		}
 	}	
 	
@@ -736,7 +748,7 @@ function getMods(item, modType)
 								fullMods[i].compositeModKey = hashes[modType][i][0];
 								hashToMod[fullMods[i].compositeModKey] = fullMods[i];
 							}
-							catch
+							catch(error)
 							{
 								console.log("unknown extended error");
 								console.log(item);
@@ -864,7 +876,7 @@ function refreshItem(data, searchInfo)
 		var origCreateDate = oldNode.querySelector('.create-date');
 		var refreshedCreateDate = refreshedItem.querySelector('.create-date');
 		refreshedCreateDate.innerHTML = '';
-		refreshedCreateDate.append(document.createTextNode('Refreshing...'));
+		refreshedCreateDate.appendChild(document.createTextNode('Refreshing...'));
 		refreshedCreateDate.createDate = origCreateDate.createDate;
 		display.insertBefore(refreshedItem, oldNode);
 		if(lastItem == oldNode)

@@ -127,11 +127,11 @@ function sortActiveSearches()
 	}
 	for(var i = 0; i < actives.length; i++)
 	{
-		searchTable.append(actives[i]);
+		searchTable.appendChild(actives[i]);
 	}
 	for(var i = 0; i < inactives.length; i++)
 	{
-		searchTable.append(inactives[i]);
+		searchTable.appendChild(inactives[i]);
 	}
 }
 
@@ -162,7 +162,7 @@ function addNewSearchRow()
 		makeDraggable(searchRow,'search-row');
 		searchRow.querySelector('.search-category').addEventListener("blur", function(e){remakeCategories();});
 		
-		searchesTable.append(searchRow);
+		searchesTable.appendChild(searchRow);
 	}
 	else
 	{
@@ -311,7 +311,7 @@ function openSearchesModal()
 		replaceWithRemoveButton(addNewButton, searchRow);	
 		makeDraggable(searchRow,'search-row');
 
-		searchesTable.append(searchRow);
+		searchesTable.appendChild(searchRow);
 	}
 
 	var searchCategoriesList = document.getElementById('search-categories');
@@ -321,7 +321,7 @@ function openSearchesModal()
 	{
 		var category = document.createElement('option');
 		category.value = searchCategories[i];
-		searchCategoriesList.append(category);
+		searchCategoriesList.appendChild(category);
 	}
 }
 
@@ -330,7 +330,7 @@ function replaceWithRemoveButton(newButton, row)
 	var parent = newButton.parentNode;
 	var removeButton = document.createElement('div');
 	removeButton.classList.add('button');
-	removeButton.append(document.createTextNode('Remove'));
+	removeButton.appendChild(document.createTextNode('Remove'));
 	removeButton.removeTarget = row;
 	removeButton.onclick = function()
 	{
@@ -420,7 +420,7 @@ function sortSearchesByCategory()
 		for(var j = 0; j < orderedRows.length; j++)
 		{
 			var orderedRow = orderedRows[j];
-			searchesTable.append(orderedRow);
+			searchesTable.appendChild(orderedRow);
 		}
 	}
 }
@@ -509,7 +509,7 @@ function remakeCategories()
 	{
 		var category = document.createElement('option');
 		category.value = searchCategories[i];
-		searchCategoriesList.append(category);
+		searchCategoriesList.appendChild(category);
 	}
 }
 
