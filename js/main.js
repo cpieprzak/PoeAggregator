@@ -21,26 +21,29 @@ function RequestManager()
 	this.addRequest = function(newRequest)
 	{	
 		var listings = newRequest.listings;
-		var filteredListing = [];
-			
-		for(var i = 0; i < listings.length; i++)
+		if(listings != null && listings.length > 0)
 		{
-			filteredListing.push(newRequest.listings[i]);
-			if(filteredListing.length == 10)
+			var filteredListing = [];
+			
+			for(var i = 0; i < listings.length; i++)
+			{
+				filteredListing.push(newRequest.listings[i]);
+				if(filteredListing.length == 10)
+				{
+					var tmpRequest = new ItemRequest(newRequest.searchInfo, filteredListing);
+					this.itemRequests.push(tmpRequest);		
+					filteredListing = [];
+				}
+			}
+			
+			if(filteredListing.length > 0)
 			{
 				var tmpRequest = new ItemRequest(newRequest.searchInfo, filteredListing);
-				this.itemRequests.push(tmpRequest);		
-				filteredListing = [];
-			}
-		}
-		
-		if(filteredListing.length > 0)
-		{
-			var tmpRequest = new ItemRequest(newRequest.searchInfo, filteredListing);
-			this.itemRequests.push(tmpRequest);
-		}			
+				this.itemRequests.push(tmpRequest);
+			}			
 
-		this.queueBox.value = requestManager.itemRequests.length;
+			this.queueBox.value = requestManager.itemRequests.length;
+		}		
 	}
 	this.getNextItem = function()
 	{
