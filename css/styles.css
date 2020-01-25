@@ -373,16 +373,34 @@ textarea.notes
 	font-weight: bold;
 }
 
-.elder
+.inf-elder
 {
 	color: #4b8250;
-	font-weight: bold;	
 }
 
-.shaped
+.inf-shaper
 {
 	color: #b45fff;
-	font-weight: bold;	
+}
+
+.inf-warlord
+{
+	color: #bb1a1e;
+}
+
+.inf-redeemer
+{
+	color: #92b8cd;
+}
+
+.inf-crusader
+{
+	color: #2fa3ce;
+}
+
+.inf-hunter
+{
+	color: #52b013;
 }
 
 .currency-img
@@ -390,7 +408,9 @@ textarea.notes
 	height: 1.5rem;
     vertical-align: middle;
 }
-.implicit-mods li {
+
+.implicit-mods li 
+{
 	color: #958e87;	
     text-decoration: underline dotted;
 }

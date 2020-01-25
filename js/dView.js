@@ -94,9 +94,8 @@ function dView(result, searchInfo)
 	overrides['whisper-button'] = buildCopyButton(whisperButtonText, result.listing.whisper);
 	overrides['item.corrupted'] = '';
 	overrides['item.mirrored'] = '';
-	overrides['item.shaper'] = '';
-	overrides['item.elder'] = '';
 	overrides['search-comment'] = '';
+	overrides['item.influences'] = '';
 	
 	if(searchInfo != null)
 	{
@@ -118,14 +117,31 @@ function dView(result, searchInfo)
 
 	if(result.item)
 	{
-		
-		if(result.item.shaper)
+		if(result.item.influences)
 		{
-			overrides['item.shaped'] = '(Shaped)';
-		}		
-		if(result.item.elder)
-		{
-			overrides['item.elder'] = '(Elder)';
+			var influences = Object.keys(result.item.influences);
+
+			var influencePanel = document.createElement('div');
+			for (var i = 0; i < influences.length; i++)
+			{
+				var influence = document.createElement('span');
+				var infName = influences[i];
+				var formatted = '';
+				var infNamelist = infName.split(' ');
+				for(var j = 0; j < infNamelist.length; j++)
+				{
+					var namePart = infNamelist[j];
+					if(j > 0)
+					{
+						formatted += ' ';
+					}
+					formatted += namePart.charAt(0).toUpperCase() + namePart.substring(1);
+				}
+				influence.innerHTML = '{' + formatted + '}';
+				influence.classList.add('inf-' + infName.trim().replace(' ','-'));
+				influencePanel.appendChild(influence);
+			}
+			overrides['item.influences'] = influencePanel;
 		}
 		var resultItem = result.item;
 		var itemKeys = Object.keys(resultItem);
