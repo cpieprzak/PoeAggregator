@@ -6,7 +6,9 @@ function ListingManager(listingString)
 		var listedSearches = listingString.split(',');
 		for (var i = 0; i < listedSearches.length; i++)
 		{
-			var newListing = new SearchListing(listedSearches[i]);
+			var search = listedSearches[i];
+			search = search.replace('%2C',',');
+			var newListing = new SearchListing(search);
 			this.searches.push(newListing);
 		}
 	}
@@ -478,6 +480,7 @@ function translateInput(rowInput)
 
 	inputValue = inputValue.replace('[','');
 	inputValue = inputValue.replace(']','');
+	inputValue = inputValue.replace(',','%2C');
 	
 	if(rowInput.type =='checkbox')
 	{
