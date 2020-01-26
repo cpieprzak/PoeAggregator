@@ -219,6 +219,7 @@ textarea.notes
 	margin-top: .125rem;
 	margin-bottom: .125rem;
 }
+
 .up-button
 {
 	margin-left: .1rem;
@@ -232,6 +233,7 @@ textarea.notes
 	border-bottom: .5rem solid transparent;
 	cursor: pointer;
 }
+
 .down-button
 {
 	margin-left: .1rem;
@@ -244,25 +246,48 @@ textarea.notes
 	border-right: .3rem solid transparent;	 
 	cursor: pointer; 
 }
+
 .search-row:hover 
 {
 	background-color: #c0c0c0;
 }
+
 .search-row:hover .up-button
 {
 	border-bottom: .5rem solid #2c6ace;
 }
+
 .search-row:hover .up-button:hover
 {
 	border-bottom: .5rem solid #008000;
 }
+
 .search-row:hover .down-button:hover
 {
 	border-top: .5rem solid #008000;
 }
+
 .search-row:hover .down-button
 {
 	border-top: .5rem solid #2c6ace;
+}
+
+.add-new-search
+{
+	border-top: 3px solid rgba(63, 66, 70, 0.75);
+	padding-bottom: .25rem;
+	background-color: #c0c0c0;
+}
+
+.add-new-search .search-header-row
+{
+	text-shadow: 2px 2px 1px #ffffff;
+}
+
+.add-new-search .search-header-row
+{
+	height: 1px;
+	overflow: hidden;
 }
 
 .add-new-search .row-position-panel

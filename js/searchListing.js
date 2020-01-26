@@ -141,6 +141,7 @@ function addNewSearchRow()
 	var newRow = document.getElementById('new-search-row');
 	var searchRow = newRow.cloneNode(true);
 	searchRow.id = '';
+	
 	if(searchRow.querySelector('.search-url').value.trim() != '')
 	{
 		var addNewButton = searchRow.querySelector('.add-new-button');
@@ -340,10 +341,23 @@ function replaceWithRemoveButton(newButton, row)
 	parent.removeChild(newButton);
 }
 
-function copySearchString()
+var tmpFileLink = document.createElement('a');
+function download(filename, content) 
 {
-	var text = generateSearchString();
-	copyTextToClipboard(text);
+	tmpFileLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+	tmpFileLink.setAttribute('download', filename);
+	tmpFileLink.click();
+}
+
+function exportSearches()
+{
+	var searches = generateSearchString();
+	var filename = prompt("Please enter a File Name:", 'poe-searches.txt');
+	if(filename === null || filename.trim().lenth < 1)
+	{
+		return;
+	}
+	download(filename,searches);
 }
 
 function saveSearchString()
@@ -448,42 +462,55 @@ function generateSearchString()
 			var rowString = '';
 			for(var j = 0; j < inputs.length; j++)
 			{
-				rowString += '[';
-				if(inputs[j].type =='checkbox')
-				{
-					if(inputs[j].checked)
-					{
-						rowString += '1';
-					}
-					else
-					{
-						rowString += '0';
-					}
-				}
-				else
-				{
-					if(inputs[j].classList.contains('search-volume'))
-					{
-						if(inputs[j].value != '')
-						{
-							if(inputs[j].value > 1)
-							{
-								inputs[j].value = 1;
-							}
-							else if(inputs[j].value < 0.1)
-							{
-								inputs[j].value = 0.1;
-							}
-						}
-					}
-					rowString += inputs[j].value;
-				}
-				rowString += ']';
+				var rowInput = inputs[j];
+				rowString += translateInput(rowInput);
 			}
 			searchString += rowString;
 		}
 	}
 	return searchString;
+}
+
+function translateInput(rowInput)
+{
+	var translated = '[';
+	var inputValue = rowInput.value;
+
+	inputValue = inputValue.replace('[','');
+	inputValue = inputValue.replace(']','');
+	
+	if(rowInput.type =='checkbox')
+	{
+		if(rowInput.checked)
+		{
+			translated += '1';
+		}
+		else
+		{
+			translated += '0';
+		}
+	}
+	else
+	{
+		if(rowInput.classList.contains('search-volume'))
+		{
+			if(inputValue != '')
+			{
+				if(inputValue > 1)
+				{
+					inputValue = 1;
+				}
+				else if(inputValue < 0.1)
+				{
+					inputValue = 0.1;
+				}
+			}
+		}
+		translated += inputValue;
+	}
+	translated += ']';
+	
+	return translated;
 }
 
 function remakeCategories()
@@ -513,12 +540,11 @@ function remakeCategories()
 	}
 }
 
-var loadFileInput = document.getElementById("load-searches");
-
+var loadFileInput = document.getElementById('load-searches');
 
 loadFileInput.addEventListener('change', function () 
 {
-	var searchString = document.getElementById("searches");
+	var searchString = document.getElementById('searches');
 	searchString.value = '';
 	if (this.files && this.files[0]) 
 	{
@@ -537,6 +563,5 @@ loadFileInput.addEventListener('change', function ()
 		});
 		
 		reader.readAsText(searchFile);
-
 	}   
 });
