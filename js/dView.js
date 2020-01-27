@@ -19,7 +19,8 @@ function dView(result, searchInfo)
 	if(result.listing.price)
 	{
 		var currencyType = result.listing.price.currency;
-		if(currencyType)
+		var currencyAmount = result.listing.price.amount;
+		if(currencyType && currencyAmount && currencyAmount > 0)
 		{
 			var currencyImg = document.createElement('img');
 			currencyImg.title = currencyType;
@@ -56,6 +57,13 @@ function dView(result, searchInfo)
 			{
 				chaosEquiv = result.listing.price.amount;
 			}
+		}
+		else
+		{
+			var unpriced = document.createElement('span');
+			unpriced.classList.add('default-text');
+			unpriced.appendChild(document.createTextNode('Unpriced'));
+			overrides['listing.price.type'] = unpriced;
 		}
 	}
 
