@@ -1053,3 +1053,29 @@ a:visited {
 {
 	vertical-align: middle;
 }
+
+.account-status
+{
+	display: inline-block;
+    color: #ffffff;
+    padding: .25rem;
+    box-sizing: border-box;
+    border-width: 1px;
+}
+.account-status.offline
+{
+	background-color: #d9534f;
+    border-color: #e7908e;
+}
+
+.account-status.online
+{
+	background-color: #309630;
+    border-color: #4dc64d;
+}
+
+.account-status.afk
+{
+	background-color: #C45F00;
+    border-color: #ff8512;
+}

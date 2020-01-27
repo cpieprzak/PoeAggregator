@@ -2,9 +2,10 @@ function dView(result, searchInfo)
 {
 	var template = document.getElementById('item-template');
 	var newNode = template.cloneNode(true);
-	//console.log(result);
 	var overrides = [];
 	var icon = document.createElement('img');
+	icon.result = result;
+	icon.onclick = function(){console.log(this.result);};
 	icon.src = result.item.icon;
 	overrides['icon'] = icon;
 
@@ -81,7 +82,31 @@ function dView(result, searchInfo)
 			overrides['item.total-sum-per-chaos'] = +(newNode.totalItemValue).toFixed(2);
 		}
 	}
-	
+	if(result.listing.account)
+	{
+		var online = result.listing.account.online;
+		var accountStatus = document.createElement('span');
+		var msgText = 'Offline';
+		var statusPanel = document.createElement('span');
+		if(online != null)
+		{
+			msgText = 'Online';
+			if(online.league)
+			{
+				statusPanel.title = online.league;
+			}
+			if(online.status)
+			{
+				msgText = online.status;
+			}
+		}
+		statusPanel.appendChild(document.createTextNode(msgText));
+		accountStatus.classList.add('account-status');
+		accountStatus.classList.add(msgText.toLowerCase());
+		accountStatus.appendChild(statusPanel);
+		
+		overrides['account-status'] = accountStatus;
+	}
 	if(result.listing.account.name)
 	{
 		whisperButtonText += ' ' + result.listing.account.lastCharacterName;
