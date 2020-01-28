@@ -11,6 +11,7 @@ function dView(result, searchInfo)
 
 	var whisperButtonText = 'Whisper';
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
+	overrides['watch-item-button'] = buildWatchButton(result.id,searchInfo);
 	overrides['listing.price.currency.img'] = '';
 	overrides['listing.price.chaos.equiv'] = '';
 	overrides['item.total-sum'] = '';
@@ -554,23 +555,25 @@ function dView(result, searchInfo)
 		}
 	}
 	var gggId = 'ggg-id-' + result.id;
-	var oldVersions = document.querySelectorAll('.' + gggId);
-	for(var p = 0; p < oldVersions.length; p++)
+	if(searchInfo.viewId == 'display-window')
 	{
-		oldVersions[p].classList.add('outdated');
+		var oldVersions = document.querySelectorAll('.' + gggId);
+		for(var p = 0; p < oldVersions.length; p++)
+		{
+			oldVersions[p].classList.add('outdated');
+		}
+		newNode.classList.add('unviewed');
+		newNode.onmouseover = function(event)
+		{
+			this.classList.remove('unviewed');
+			this.onmouseover = null;
+		}
 	}
 	
 	newNode.allText = JSON.stringify(newNode).toLowerCase() + getTextFromNode(newNode).toLowerCase();
-	filterItem(newNode);
-	
+	filterItem(newNode);	
 
 	newNode.classList.add(gggId);
-	newNode.classList.add('unviewed');
-	newNode.onmouseover = function(event)
-	{
-		this.classList.remove('unviewed');
-		this.onmouseover = null;
-	}
 	
 	return newNode;
 }
@@ -913,8 +916,9 @@ function scrollToTop()
 
 function refreshItem(data, searchInfo) 
 {
-	var json = JSON.parse(data);
-	var display = document.getElementById('display-window');
+	var json = JSON.parse(data);'display-window'
+	var viewId = searchInfo.viewId;
+	var display = document.getElementById(viewId);
 	var results = json.result;
 	var oldNode = searchInfo.refreshTarget;
 	for(var resultIndex = 0; resultIndex < results.length; resultIndex++)
@@ -933,7 +937,10 @@ function refreshItem(data, searchInfo)
 			lastItem = refreshedItem;
 		}		
 		oldNode.parentNode.removeChild(oldNode);
-		allDisplayedItems.push(refreshedItem);
+		if(viewId == 'display-window')
+		{
+			allDisplayedItems.push(refreshedItem);
+		}
 	}
 } 
 
@@ -953,4 +960,50 @@ function getTextFromNode(node)
 		text += node.textContent.trim();
 	}
 	return text;
+}
+
+function buildCopyButton(buttonText, textToCopy)
+{
+	var inputElement = document.createElement('input');
+	inputElement.type = "button"
+	inputElement.className = "button"
+	inputElement.value = buttonText;
+	inputElement.addEventListener('click', function(event)
+	{
+	    copyTextToClipboard(textToCopy);
+	    event.target.classList.add('copied');
+	});
+
+	return inputElement;
+}
+
+function buildWatchButton(itemId,searchInfo)
+{
+	var viewId = '';
+	if(searchInfo != null)
+	{
+		viewId = searchInfo.viewId;
+	}
+	var inputElement = document.createElement('input');
+	inputElement.type = 'button';
+	inputElement.className = 'button';
+	inputElement.itemId = itemId;
+	if(viewId == 'watched-display-window')
+	{
+		inputElement.value = 'Stop Watching';
+		inputElement.addEventListener('click', function(event)
+		{
+			watchedItemManager.removeItem(this.itemId);
+		});
+	}
+	else
+	{
+		inputElement.value = 'Watch Item';
+		inputElement.addEventListener('click', function(event)
+		{
+			watchedItemManager.addItem(this.itemId);
+		});
+	}
+
+	return inputElement;
 }

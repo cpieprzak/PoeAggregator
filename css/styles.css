@@ -159,7 +159,7 @@ textarea.notes
 	height: 50vh;
 }
 
-#display-window
+.display-window-wrapper
 {	
 	flex: 1;
 	overflow-y: scroll;
@@ -168,7 +168,7 @@ textarea.notes
     justify-content: flex-start;
 }
 
-#display-window.condensed
+.display-window-wrapper.condensed
 {	
     justify-content: flex-start;
     flex-direction: row;
@@ -892,17 +892,34 @@ a:visited {
 	display: none;
 }
 
-#scroll-to-top
+.overlay-control
 {
-	position: fixed;
-	bottom: 2rem; 
-	right: 2rem; 
+	box-sizing: border-box;
 	display: inline-block;
 	border: 1px solid #ffffff;
 	padding: .5rem;
 	color: #ffffff;
 	background-color: rgba(0,0,0,.5);
 	text-shadow: 1px 1px 1px #000000;
+}
+
+.overlay-control:hover
+{
+	background-color: rgba(0,0,0,.25);
+}
+
+.tab-control-panel
+{
+	position: fixed;
+	bottom: 0rem; 
+	left: 0rem; 
+}
+
+#scroll-to-top
+{
+	position: fixed;
+	bottom: 2rem; 
+	right: 2rem; 
 }
 
 .req-str .data-value span

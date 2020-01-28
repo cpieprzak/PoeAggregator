@@ -7,6 +7,22 @@ var allDisplayedItems = [];
 var hasActiveSockets = false;
 var currencyRatios = [];
 var genericId = 0;
+var currentView = document.getElementById('display-window');
+
+function setCurrentWindow(id)
+{
+	var views = document.querySelectorAll('.view-tab');
+	for (var i = 0; i < views.length; i++)
+	{
+		var view = views[i];
+		view.classList.add('hidden');
+		if(view.id && view.id == id)
+		{
+			view.classList.remove('hidden');
+			currentWindow = view;
+		}
+	}
+}
 
 function ItemRequest(searchInfo, listings)
 {	
@@ -60,7 +76,10 @@ function RequestManager()
 	this.processItem = function (itemUrl, searchInfo)
 	{
 		callAjax(itemUrl, addItem, searchInfo);
-		playSound(searchInfo.soundId, searchInfo.soundVolume);
+		if(searchInfo.viewId == 'display-window')
+		{
+			playSound(searchInfo.soundId, searchInfo.soundVolume);
+		}
 	};
 }
 
@@ -125,7 +144,6 @@ function consoleOut(data)
 	console.log(json);
 }
 
-
 function clearDisplay()
 {
 	var display = document.getElementById('display-window');
@@ -177,42 +195,29 @@ function addItem(data, searchInfo)
 {
 	var json = JSON.parse(data);
 	var results = json.result;
-
-	var display = document.getElementById('display-window');
+	var viewId = searchInfo.viewId;
+	var display = document.getElementById(viewId);
 	for(var resultIndex = 0; resultIndex < results.length; resultIndex++)
 	{	
 		var result = results[resultIndex];
 		var newNode = dView(result, searchInfo);
 		display.insertBefore(newNode, display.firstChild);
-		lastItem = newNode;
-
-		allDisplayedItems.push(lastItem);
-		while(allDisplayedItems.length > maxItemsDisplayed)
+		if(viewId == 'display-window')
 		{
-			var oldestItem = allDisplayedItems.shift();
-			if(oldestItem != null)
+			lastItem = newNode;
+			allDisplayedItems.push(lastItem);
+			while(allDisplayedItems.length > maxItemsDisplayed)
 			{
-				oldestItem.parentNode.removeChild(oldestItem);
-				oldestItem = null;			
+				var oldestItem = allDisplayedItems.shift();
+				if(oldestItem != null)
+				{
+					oldestItem.parentNode.removeChild(oldestItem);
+					oldestItem = null;			
+				}
 			}
 		}
 	}
 } 
-
-function buildCopyButton(buttonText, textToCopy)
-{
-	var inputElement = document.createElement('input');
-	inputElement.type = "button"
-	inputElement.className = "button"
-	inputElement.value = buttonText;
-	inputElement.addEventListener('click', function(event)
-	{
-	    copyTextToClipboard(textToCopy);
-	    event.target.classList.add('copied');
-	});
-
-	return inputElement;
-}
 
 function copyTextToClipboard(text)
 {

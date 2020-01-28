@@ -23,6 +23,7 @@ function SearchListing(listingString)
 	this.soundVolume = 0.25;
 	this.color = '#1c1e23';
 	this.searchCategory = '';
+	this.viewId = 'display-window';
 	
 	if(listingString != null)
 	{
@@ -50,6 +51,7 @@ function SearchListing(listingString)
 		clonedNode.soundVolume = this.soundVolume;
 		clonedNode.color = this.color;
 		clonedNode.searchCategory = this.searchCategory;
+		clonedNode.viewId = this.viewId;
 		
 		return clonedNode;
 	}
@@ -231,7 +233,6 @@ function loadSearchItems(element)
 		parent = parent.parentNode;
 	}
 	runSearch(parent);
-	
 }
 
 function runSearch(searchRow)

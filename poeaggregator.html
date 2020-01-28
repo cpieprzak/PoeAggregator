@@ -5,6 +5,7 @@
 		<link rel="stylesheet" href="./css/modCustomization.css">
 	</head>
 	<body class='small'>
+		<input type='text' class="local-data hidden" id='watched-items' value='' />
 		<div class="all-screen" >	
 			<div class="control-panel flex-item">			
 				<div class="control-panel-items" id='control-panel'>
@@ -66,11 +67,17 @@
 					<span class='button' onclick="showHide('notes-modal');" >Notes</span>
 				</div>
 			</div>	
-			<div class='display-window-wrapper flex-item condensed' id='display-window'>
+			<div class='display-window-wrapper flex-item condensed view-tab' id='display-window'>
 			</div>
-			<div id='scroll-to-top' onclick='scrollToTop();'>
-				Top
+			<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'>
 			</div>
+			
+			<div class='tab-control-panel'>
+				<div class='overlay-control' onclick="setCurrentWindow('display-window');"">Main</div>
+				<div class='overlay-control' onclick="setCurrentWindow('watched-display-window');">Watched</div>
+			</div>
+			
+			<div id='scroll-to-top' class='overlay-control' onclick='scrollToTop();'>Top</div>
 		</div>
 		<div class="hidden">
 			<div class='item-display' id='item-template'>
@@ -281,6 +288,7 @@
 					<span class='data-target'></span>
 				</span>
 				<span class='template-field' tf='copy-item-button'></span>
+				<span class='template-field' tf='watch-item-button'></span>
 				<span class='template-field bold' tf='item.total-sum'>	
 					<span class='if-present item-price'>Sum: </span>
 					<span class='data-target item-price' onclick='orderBySum()'></span>
@@ -719,5 +727,7 @@
 		<script type="text/javascript" src="./js/leagueInfo.js"></script>
 		<script type="text/javascript" src="./js/dataPersistence.js"></script>	
 		<script type="text/javascript" src="./js/currencyConversion.js"></script>	
+		<script type="text/javascript" src="./js/watchedItems.js"></script>
+		<script type="text/javascript" src="./js/startup.js"></script>
 	</body>
 </html>

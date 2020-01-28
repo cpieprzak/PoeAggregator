@@ -2,8 +2,6 @@ function loadLocalData()
 { 
 	var storedFields = document.querySelectorAll('.local-data');
 	
-	
-	
 	for(var key in storedFields)
 	{
 		var storedField = storedFields[key];
@@ -31,7 +29,7 @@ function loadLocalData()
 			}
 			else
 			{
-				storedField.value = storedValue; 
+				storedField.value = storedValue;
 			}
 			storedField.lastSavedValue = storedValue;
 		}
@@ -40,8 +38,8 @@ function loadLocalData()
 			storedField.onblur();
 		}
 	} 
+	watchedItemManager.initialize();
 } 
-loadLocalData();
 
 function saveLocalData(id)
 {
@@ -51,6 +49,15 @@ function saveLocalData(id)
 		target = document.getElementById(id);
 	}
 	var fieldsToSave = target.querySelectorAll('.local-data');
+	if(fieldsToSave.length < 1)
+	{
+		fieldsToSave = [];
+		var element = document.getElementById(id);
+		if(element != null)
+		{
+			fieldsToSave.push(element);
+		}
+	}
 	for(var i = 0; i < fieldsToSave.length; i++)
 	{
 		var field = fieldsToSave[i];
