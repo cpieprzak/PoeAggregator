@@ -7,14 +7,20 @@ function WatchedItemManager()
 	this.initialize = function()
 	{
 		var loadedItems = this.input.value.split(',');
+		var listings = [];
 		for(var i = 0; i < loadedItems.length; i++)
 		{
 			var itemId = loadedItems[i];
-			this.items.push(itemId);
-			var listings = [];
-			listings.push(itemId);
-			var searchinfo = new SearchListing();
-			searchinfo.viewId = 'watched-display-window';
+			if(itemId != null && itemId.length > 0)
+			{
+				this.items.push(itemId);
+				listings.push(itemId);
+				var searchinfo = new SearchListing();
+				searchinfo.viewId = 'watched-display-window';
+			}
+		}
+		if(listings.length > 0)
+		{
 		    requestManager.addRequest(new ItemRequest(searchinfo,listings));
 		}
 	}

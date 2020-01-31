@@ -66,11 +66,28 @@ function RequestManager()
 		if(this.itemRequests.length > 0)
 		{
 			var itemRequest = this.itemRequests.shift();
-			this.queueBox.value = this.itemRequests.length;		
-			var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
-			var itemUrl = getItemUrl + itemRequest.listings;
-			itemUrl += '?query=' + itemRequest.searchInfo.searchUrlPart;
-			this.processItem(itemUrl, itemRequest.searchInfo);			
+			this.queueBox.value = this.itemRequests.length;	
+			var listings = itemRequest.listings;
+			
+			var foundItem = false;
+			for(var i = 0; i < listings.length; i++)
+			{
+				var listing = listings[i];
+				if(listing != null && listing.length > 0)
+				{
+					foundItem = true;
+					break;
+				}
+			}
+			
+			if(foundItem)
+			{
+				var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
+				var itemUrl = getItemUrl + itemRequest.listings;
+				itemUrl += '?query=' + itemRequest.searchInfo.searchUrlPart;
+				this.processItem(itemUrl, itemRequest.searchInfo);	
+			}
+				
 		}
 	};
 	this.processItem = function (itemUrl, searchInfo)
