@@ -61,7 +61,7 @@ function saveLocalData(id)
 	for(var i = 0; i < fieldsToSave.length; i++)
 	{
 		var field = fieldsToSave[i];
-		if(field.type && field.type.toLowerCase() === 'SELECT')
+		if(field.type && field.type.toLowerCase() === 'select')
 		{
 			window.localStorage.setItem(field.id, field.options[field.selectedIndex].value);
 		}
@@ -70,6 +70,10 @@ function saveLocalData(id)
 			if(!field.checked)
 			{
 				window.localStorage.setItem(field.id, '');
+			}
+			else
+			{
+				window.localStorage.setItem(field.id, field.value);
 			}
 		}
 		else
