@@ -8,6 +8,7 @@ function dView(result, searchInfo)
 	icon.onclick = function(){console.log(this.result);};
 	icon.src = result.item.icon;
 	overrides['icon'] = icon;
+	newNode.id = result.id;
 
 	var whisperButtonText = 'Whisper';
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
@@ -447,9 +448,7 @@ function dView(result, searchInfo)
 	{
 		newNode.classList.add('not-verified');
 	}
-	newNode.id = 'tmp-id';
 	var fields = newNode.querySelectorAll('.template-field');
-	newNode.id = '';
 	
 	var refreshButton = document.createElement('div');
 	refreshButton.classList.add('button');
@@ -574,6 +573,9 @@ function dView(result, searchInfo)
 	filterItem(newNode);	
 
 	newNode.classList.add(gggId);
+	var stats = new TrackedStats();
+	stats.setTrackedStats(result);
+	newNode.trackedStats = stats;
 	
 	return newNode;
 }
@@ -916,33 +918,38 @@ function scrollToTop()
 
 function refreshItem(data, searchInfo) 
 {
-	var json = JSON.parse(data);'display-window'
+	var json = JSON.parse(data);
+	var results = json.result;
+	for(var i = 0; i < results.length; i++)
+	{	
+		var result = results[i];
+		updateItem(result,searchInfo);
+	}
+}
+
+function updateItem(result,searchInfo)
+{
+	var oldNode = searchInfo.refreshTarget;
 	var viewId = searchInfo.viewId;
 	var display = document.getElementById(viewId);
-	var results = json.result;
-	var oldNode = searchInfo.refreshTarget;
-	for(var resultIndex = 0; resultIndex < results.length; resultIndex++)
-	{	
-		var result = results[resultIndex];
-		var refreshedItem = dView(result, searchInfo);
+	var refreshedItem = dView(result, searchInfo);
 
-		var origCreateDate = oldNode.querySelector('.create-date');
-		var refreshedCreateDate = refreshedItem.querySelector('.create-date');
-		refreshedCreateDate.innerHTML = '';
-		refreshedCreateDate.appendChild(document.createTextNode('Refreshing...'));
-		refreshedCreateDate.createDate = origCreateDate.createDate;
-		display.insertBefore(refreshedItem, oldNode);
-		if(lastItem == oldNode)
-		{
-			lastItem = refreshedItem;
-		}		
-		oldNode.parentNode.removeChild(oldNode);
-		if(viewId == 'display-window')
-		{
-			allDisplayedItems.push(refreshedItem);
-		}
+	var origCreateDate = oldNode.querySelector('.create-date');
+	var refreshedCreateDate = refreshedItem.querySelector('.create-date');
+	refreshedCreateDate.innerHTML = '';
+	refreshedCreateDate.appendChild(document.createTextNode('Refreshing...'));
+	refreshedCreateDate.createDate = origCreateDate.createDate;
+	display.insertBefore(refreshedItem, oldNode);
+	if(lastItem == oldNode)
+	{
+		lastItem = refreshedItem;
+	}		
+	oldNode.parentNode.removeChild(oldNode);
+	if(viewId == 'display-window')
+	{
+		allDisplayedItems.push(refreshedItem);
 	}
-} 
+}
 
 function getTextFromNode(node)
 {

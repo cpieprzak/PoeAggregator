@@ -31,37 +31,45 @@ populateSounds();
 
 function playSound(soundId, volume)
 {
-	if(volume == null || volume == '')
+	try
 	{
-		volume = 0.25;
-	}
-	if(soundId != null && soundId.length > 0)
-	{
-		if (sounds[soundId] == null)
+		if(volume == null || volume == '')
 		{
-			var audioPath = '/audio/' + soundId;
-			try
+			volume = 0.25;
+		}
+		if(soundId != null && soundId.length > 0)
+		{
+			if (sounds[soundId] == null)
 			{
-				var newSound = new Audio('.' + audioPath);
-				if(isNaN(sound.duration))
+				var audioPath = '/audio/' + soundId;
+				try
 				{
-					sounds[soundId] = newSound;			
+					var newSound = new Audio('.' + audioPath);
+					if(isNaN(sound.duration))
+					{
+						sounds[soundId] = newSound;			
+					}
+				}
+				catch(e)
+				{
+					console.log('Could not find: ' + audioPath);
+					sounds[soundId] = 'error';
 				}
 			}
-			catch(e)
-			{
-				console.log('Could not find: ' + audioPath);
-				sounds[soundId] = 'error';
-			}
+		}
+		if(soundId == null || soundId.trim() == '' || sounds[soundId] == 'error')
+		{
+			soundId = document.getElementById('notification-sound').value;
+		}
+		if(soundId != null && soundId.length > 0)
+		{
+			sounds[soundId].volume = volume;
+			sounds[soundId].play();
 		}
 	}
-	if(soundId == null || soundId.trim() == '' || sounds[soundId] == 'error')
+	catch(e)
 	{
-		soundId = document.getElementById('notification-sound').value;
+		console.log(e);
 	}
-	if(soundId != null && soundId.length > 0)
-	{
-		sounds[soundId].volume = volume;
-		sounds[soundId].play();
-	}
+	
 } 

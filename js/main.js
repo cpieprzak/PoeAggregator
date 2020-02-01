@@ -28,6 +28,13 @@ function ItemRequest(searchInfo, listings)
 {	
 	this.listings = listings;
 	this.searchInfo = searchInfo;
+	this.callback = null;
+	this.clone = function()
+	{
+		var clone = new ItemRequest(this.searchInfo, this.listings);
+		clone.callback = this.callback;
+		return clone;
+	}
 }
 
 function RequestManager()
@@ -46,7 +53,8 @@ function RequestManager()
 				filteredListing.push(newRequest.listings[i]);
 				if(filteredListing.length == 10)
 				{
-					var tmpRequest = new ItemRequest(newRequest.searchInfo, filteredListing);
+					var tmpRequest = newRequest.clone();
+					tmpRequest.listings = filteredListing;
 					this.itemRequests.push(tmpRequest);		
 					filteredListing = [];
 				}
@@ -54,7 +62,8 @@ function RequestManager()
 			
 			if(filteredListing.length > 0)
 			{
-				var tmpRequest = new ItemRequest(newRequest.searchInfo, filteredListing);
+				var tmpRequest = newRequest.clone();
+				tmpRequest.listings = filteredListing;			
 				this.itemRequests.push(tmpRequest);
 			}			
 
@@ -85,14 +94,24 @@ function RequestManager()
 				var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
 				var itemUrl = getItemUrl + itemRequest.listings;
 				itemUrl += '?query=' + itemRequest.searchInfo.searchUrlPart;
-				this.processItem(itemUrl, itemRequest.searchInfo);	
+				this.processItem(itemRequest);	
 			}
 				
 		}
 	};
-	this.processItem = function (itemUrl, searchInfo)
+	this.processItem = function (itemRequest)
 	{
-		callAjax(itemUrl, addItem, searchInfo);
+		var searchInfo = itemRequest.searchInfo;
+		var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
+		var itemUrl = getItemUrl + itemRequest.listings;
+		itemUrl += '?query=' + itemRequest.searchInfo.searchUrlPart;
+		
+		var callback = itemRequest.callback;
+		if(callback == null)
+		{
+			callback = addItem;
+		}
+		callAjax(itemUrl, callback, searchInfo);
 		if(searchInfo.viewId == 'display-window')
 		{
 			playSound(searchInfo.soundId, searchInfo.soundVolume);
@@ -212,9 +231,9 @@ function addItem(data, searchInfo)
 	var results = json.result;
 	var viewId = searchInfo.viewId;
 	var display = document.getElementById(viewId);
-	for(var resultIndex = 0; resultIndex < results.length; resultIndex++)
+	for(var i = 0; i < results.length; i++)
 	{	
-		var result = results[resultIndex];
+		var result = results[i];
 		var newNode = dView(result, searchInfo);
 		display.insertBefore(newNode, display.firstChild);
 		if(viewId == 'display-window')
