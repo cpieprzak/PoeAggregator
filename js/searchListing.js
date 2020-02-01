@@ -240,19 +240,11 @@ function runSearch(searchRow)
 	var urlBox = searchRow.querySelector('.search-url');
 	if(urlBox.value != null && urlBox.value.trim().length > 0)
 	{
-		var league = document.getElementById('league').value;
-		var url = 'https://www.pathofexile.com/api/trade/search/' + league + '/' + urlBox.value;
-		url += '?query=' + urlBox.value;
-
-	    var searchinfo = new SearchListing();
-	    searchinfo.searchUrlPart = urlBox.value;
-		var getSearchResults = function(data, searchInfo)
-		{
-		    var json = JSON.parse(data);
-		    var results = json.result;
-		    requestManager.addRequest(new ItemRequest(searchinfo,results));
-		};
-		callAjax(url, getSearchResults.bind(searchinfo));
+		var search = urlBox.value;
+		var sort = new Object();
+		sort.price = 'asc';
+		var viewId = 'display-window';
+		runSortedSearch(search, sort, outputToView);
 	}	
 }
 

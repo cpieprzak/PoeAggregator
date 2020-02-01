@@ -36,4 +36,3 @@ var loadLeagues = function(data, parameters)
 	}
 	leagueSelect.selectedIndex = selectedIndex;
 };
-callAjax('https://api.pathofexile.com/leagues', loadLeagues);

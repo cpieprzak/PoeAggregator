@@ -100,7 +100,6 @@ function RequestManager()
 	};
 }
 
-var requestManager = new RequestManager();
 function getItems()
 {
 	requestManager.getNextItem();
@@ -141,8 +140,7 @@ setInterval(updateTimes, 1000);
 
 function callAjax(url, callback, searchInfo)
 {
-    var xmlhttp;
-    xmlhttp = new XMLHttpRequest();
+    var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function()
     {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
@@ -689,4 +687,58 @@ function orderByValue()
 		{
 			displayWindow.appendChild(allDisplayedItems[i]);
 		}
+}
+
+
+var outputToView = function(data, parameters)
+{
+	var viewId = 'display-window';
+	if(parameters != null)
+	{
+		viewId = parameters.viewId;
+	}
+	var json = JSON.parse(data);
+	var loadedItems = json.result;
+	var listings = [];
+	for(var i = 0; i < loadedItems.length; i++)
+	{
+		var itemId = loadedItems[i];
+		if(itemId != null && itemId.length > 0)
+		{
+			listings.push(itemId);
+		}
+	}
+	if(listings.length > 0)
+	{
+		var searchinfo = new SearchListing();
+		searchinfo.viewId = viewId;
+	    requestManager.addRequest(new ItemRequest(searchinfo,listings));
+	}
+};
+
+function runSortedSearch(search, sort, callback)
+{
+	var url = 'https://www.pathofexile.com/api/trade/search/';
+	var league = document.getElementById('league').value;
+	url += league + '/';
+	url += search;
+	var sortsearches = function(data, parameters)
+	{
+		var league = document.getElementById('league').value;
+		var result = JSON.parse(data);
+		var query = result.query;
+		if(sort != null)
+		{
+			query.sort = sort;			
+		}
+
+		var jquery = JSON.stringify(query);
+		var url = 'https://www.pathofexile.com/api/trade/search/';
+		url += league + '?source=' + jquery;
+		callAjax(url, callback);
+		
+	};
+
+	url += '?q=';
+	callAjax(url, sortsearches);
 }

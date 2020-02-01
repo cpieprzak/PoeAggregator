@@ -15,12 +15,12 @@ function WatchedItemManager()
 			{
 				this.items.push(itemId);
 				listings.push(itemId);
-				var searchinfo = new SearchListing();
-				searchinfo.viewId = 'watched-display-window';
 			}
 		}
 		if(listings.length > 0)
 		{
+			var searchinfo = new SearchListing();
+			searchinfo.viewId = 'watched-display-window';
 		    requestManager.addRequest(new ItemRequest(searchinfo,listings));
 		}
 	}

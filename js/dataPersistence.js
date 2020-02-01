@@ -38,7 +38,6 @@ function loadLocalData()
 			storedField.onblur();
 		}
 	} 
-	watchedItemManager.initialize();
 } 
 
 function saveLocalData(id)
