@@ -14,6 +14,7 @@ function ListingManager(listingString)
 	}
 }
 
+var maxActiveSearches = 20;
 function SearchListing(listingString)
 {
 	this.active = '1';
@@ -34,9 +35,10 @@ function SearchListing(listingString)
 			var searchPart = searchParts[i].replace('[','').replace(']','').trim();
 			if(searchPart != null)
 			{	
-				if(variables[i] != null)
+				var variable = variables[i];
+				if(variable != null)
 				{
-					this[variables[i]] = searchPart;
+					this[variable] = searchPart;
 				}
 			}		
 		}
@@ -248,6 +250,34 @@ function runSearch(searchRow)
 	}	
 }
 
+function checkActives(input)
+{
+	if(input.checked)
+	{
+		var allSearches = document.getElementById('all-searches-table');
+		var checkedActives = allSearches.querySelectorAll('.search-active:checked');
+		if(checkedActives != null)
+		{
+			if(checkedActives.length == maxActiveSearches)
+			{
+				var newSearchRow = document.getElementById('new-search-row');
+				var activeCheckbox = newSearchRow.querySelector('.search-active');
+				activeCheckbox.checked = false;
+				if(input == activeCheckbox)
+				{
+					alert('You cannot have more than 20 searches active at once.');
+				}
+				
+			}
+			else if(checkedActives.length > maxActiveSearches)
+			{
+				input.checked = false;
+				alert('You cannot have more than 20 searches active at once.');
+			}
+		}
+	}
+}
+
 function openSearchesModal()
 {
 	var searchId = 'search-string-builder';
@@ -265,6 +295,8 @@ function openSearchesModal()
 	
 	var searches = manager.searches;
 	var searchCategories = [];
+	
+	var totalActives = 0;
 	for(var i = 0; i < searches.length; i++)
 	{
 		var search = searches[i];
@@ -273,11 +305,15 @@ function openSearchesModal()
 		var searchRow = newRow.cloneNode(true);
 		searchRow.id = '';
 		var activeBox = searchRow.querySelector('.search-active');
-		activeBox.checked = true;
-		if(search.active != 1)
+		activeBox.checked = false;
+		if(search.active == 1)
 		{
-			activeBox.checked = false;
-		}		
+			if(totalActives < maxActiveSearches)
+			{
+				activeBox.checked = true;
+				totalActives++;
+			}
+		}
 
 		var urlBox = searchRow.querySelector('.search-url');
 		urlBox.value = search.searchUrlPart;
@@ -434,8 +470,10 @@ function sortSearchesByCategory()
 	}
 }
 
+var tmpActiveCount = 0;
 function generateSearchString()
 {
+	tmpActiveCount = 0;
 	var searchString = '';
 	var searchesTable =  document.getElementById('all-searches-table');
 	var searchRows = searchesTable.querySelectorAll('.search-row');
@@ -479,7 +517,22 @@ function translateInput(rowInput)
 	{
 		if(rowInput.checked)
 		{
-			translated += '1';
+			if(rowInput.classList.contains('search-active'))
+			{
+				if(tmpActiveCount < maxActiveSearches)
+				{
+					translated += '1';
+					tmpActiveCount++;
+				}
+				else
+				{
+					translated += '0';
+				}
+			}
+			else
+			{
+				translated += '1';
+			}
 		}
 		else
 		{
