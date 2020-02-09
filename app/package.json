@@ -1,0 +1,24 @@
+{
+  "name": "PoeAggregator",
+  "version": "1.0.0",
+  "description": "testapp",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "author": "cpieprzak",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^8.0.0",
+    "electron-builder": "^22.3.2"
+  },
+  "build": {
+    "appId": "poe-aggregator"
+  },
+  "dependencies": {
+    "cookie": "^0.4.0",
+    "ws": "^7.2.1"
+  }
+}

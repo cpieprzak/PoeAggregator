@@ -7,7 +7,6 @@ function SearchConnectionManager()
 	this.socketStatus = [];
 	this.socketBox = document.getElementById('socket-count');
 	this.fullyClosed = true;
-	this.fullyActive = false;
 	
 	this.start = function(providedSearches,socketUrl)
 	{
@@ -47,15 +46,11 @@ function SearchConnectionManager()
 	}
 	this.stop = function()
 	{
-		if(this.fullyActive)
+		for(var i = 0; i < this.sockets.length; i++)
 		{
-			this.fullyActive = false;
-			for(var i = 0; i < this.sockets.length; i++)
-			{
-				this.sockets[i].close();
-			}
-			this.socketBox.classList.remove('active');
+			this.sockets[i].close();
 		}
+		this.socketBox.classList.remove('active');
 	}
 	this.update = function(event,socket)
 	{
@@ -95,10 +90,6 @@ function SearchConnectionManager()
 			if(connectedCount == 0)
 			{
 				this.fullyClosed = true;
-			}
-			else if(connectedCount == this.totalSocketCount)
-			{
-				this.fullyActive = true;
 			}
 		}
 		

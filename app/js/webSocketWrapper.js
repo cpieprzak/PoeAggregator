@@ -1,3 +1,6 @@
+const WebSocket = require('ws');
+const cookie = require('cookie');
+
 function WebSocketWrapper(url, searchInfo, connectionManager)
 {
 	this.url = url;
@@ -6,7 +9,7 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 	this.timeoutDelay = 10000;
 	this.closedByUser = false;
 	this.connectionManager = connectionManager;
-	this.autoReconnectDelay = 15 * 60 * 1000;
+	this.autoReconnectDelay = 45 * 60 * 1000;
 	this.autoReconnect = null;
 	
 	this.reconnect = function(event)
@@ -18,10 +21,19 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 		{
 			if(event.code)
 			{
-				if(event.code == -1000)
+				if(event.code == 401)
+				{
+					console.log('Scheduled close (' + this.url + ')[' + event.code + ']... reconnecting');
+				}
+				else if(event.code == -1000)
 				{
 					console.log('Scheduled close (' + this.url + ')[' + event.code + ']... reconnecting');
 					this.connect();
+				}
+				else if(event.code == 1006)
+				{
+					console.log('Bad close (' + this.url + ')[' + event.code + '].');
+					document.getElementById('socket-count').value = 0;
 				}
 				else if(event.code != 1000)
 				{
@@ -53,7 +65,17 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 				this.reconnect(new ScheduledClosedEvent()); 
 			}.bind(this), this.autoReconnectDelay
 		);
-		this.socket = new WebSocket(this.url);
+		this.socket = new WebSocket(
+				this.url,
+			    [],
+			    {
+			    	'origin' : 'https://www.pathofexile.com/',
+			        'headers': 
+			        {
+			            'Cookie': cookie.serialize('POESESSID', poesessionid)
+			        }
+			    }
+			);
 		this.socket.mywrapper = this;
 		this.socket.onopen = function(event)
 		{

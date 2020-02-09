@@ -8,6 +8,7 @@ var hasActiveSockets = false;
 var currencyRatios = [];
 var genericId = 0;
 var currentView = document.getElementById('display-window');
+var poesessionid = '';
 
 function setCurrentWindow(id)
 {
@@ -188,6 +189,11 @@ function clearDisplay()
 
 function startSockets() 
 {	
+	if(poesessionid == null || poesessionid.trim().length < 1)
+	{
+		alert('"poesessionid" must be set in the settings menu.')
+		return false;
+	}
 	if(hasActiveSockets)
 	{
 		return false;
@@ -202,7 +208,9 @@ function startSockets()
 			loadCurrency();
 		}
 		var league = document.getElementById('league').value;
-		var socketUrl = "wss://pathofexile.com:443/api/trade/live/" + league + '/';
+		var socketPath = "wss://pathofexile.com:443/api/trade/live/";
+		
+		var socketUrl = socketPath + league + '/';
 		var searchesString = document.getElementById('searches').value;
 		var soundId = document.getElementById('notification-sound').value;
 
@@ -341,6 +349,14 @@ function updateMaxItemsDisplayed()
 	{
 		maxItemsDisplayed = 300;
 	}	
+}
+
+function updatePoesessionid()
+{
+	var input = document.getElementById('poesessionid');
+	poesessionid = input.value.trim();
+
+	console.log('setting: ' + input.value.trim());
 }
 
 function toggleView()
