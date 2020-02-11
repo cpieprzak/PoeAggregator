@@ -1,4 +1,4 @@
-const {app,BrowserWindow,session,protocol} = require('electron')
+const {app,BrowserWindow,session,protocol,ipcMain,shell} = require('electron')
 
 
 async function createWindow () 
@@ -21,6 +21,10 @@ async function createWindow ()
 app.on('ready', () => 
 {
     createWindow();
+});
+
+ipcMain.on('loadGH', (event, arg) => {
+    shell.openExternal(arg);
 });
 
 app.on('window-all-closed', () => 

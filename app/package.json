@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "cookie": "^0.4.0",
+    "fs": "0.0.1-security",
     "ws": "^7.2.1"
   }
 }

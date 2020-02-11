@@ -1,3 +1,5 @@
+const ipc = require('electron').ipcRenderer;
+
 var lastItem = null;
 var openSockets = 0;
 var activeCount = 0;
@@ -9,6 +11,11 @@ var currencyRatios = [];
 var genericId = 0;
 var currentView = document.getElementById('display-window');
 var poesessionid = '';
+
+function openBrowserWindow(url)
+{
+	ipc.send('loadGH',url);
+}
 
 function setCurrentWindow(id)
 {
@@ -355,8 +362,6 @@ function updatePoesessionid()
 {
 	var input = document.getElementById('poesessionid');
 	poesessionid = input.value.trim();
-
-	console.log('setting: ' + input.value.trim());
 }
 
 function toggleView()

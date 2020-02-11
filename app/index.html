@@ -55,8 +55,7 @@
 							<input type="file" accept=".txt" class="hidden" id='load-searches' />
 						</label>
 						<label>
-							<span class="button">Export</span>
-							<input type="button" class="hidden" value="Export" onclick="exportSearches();">
+							<span class="button" onclick="exportSearches()">Export</span>
 						</label>
 					</span>
 				
@@ -283,10 +282,7 @@
 				</span>		
 				
 				<span class='template-field' tf='whisper-button'></span>
-				<span class='template-field account-profile' tf='account-profile'>
-					<span class='if-present'>View Account:</span>
-					<span class='data-target'></span>
-				</span>
+				<span class='template-field account-profile' tf='account-profile'></span>
 				<span class='template-field account-status' tf='account-status'>
 					<span class='data-target'></span>
 				</span>
@@ -296,7 +292,6 @@
 					<span class='if-present item-price'>Sum: </span>
 					<span class='data-target item-price' onclick='orderBySum()'></span>
 				</span>	
-				<div class='template-field item-key-panel' tf='itemKeyPanel'></div>	
 			</div>
 		</div>		
 		

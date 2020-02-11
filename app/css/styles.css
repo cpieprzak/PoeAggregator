@@ -642,6 +642,19 @@ a:visited {
 	color: #4c4c6a;
 }
 
+.link
+{
+	color: #b7b7ff;
+	text-decoration: underline;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.link:hover
+{
+	color: #b7b7ff;
+}
+
 .searchinfo a:visited
 {	
 	color: #b7b7ff;
@@ -754,10 +767,30 @@ a:visited {
 #currency-ratios .modal-content-box
 {	
 	position: relative;
-	width: auto;t
+	width: auto;
 	top: 0px;
     left: 0px;
 }
+
+.modal-auto-size
+{
+	position: relative;
+	text-align: center;
+}
+
+.modal-auto-size .modal-content-box
+{	
+	position: relative;
+	width: auto;
+	top: 1rem;
+    left: 0px;
+}
+
+.modal-auto-size .modal-body
+{
+	min-height: auto;
+}
+
 .all-searches
 {
 	height: 60vh;

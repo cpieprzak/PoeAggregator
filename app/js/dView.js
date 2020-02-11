@@ -120,11 +120,7 @@ function dView(result, searchInfo)
 	if(result.listing.account.name)
 	{
 		whisperButtonText += ' ' + result.listing.account.lastCharacterName;
-		var profileLink = document.createElement('a');
-		profileLink.href = 'https://www.pathofexile.com/account/view-profile/' + result.listing.account.name;
-		profileLink.appendChild(document.createTextNode(result.listing.account.name));
-		profileLink.target = '_blank';
-		overrides['account-profile'] = profileLink;
+		overrides['account-profile'] = buildAccountLink(result.listing.account.name);
 	}
 	overrides['whisper-button'] = buildCopyButton(whisperButtonText, result.listing.whisper);
 	overrides['item.corrupted'] = '';
@@ -136,11 +132,17 @@ function dView(result, searchInfo)
 	{
 		overrides['search-comment'] = searchInfo.searchComment;
 		var searchLink = document.createElement('a');
-		var league = document.getElementById('league').value;
-		searchLink.href = 'https://www.pathofexile.com/trade/search/' + league + '/' + searchInfo.searchUrlPart;
-		var searchText = searchInfo.searchUrlPart;
-		searchLink.appendChild(document.createTextNode(searchText));
-		searchLink.target = '_blank';
+		var league = document.getElementById('league').value;		
+		var searchLink = document.createElement('span');
+		searchLink.classList.add('link');
+		searchLink.appendChild(document.createTextNode(searchInfo.searchUrlPart));
+		searchLink.url = 'https://www.pathofexile.com/trade/search/' + league + '/' + searchInfo.searchUrlPart;
+		searchLink.addEventListener('click', function(event)
+		{
+		    openBrowserWindow(this.url);
+		});
+		
+		
 		overrides['searchinfo'] = searchLink;
 		var colorIndicator = document.createElement('div');
 		if(searchInfo.color && searchInfo.color.length > 0)
@@ -179,41 +181,13 @@ function dView(result, searchInfo)
 			overrides['item.influences'] = influencePanel;
 		}
 		var resultItem = result.item;
-		var itemKeys = Object.keys(resultItem);
-		var itemKeyPanel = document.createElement('div');
-		var keyTitle = document.createElement('div');
-		keyTitle.appendChild(document.createTextNode('keys'));
-		itemKeyPanel.appendChild(keyTitle);
-		keyTitle.onclick = showHide;
-		var itemKeyBody = document.createElement('div');
 		
 		var timeInfo = document.createElement('div');
 		timeInfo.createDate = new Date();
 		timeInfo.classList.add('create-date');
 		timeInfo.appendChild(document.createTextNode('A few seconds ago'));
 		overrides['search-time'] = timeInfo;
-
-		itemKeyBody.classList.add('hidden');
-		itemKeyPanel.appendChild(itemKeyBody);
-		keyTitle.showHideTarget = itemKeyBody;
-		var showHideTarget = showHideTarget;
-		for (var keyIndex = 0; keyIndex < itemKeys.length; keyIndex++)
-		{
-			var ikey = itemKeys[keyIndex];
-			var keyHeader = document.createElement('div');
-			keyHeader.classList.add('key-header');
-			keyHeader.appendChild(document.createTextNode(ikey));
-			keyHeader.onclick = showHide;
-			itemKeyBody.appendChild(keyHeader);
-
-			var keyValue = document.createElement('div');
-			keyValue.classList.add('key-value');
-			keyValue.classList.add('hidden');
-			keyValue.appendChild(document.createTextNode(JSON.stringify(resultItem[ikey])));
-			itemKeyBody.appendChild(keyValue);
-			keyHeader.showHideTarget = keyValue;
-		}
-		overrides['itemKeyPanel'] = itemKeyPanel;
+		
 		overrides['item.sockets'] = '';
 		if(result.item.sockets)
 		{
@@ -972,8 +946,8 @@ function getTextFromNode(node)
 function buildCopyButton(buttonText, textToCopy)
 {
 	var inputElement = document.createElement('input');
-	inputElement.type = "button"
-	inputElement.className = "button"
+	inputElement.type = "button";
+	inputElement.className = "button";
 	inputElement.value = buttonText;
 	inputElement.addEventListener('click', function(event)
 	{
@@ -982,6 +956,25 @@ function buildCopyButton(buttonText, textToCopy)
 	});
 
 	return inputElement;
+}
+
+function buildAccountLink(accountName)
+{
+	var panel = document.createElement('span');
+	var inputElement = document.createElement('span');
+	inputElement.classList.add('link');
+	inputElement.appendChild(document.createTextNode(accountName));
+	inputElement.accountName = accountName;
+	inputElement.addEventListener('click', function(event)
+	{
+	    var url = 'https://www.pathofexile.com/account/view-profile/' + this.accountName;
+	    openBrowserWindow(url);
+	});
+	
+	panel.appendChild(document.createTextNode('Account: '));
+	panel.appendChild(inputElement);
+	
+	return panel;
 }
 
 function buildWatchButton(itemId,searchInfo)

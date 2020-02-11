@@ -1,3 +1,38 @@
+const {remote} = require('electron');
+const { writeFile } = require('fs');
+dialog = remote.dialog;
+browserWindow = remote.getCurrentWindow();
+
+let exportOptions = 
+{
+	title: "Save Trade Searches",
+	defaultPath : "poe-searches.txt",
+	buttonLabel : "Save Searches",
+	filters :
+	[
+	 	{name: 'Text', extensions: ['txt']},
+	 	{name: 'All Files', extensions: ['*']}
+ 	]
+}
+
+async function exportSearches()
+{
+	var searches = generateSearchString();
+	try
+	{
+		var {filePath, cancelled} = await dialog.showSaveDialog(browserWindow,exportOptions);
+		if(!cancelled)
+		{
+			console.log(filePath);
+			writeFile(filePath,searches, error => {if (error) { console.error(error.message);}});
+		}
+	}
+	catch(error)
+	{
+		console.log(error);
+	}
+}
+
 function ListingManager(listingString)
 {
 	this.searches = [];
@@ -201,8 +236,7 @@ function openTradeWebsite(element)
 	{
 		var league = document.getElementById('league').value;
 		var url = 'https://www.pathofexile.com/trade/search/' + league + '/' + urlBox.value;
-		
-		window.open(url, '_blank');
+		openBrowserWindow(url);
 	}	
 }
 
@@ -378,17 +412,6 @@ function download(filename, content)
 	tmpFileLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
 	tmpFileLink.setAttribute('download', filename);
 	tmpFileLink.click();
-}
-
-function exportSearches()
-{
-	var searches = generateSearchString();
-	var filename = prompt("Please enter a File Name:", 'poe-searches.txt');
-	if(filename === null || filename.trim().lenth < 1)
-	{
-		return;
-	}
-	download(filename,searches);
 }
 
 function saveSearchString()
