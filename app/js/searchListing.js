@@ -279,7 +279,6 @@ function runSearch(searchRow)
 		var search = urlBox.value;
 		var sort = new Object();
 		sort.price = 'asc';
-		var viewId = 'display-window';
 		runSortedSearch(search, sort, outputToView);
 	}	
 }

@@ -751,6 +751,14 @@ var outputToView = function(data, parameters)
 	if(listings.length > 0)
 	{
 		var searchinfo = new SearchListing();
+		if(parameters != null)
+		{
+			var urlPart = parameters.searchUrlPart;
+			if(urlPart != null)
+			{
+				searchinfo.searchUrlPart = urlPart;
+			}
+		}
 		searchinfo.viewId = viewId;
 	    requestManager.addRequest(new ItemRequest(searchinfo,listings));
 	}
@@ -760,6 +768,8 @@ function runSortedSearch(search, sort, callback)
 {
 	var url = 'https://www.pathofexile.com/api/trade/search/';
 	var league = document.getElementById('league').value;
+	var searchInfo = new SearchListing();
+	searchInfo.searchUrlPart = search;
 	url += league + '/';
 	url += search;
 	var sortsearches = function(data, parameters)
@@ -774,11 +784,10 @@ function runSortedSearch(search, sort, callback)
 
 		var jquery = JSON.stringify(query);
 		var url = 'https://www.pathofexile.com/api/trade/search/';
-		url += league + '?source=' + jquery;
-		callAjax(url, callback);
+		url += league + '?source=' + jquery + '&q=';
+		callAjax(url, callback, searchInfo);
 		
 	};
-
 	url += '?q=';
 	callAjax(url, sortsearches);
 }
