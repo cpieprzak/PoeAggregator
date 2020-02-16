@@ -99,9 +99,6 @@ function RequestManager()
 			
 			if(foundItem)
 			{
-				var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
-				var itemUrl = getItemUrl + itemRequest.listings;
-				itemUrl += '?query=' + itemRequest.searchInfo.searchUrlPart;
 				this.processItem(itemRequest);	
 			}
 				
@@ -330,18 +327,21 @@ function showHide(elementId)
 	}	
 }
 
-function toggleFontSize()
+function updateFontSize()
 {
 	var body = document.querySelector('body');
-	var targetClass = 'small';
-	if(body.classList.contains(targetClass))
+	var fontSize = document.getElementById('font-size').value;
+	fontSize = Math.ceil(fontSize / 10) * 10;
+	var classList = body.classList;
+	for(var i = 0; i < classList.length; i++)
 	{
-		body.classList.remove(targetClass);	
+		var cssClass = classList[i];
+		if(cssClass.startsWith('font-size-'))
+		{
+			classList.remove(cssClass);
+		}
 	}
-	else
-	{
-		body.classList.add(targetClass);	
-	}
+	classList.add('font-size-' + fontSize);
 }
 
 function updateMaxItemsDisplayed()
@@ -557,7 +557,8 @@ function makeDraggable(element, dropClass)
 	element.ondragleave = dragLeave;
 	element.ondrop = drop;
 	
-	var rowInputs = element.querySelectorAll('input[type="text"]');
+	var rowInputs = element.querySelectorAll('input[type="text"],input[type="range"]');
+	
 	for(var i = 0; i < rowInputs.length; i++)
 	{
 		rowInputs[i].searchRow = element;		

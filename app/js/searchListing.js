@@ -56,7 +56,7 @@ function SearchListing(listingString)
 	this.searchUrlPart = '';
 	this.searchComment = '';
 	this.soundId = '';
-	this.soundVolume = 0.25;
+	this.soundVolume = 25;
 	this.color = '#1c1e23';
 	this.searchCategory = '';
 	this.viewId = 'display-window';
@@ -77,6 +77,10 @@ function SearchListing(listingString)
 				}
 			}		
 		}
+	}
+	if(this.soundVolume < 1 && this.soundVolume > 0)
+	{
+		this.soundVolume *= 100;
 	}
 	this.cloneNode = function()
 	{
@@ -191,13 +195,13 @@ function addNewSearchRow()
 		var soundVolume = searchRow.querySelector('.search-control.search-volume');
 		if(soundVolume.value != '')
 		{
-			if(soundVolume.value > 1)
+			if(soundVolume.value > 100)
 			{
-				soundVolume.value = 1;
+				soundVolume.value = 100;
 			}
-			else if(soundVolume.value < 0.1)
+			else if(soundVolume.value < 10)
 			{
-				soundVolume.value = 0.1;
+				soundVolume.value = 10;
 			}
 		}
 		
@@ -244,7 +248,6 @@ function runActiveSearches()
 {
 	var searchTable = document.getElementById('all-searches-table');
 	var actives = [];
-	var inactives = [];
 	var searchRows = searchTable.querySelectorAll('.search-row');
 	for(var i = 0; i < searchRows.length; i++)
 	{
@@ -567,13 +570,13 @@ function translateInput(rowInput)
 		{
 			if(inputValue != '')
 			{
-				if(inputValue > 1)
+				if(inputValue > 100)
 				{
-					inputValue = 1;
+					inputValue = 100;
 				}
-				else if(inputValue < 0.1)
+				else if(inputValue < 10)
 				{
-					inputValue = 0.1;
+					inputValue = 10;
 				}
 			}
 		}

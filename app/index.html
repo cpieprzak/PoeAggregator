@@ -7,7 +7,7 @@
 	    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 		<title>Trade Aggregator</title>
 	</head>
-	<body class='small'>
+	<body>
 		<input type='text' class="local-data hidden" id='watched-items' value='' />
 		<div class="all-screen" >	
 			<div class="control-panel flex-item">			
@@ -311,15 +311,22 @@
 										<select class="local-data search-sounds" id='notification-sound'>
 											<option value="" selected></option>
 										</select>
-									</label>	
+									</label>
 								</div>
 							</div>
 							<div class="us-table-row">
 								<div class="us-table-cell">
-							
+									Font Size
 								</div>
 								<div class="us-table-cell">
-									<div class='button' onclick="toggleFontSize()" >Font Size</div>
+									<input
+											type="range" 
+											class="local-data" 
+											id="font-size"
+											min="1" 
+											max="100" 
+											value="50" 
+											onchange="updateFontSize()">
 								</div>
 							</div>
 							<div class="us-table-row">
@@ -461,7 +468,7 @@
 							</div>
 						</div>
 						<div class="us-table-cell">
-							<input class="search-control search-volume" type="text">
+							<input class="search-control search-volume" type="range" min="10" max="100" value="25">
 						</div>
 						<div class="us-table-cell">
 							<input class="search-control search-color" type="color">

@@ -37,6 +37,10 @@ function loadLocalData()
 		{
 			storedField.onblur();
 		}
+		if(storedField.onchange)
+		{
+			storedField.onchange();
+		}
 	} 
 } 
 

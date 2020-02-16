@@ -68,7 +68,6 @@ function dView(result, searchInfo)
 			overrides['listing.price.type'] = unpriced;
 		}
 	}
-
 	overrides['item.total-sum-per-chaos'] = '';
 	if(result.item.pseudoMods)
 	{
@@ -456,7 +455,7 @@ function dView(result, searchInfo)
 			}
 			else
 			{
-				aTmpResult = findValue(field, result,resultPath,0);
+				aTmpResult = findValue(result,resultPath);
 			}	
 			if(aTmpResult != null && aTmpResult != '' && aTmpResult != 'null')
 			{
@@ -647,7 +646,7 @@ function makeModList(compositeMods, affixListType)
 	return modlist;	
 }
 
-function findValue(field, object, objectPath, depth)
+function findValue(object, objectPath)
 {
 	var objectValue = object;
 	var objectParts = objectPath.split('.');
