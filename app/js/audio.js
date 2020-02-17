@@ -39,7 +39,6 @@ function playSound(soundId, volume)
 		}
 		if(soundId != null && soundId.length > 0)
 		{
-			volume = volume / 100;	
 			if (sounds[soundId] == null)
 			{
 				var audioPath = '/audio/' + soundId;
@@ -64,6 +63,7 @@ function playSound(soundId, volume)
 		}
 		if(soundId != null && soundId.length > 0)
 		{
+			volume = volume / 100;	
 			sounds[soundId].volume = volume;
 			sounds[soundId].play();
 		}
