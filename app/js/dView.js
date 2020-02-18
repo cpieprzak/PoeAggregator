@@ -18,6 +18,41 @@ function dView(result, searchInfo)
 	overrides['item.total-sum'] = '';
 	overrides['item.sum-per-chaos'] = '';
     var chaosEquiv = null;
+
+	overrides['item.sum-per-chaos'] = '';
+	overrides['listing-time'] = '';
+	
+	if(result.listing)
+	{
+		var indexedTime = result.listing.indexed;
+		try
+		{
+			var indexDate = new Date(indexedTime);
+			var day = indexDate.getDate();
+			var monthIndex = indexDate.getMonth() + 1;
+			var year = indexDate.getFullYear();
+			var hours = indexDate.getHours();
+			var minutes = indexDate.getMinutes();
+			var ampm = 'AM';
+			if(hours >= 12)
+			{
+				ampm = 'PM';
+				hours -= 12;
+			}		
+			if(hours == 0)
+			{
+				hours = 12;
+			}
+			var timeString = monthIndex + '/' + day + '/' + year + ' ' + hours + ':' + minutes;
+			timeString += ampm;
+			overrides['listing-time'] = timeString;
+		}
+		catch(error)
+		{
+			overrides['listing-time'] = result.listing.indexed;
+		}		
+	}
+
 	if(result.listing.price)
 	{
 		var currencyType = result.listing.price.currency;

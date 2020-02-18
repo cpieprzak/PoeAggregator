@@ -6,11 +6,12 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 	this.url = url;
 	this.searchInfo = searchInfo;
 	this.socket = null;
-	this.timeoutDelay = 10000;
 	this.closedByUser = false;
 	this.connectionManager = connectionManager;
 	this.autoReconnectDelay = 45 * 60 * 1000;
+	this.connectTimeout = null;
 	this.autoReconnect = null;
+	this.delay = 100;
 	
 	this.reconnect = function(event)
 	{
@@ -23,7 +24,10 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 			{
 				if(event.code == 401)
 				{
-					console.log('Scheduled close (' + this.url + ')[' + event.code + ']... reconnecting');
+					console.log('Bad close (' + this.url + ')[' + event.code + ']... Could not authenticate.');
+					var socketCount = document.getElementById('socket-count');
+					socketCount.value = 0;
+					socketCount.classList.remove('active');
 				}
 				else if(event.code == -1000)
 				{
@@ -32,29 +36,46 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 				}
 				else if(event.code == 1006)
 				{
-					console.log('Bad close (' + this.url + ')[' + event.code + '].');
-					document.getElementById('socket-count').value = 0;
+					console.log('Bad close (' + this.url + ')[' + event.code + ']... reconnecting');
+					this.delay += 5000;
+					this.connect();
 				}
 				else if(event.code != 1000)
 				{
 					console.log('Bad close (' + this.url + ')[' + event.code + ']... reconnecting');
+					this.delay += 5000;
 					this.connect();
 				}
 				else
 				{
 					console.log('Closing ' + this.url);
-					document.getElementById('socket-count').value = 0;
+					var socketCount = document.getElementById('socket-count');
+					socketCount.value = 0;
+					socketCount.classList.remove('active');
 				}
 			}
 			else
 			{
 				console.log('Closing ' + this.url);
-				document.getElementById('socket-count').value = 0;
+				var socketCount = document.getElementById('socket-count');
+				socketCount.value = 0;
+				socketCount.classList.remove('active');
 			}
 		}
 	};
 	
 	this.connect = function()
+	{
+		this.connectTimeout = setTimeout
+		(
+			function()
+			{
+				this.delayedConnection(); 
+			}.bind(this), this.delay
+		);
+	}
+	
+	this.delayedConnection = function()
 	{
 		console.log('Connecting to ' + url);
 		this.autoReconnect = setTimeout
@@ -123,6 +144,10 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 	{
 		this.closedByUser = true;
 		console.log('Closing ' + url);
+		if(this.connectTimeout != null)
+		{
+			 clearTimeout(this.connectTimeout);
+		}
 		if(this.autoReconnect != null)
 		{
 			 clearTimeout(this.autoReconnect);
