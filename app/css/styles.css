@@ -607,6 +607,7 @@ ul
 .copied 
 {
 	text-decoration: line-through;
+	background-color: #5c5f67;
 }
 
 .bold 
