@@ -385,6 +385,16 @@ textarea.notes
 	min-width: 90vw;
 }
 
+.item-display.is-corrupted
+{
+	background-color: #352929;
+}
+
+.item-display.is-mirrored
+{
+	background-color: #1b2132;
+}
+
 @media only screen and (min-width: 1300px)
 {
 	.item-display 

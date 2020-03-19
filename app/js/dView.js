@@ -437,12 +437,14 @@ function dView(result, searchInfo)
 
 		if(result.item.corrupted)
 		{
-			overrides['item.corrupted'] = '(Corrupted)';					
+			overrides['item.corrupted'] = '(Corrupted)';
+			newNode.classList.add('is-corrupted');					
 		}
 		
 		if(result.item.duplicated)
 		{
-			overrides['item.mirrored'] = '(Mirrored)';					
+			overrides['item.mirrored'] = '(Mirrored)';	
+			newNode.classList.add('is-mirrored');				
 		}
 	}
 	var itemNamePlate = document.createElement('span');
@@ -584,6 +586,7 @@ function dView(result, searchInfo)
 	var stats = new TrackedStats();
 	stats.setTrackedStats(result);
 	newNode.trackedStats = stats;
+	remote.getCurrentWindow().flashFrame(true);
 	
 	return newNode;
 }

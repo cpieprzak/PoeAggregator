@@ -1,9 +1,9 @@
 const {app,BrowserWindow,session,protocol,ipcMain,shell} = require('electron')
 
-
+var mainWindow = null;
 async function createWindow () 
 {	
-	var mainWindow = new BrowserWindow(
+	mainWindow = new BrowserWindow(
 	{
 	    width: 800,
 	    height: 600,
@@ -14,8 +14,9 @@ async function createWindow ()
 	})
 
 	var url = 'index.html';
-	mainWindow.maximize()
-	mainWindow.loadFile(url)
+	mainWindow.maximize();
+	mainWindow.loadFile(url);
+	mainWindow.once('focus', () => mainWindow.flashFrame(false));	
 }
 
 app.on('ready', () => 
@@ -39,6 +40,6 @@ app.on('activate', () =>
 {
 	if (BrowserWindow.getAllWindows().length === 0) 
 	{
-		createWindow()
+		createWindow();
 	}
 })
