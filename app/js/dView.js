@@ -586,7 +586,6 @@ function dView(result, searchInfo)
 	var stats = new TrackedStats();
 	stats.setTrackedStats(result);
 	newNode.trackedStats = stats;
-	remote.getCurrentWindow().flashFrame(true);
 	
 	return newNode;
 }

@@ -141,6 +141,7 @@ function updateWatched(data, searchInfo)
 			var soundId = watchedItemManager.getSoundId();
 			var soundVolume = watchedItemManager.getSoundVolume();
 			playSound(soundId, soundVolume);
+			remote.getCurrentWindow().flashFrame(true);
 			newNode.classList.add('watched-item');
 			display.insertBefore(newNode, display.firstChild);
 			lastItem = newNode;
