@@ -261,6 +261,7 @@ function addItem(data, searchInfo)
 					oldestItem = null;			
 				}
 			}
+			remote.getCurrentWindow().flashFrame(true);
 		}
 	}
 } 
