@@ -354,6 +354,14 @@
 									<input class="local-data" type='text' id='poesessionid' value='' onblur="updatePoesessionid()" />
 								</div>
 							</div>
+							<div class="us-table-row">
+								<div class="us-table-cell">
+									Queue Update Speed (MS)
+								</div>
+								<div class="us-table-cell">
+									<input class="local-data" type='text' id='queue-update-speed' value='700' onblur="updateQueue()" />
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -732,11 +740,13 @@
 			</div>
 		</div>	
 		
+		
 		<script type="text/javascript" src="./js/polyfills.js"></script>
 		<script type="text/javascript" src="./js/audio.js"></script>		
 		<script type="text/javascript" src="./js/connectionManager.js"></script>
 		<script type="text/javascript" src="./js/searchListing.js"></script>
 		<script type="text/javascript" src="./js/dView.js"></script>
+		<script type="text/javascript" src="./js/itemFetcher.js"></script>
 		<script type="text/javascript" src="./js/aggmain.js"></script>
 		<script type="text/javascript" src="./js/webSocketWrapper.js"></script>		
 		<script type="text/javascript" src="./js/leagueInfo.js"></script>

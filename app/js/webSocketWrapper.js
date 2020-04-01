@@ -29,11 +29,6 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 					socketCount.value = 0;
 					socketCount.classList.remove('active');
 				}
-				else if(event.code == -1000)
-				{
-					console.log('Scheduled close (' + this.url + ')[' + event.code + ']... reconnecting');
-					this.connect();
-				}
 				else if(event.code == 1006)
 				{
 					console.log('Bad close (' + this.url + ')[' + event.code + ']... reconnecting');
@@ -78,14 +73,6 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 	this.delayedConnection = function()
 	{
 		console.log('Connecting to ' + url);
-		this.autoReconnect = setTimeout
-		(
-			function()
-			{
-				this.socket.close(1000);
-				this.reconnect(new ScheduledClosedEvent()); 
-			}.bind(this), this.autoReconnectDelay
-		);
 		this.socket = new WebSocket(
 				this.url,
 			    [],
@@ -163,8 +150,4 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 			this.socket = null;
 		}
 	}
-}
-function ScheduledClosedEvent()
-{
-	this.code = -1000;	
 }

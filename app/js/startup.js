@@ -1,8 +1,8 @@
 var watchedItemManager = new WatchedItemManager();
 var requestManager = new RequestManager();
-loadLocalData();
 var init = function(data, parameters)
 {
+	loadLocalData();
 	try
 	{
 		loadLeagues(data, parameters);
@@ -11,9 +11,8 @@ var init = function(data, parameters)
 	{
 		console.log(e);
 	}
+	updateQueue();
 }
-
-
 
 callAjax('https://api.pathofexile.com/leagues', init);
 watchedItemManager.initialize();

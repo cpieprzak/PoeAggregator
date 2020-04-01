@@ -110,6 +110,7 @@ input, textarea, select
 	margin: 0px;
 	text-align: top;
 	height: 1.5rem;
+	vertical-align: middle;
 }
 
 .us-table
@@ -950,9 +951,10 @@ a:visited
 .modal-content-box select
 {
 	display: inline-block;
-	margin: 0px;
+	margin: 0px 1px;
 	padding: 0px;
 	width: 100%;
+	vertical-align: middle;
 }
 
 .modal-footer

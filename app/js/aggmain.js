@@ -80,7 +80,7 @@ function RequestManager()
 	}
 	this.getNextItem = function()
 	{
-		if(this.itemRequests.length > 0)
+		if(this.itemRequests.length > 0 && ItemFetchManager.canFetch())
 		{
 			var itemRequest = this.itemRequests.shift();
 			this.queueBox.value = this.itemRequests.length;	
@@ -106,21 +106,7 @@ function RequestManager()
 	};
 	this.processItem = function (itemRequest)
 	{
-		var searchInfo = itemRequest.searchInfo;
-		var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
-		var itemUrl = getItemUrl + itemRequest.listings;
-		itemUrl += '?query=' + itemRequest.searchInfo.searchUrlPart;
-		
-		var callback = itemRequest.callback;
-		if(callback == null)
-		{
-			callback = addItem;
-		}
-		callAjax(itemUrl, callback, searchInfo);
-		if(searchInfo.viewId == 'display-window')
-		{
-			playSound(searchInfo.soundId, searchInfo.soundVolume);
-		}
+		ItemFetchManager.fetch(itemRequest);
 	};
 }
 
@@ -129,8 +115,30 @@ function getItems()
 	requestManager.getNextItem();
 }
 
-setInterval(getItems, 500);
+var lookupProcess = null;
 
+var updateSpeed = 3000;
+function updateQueue(updateSpeed)
+{
+	if(updateSpeed == null)
+	{
+		updateSpeed = document.getElementById('queue-update-speed');
+	}
+	try
+	{
+		updateSpeed = parseInt(updateSpeed.value);
+	}
+	catch(e)
+	{
+		updateSpeed = 3500;
+	}
+	if(lookupProcess != null)
+	{
+		clearInterval(lookupProcess);
+	}
+	console.log('Updating queue speeds to ' + updateSpeed + 'ms.');
+	lookupProcess = setInterval(getItems, updateSpeed);
+}
 
 function updateTimes()
 {
@@ -166,11 +174,33 @@ function callAjax(url, callback, searchInfo)
 {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function()
-    {
+    {		
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
         {
         	callback(xmlhttp.responseText, searchInfo);
         }
+
+		var ratelimitPolicy = xmlhttp.getResponseHeader('x-rate-limit-policy');
+		if(ratelimitPolicy != null && ratelimitPolicy == 'trade-fetch-request-limit')
+		{
+			var rateLimits = xmlhttp.getResponseHeader('x-rate-limit-ip');
+			if(rateLimits != null)
+			{
+				var parts = rateLimits.split(',');
+				var rate = 500;
+				for(var i = 0; i < parts.length; i++)
+				{
+					var limitParts = parts[i].split(':');
+					var requests = limitParts[0];
+					var seconds = limitParts[1];
+					var currentRate = Math.ceil((requests / seconds) * 1000);
+					
+					var rl = new RateLimit();
+					rl.parse(parts[i]);
+					rl.log();
+				}
+			}
+		}		
     }
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
@@ -179,7 +209,6 @@ function callAjax(url, callback, searchInfo)
 function consoleOut(data)
 {
 	var json = JSON.parse(data);
-	var results = json.result;
 	console.log(json);
 }
 
