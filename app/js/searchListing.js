@@ -59,11 +59,12 @@ function SearchListing(listingString)
 	this.soundVolume = 25;
 	this.color = '#1c1e23';
 	this.searchCategory = '';
+	this.autoCopy  = '0';
 	this.viewId = 'display-window';
 	
 	if(listingString != null)
 	{
-		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'searchCategory'];
+		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'searchCategory','autoCopy'];
 		var searchParts = listingString.trim().split('[');
 		for (var i = 0; i < searchParts.length; i++)
 		{
@@ -92,6 +93,7 @@ function SearchListing(listingString)
 		clonedNode.soundVolume = this.soundVolume;
 		clonedNode.color = this.color;
 		clonedNode.searchCategory = this.searchCategory;
+		clonedNode.autoCopy = this.autoCopy;
 		clonedNode.viewId = this.viewId;
 		
 		return clonedNode;
@@ -374,6 +376,13 @@ function openSearchesModal()
 			searchCategories.push(search.searchCategory);
 		}
 		categoryBox.addEventListener("blur", function(e){remakeCategories();});
+		
+		var autoCopyBox = searchRow.querySelector('.search-auto-copy');
+		autoCopyBox.checked = false;
+		if(search.autoCopy == 1)
+		{
+			autoCopyBox.checked = true;
+		}
 
 		var addNewButton = searchRow.querySelector('.add-new-button');
 		replaceWithRemoveButton(addNewButton, searchRow);	

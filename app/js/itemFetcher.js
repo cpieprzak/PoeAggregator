@@ -96,7 +96,6 @@ function ItemFetcher()
 							rl.parse(parts[i]);
 							ItemFetchManager.rates.push(rl);
 						}
-						console.log(ItemFetchManager);
 					}					
 				}
 			}
@@ -107,7 +106,6 @@ function ItemFetcher()
 	    }
 	    xmlhttp.open("GET", url, true);
 		xmlhttp.send();
-		console.log(this);
 	}
 }
 

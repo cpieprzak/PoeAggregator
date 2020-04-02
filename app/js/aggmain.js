@@ -291,6 +291,10 @@ function addItem(data, searchInfo)
 				}
 			}
 			remote.getCurrentWindow().flashFrame(true);
+			if(searchInfo.autoCopy == '1')
+			{
+				copyTextToClipboard(result.listing.whisper);
+			}
 		}
 	}
 } 
