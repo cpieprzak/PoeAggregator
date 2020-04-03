@@ -384,6 +384,7 @@ textarea.notes
     margin-right: auto;
     margin-left: auto;
 	min-width: 90vw;
+	max-width: 90vw;
 }
 
 .item-display.is-corrupted
