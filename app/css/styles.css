@@ -1102,20 +1102,31 @@ a:visited
     text-align: right;
 }
 
-.outdated
+html .all-screen .outdated
 {
-	background-color: #0a0b0c !important;
+	background-color: #0a0b0c;
     text-decoration: line-through !important;
 	opacity: .5;
 }
 
-.not-verified
+html .all-screen .not-verified
 {
-	background-color: #0a0b0c !important;
+	background-color: #0a0b0c;
     text-decoration: line-through !important;
 	opacity: .5;
 }
-.outdated .template-field
+
+html .all-screen .item-display.watched-item.outdated
+{
+	background-color: rgb(2, 15, 21);
+}
+
+html .all-screen .item-display.watched-item.not-verified
+{
+	background-color: rgb(2, 15, 21);
+}
+
+html .all-screen .outdated .template-field
 {
     text-decoration: line-through !important;
 }
