@@ -58,7 +58,11 @@ function RequestManager()
 			
 			for(var i = 0; i < listings.length; i++)
 			{
-				filteredListing.push(newRequest.listings[i]);
+				var listing = newRequest.listings[i];
+				if(!filteredListing.includes(listing))
+				{
+					filteredListing.push(listing);
+				}
 				if(filteredListing.length == 10)
 				{
 					var tmpRequest = newRequest.clone();
