@@ -1,4 +1,5 @@
 const ipc = require('electron').ipcRenderer;
+const https = require('https');
 
 var lastItem = null;
 var openSockets = 0;
@@ -182,29 +183,7 @@ function callAjax(url, callback, searchInfo)
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
         {
         	callback(xmlhttp.responseText, searchInfo);
-        }
-
-		var ratelimitPolicy = xmlhttp.getResponseHeader('x-rate-limit-policy');
-		if(ratelimitPolicy != null && ratelimitPolicy == 'trade-fetch-request-limit')
-		{
-			var rateLimits = xmlhttp.getResponseHeader('x-rate-limit-ip');
-			if(rateLimits != null)
-			{
-				var parts = rateLimits.split(',');
-				var rate = 500;
-				for(var i = 0; i < parts.length; i++)
-				{
-					var limitParts = parts[i].split(':');
-					var requests = limitParts[0];
-					var seconds = limitParts[1];
-					var currentRate = Math.ceil((requests / seconds) * 1000);
-					
-					var rl = new RateLimit();
-					rl.parse(parts[i]);
-					rl.log();
-				}
-			}
-		}		
+        }		
     }
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
@@ -805,7 +784,7 @@ var outputToView = function(data, parameters)
 
 function runSortedSearch(search, sort, callback)
 {
-	var url = 'https://www.pathofexile.com/api/trade/search/';
+	var url = '/api/trade/search/';
 	var league = document.getElementById('league').value;
 	var searchInfo = new SearchListing();
 	searchInfo.searchUrlPart = search;
@@ -824,9 +803,52 @@ function runSortedSearch(search, sort, callback)
 		var jquery = JSON.stringify(query);
 		var url = 'https://www.pathofexile.com/api/trade/search/';
 		url += league + '?source=' + jquery + '&q=';
-		callAjax(url, callback, searchInfo);
+		callAjaxWithSession(url, callback, searchInfo);
 		
 	};
 	url += '?q=';
-	callAjax(url, sortsearches);
+	callAjaxWithSession(url, sortsearches);
+}
+
+function callAjaxWithSession(path, callback, searchInfo)
+{
+    const options =
+	{
+		host: 'www.pathofexile.com',
+		port: 443,
+		path: path,
+  		method: 'GET',
+		headers: 
+        {
+            'Cookie': cookie.serialize('POESESSID', poesessionid)
+        }
+	};
+	
+	var data = '';
+	const req = https.request(options, res => 
+	{
+		if(res.statusCode == 200)
+		{
+			res.setEncoding('utf8');
+		  	res.on('data', d => 
+			{
+		    	data += d;
+		  	})
+		  	res.on('end', d => 
+			{
+		    	callback(data, searchInfo);
+		  	})
+		}
+		else
+		{
+			console.log('Bad request: ' + res.statusCode);
+		}
+	})
+
+	req.on('error', error => 
+	{
+  		console.error(error)
+	})
+
+	req.end()
 }
