@@ -16,6 +16,7 @@ async function createWindow ()
 	var url = 'index.html';
 	mainWindow.maximize();
 	mainWindow.loadFile(url);
+	//mainWindow.webContents.openDevTools();
 	mainWindow.once('focus', () => mainWindow.flashFrame(false));	
 }
 

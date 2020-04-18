@@ -784,7 +784,7 @@ var outputToView = function(data, parameters)
 
 function runSortedSearch(search, sort, callback)
 {
-	var url = '/api/trade/search/';
+	var url = '/trade/search/';
 	var league = document.getElementById('league').value;
 	var searchInfo = new SearchListing();
 	searchInfo.searchUrlPart = search;
@@ -792,36 +792,73 @@ function runSortedSearch(search, sort, callback)
 	url += search;
 	var sortsearches = function(data, parameters)
 	{
-		var league = document.getElementById('league').value;
-		var result = JSON.parse(data);
-		var query = result.query;
+		var start = data.indexOf('//<!--');
+		var end = data.indexOf('//-->');
+		var newData = data.substring(start, end).trim();
+		start = newData.indexOf('t({"tab"');
+		newData = newData.substring(start + 2);
+		newData = newData.substring(0, newData.length - 8);
+		/*
+		var i = 0;
+		while (i < 15)
+		{
+			console.log('trying:' + i);
+			var tmp = newData.substring(0, newData.length - i);
+			try
+			{
+			 	newData = JSON.parse(tmp);
+				i = 45;
+			}
+			catch(e)
+			{
+				console.log('failed:' + i);
+			}
+		
+			
+			i++;
+		}*/
+		newData =  JSON.parse(newData);
+		var jsonData = new Object();
+		jsonData.query = newData.state;
 		if(sort != null)
 		{
-			query.sort = sort;			
+			jsonData.sort = sort;			
 		}
-
-		var jquery = JSON.stringify(query);
-		var url = 'https://www.pathofexile.com/api/trade/search/';
-		url += league + '?source=' + jquery + '&q=';
-		callAjaxWithSession(url, callback, searchInfo);
+		jsonData = JSON.stringify(jsonData);
+		var league = document.getElementById('league').value;
+		var path = '/api/trade/search/';
+		path += league;
+		callAjaxWithSession(path, callback, jsonData, searchInfo);
 		
 	};
 	url += '?q=';
 	callAjaxWithSession(url, sortsearches);
 }
 
-function callAjaxWithSession(path, callback, searchInfo)
+function callAjaxWithSession(path, callback, jsonData, searchInfo)
 {
+	var myHeaders = 
+    {
+        'Cookie': cookie.serialize('POESESSID', poesessionid)
+    };
+
+	if(jsonData != null)
+	{
+		myHeaders = 
+	    {
+	        'Cookie': cookie.serialize('POESESSID', poesessionid),
+			'Content-Length': Buffer.byteLength(jsonData),
+	      	'Content-Type': 'application/json'
+	    };
+	}
+
     const options =
 	{
 		host: 'www.pathofexile.com',
 		port: 443,
 		path: path,
-  		method: 'GET',
-		headers: 
-        {
-            'Cookie': cookie.serialize('POESESSID', poesessionid)
-        }
+  		method: 'POST',
+		headers: myHeaders
 	};
 	
 	var data = '';
@@ -849,6 +886,11 @@ function callAjaxWithSession(path, callback, searchInfo)
 	{
   		console.error(error)
 	})
+	
+	if(jsonData != null)
+	{
+		req.write(jsonData);
+	}
 
 	req.end()
 }
