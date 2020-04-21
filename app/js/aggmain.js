@@ -784,42 +784,15 @@ var outputToView = function(data, parameters)
 
 function runSortedSearch(search, sort, callback)
 {
-	var url = '/trade/search/';
-	var league = document.getElementById('league').value;
+	var url = '/api/trade/search/';
 	var searchInfo = new SearchListing();
 	searchInfo.searchUrlPart = search;
-	url += league + '/';
 	url += search;
-	var sortsearches = function(data, parameters)
+	var sortsearches = function(data)
 	{
-		var start = data.indexOf('//<!--');
-		var end = data.indexOf('//-->');
-		var newData = data.substring(start, end).trim();
-		start = newData.indexOf('t({"tab"');
-		newData = newData.substring(start + 2);
-		newData = newData.substring(0, newData.length - 8);
-		/*
-		var i = 0;
-		while (i < 15)
-		{
-			console.log('trying:' + i);
-			var tmp = newData.substring(0, newData.length - i);
-			try
-			{
-			 	newData = JSON.parse(tmp);
-				i = 45;
-			}
-			catch(e)
-			{
-				console.log('failed:' + i);
-			}
-		
-			
-			i++;
-		}*/
-		newData =  JSON.parse(newData);
+		var results =  JSON.parse(data);
 		var jsonData = new Object();
-		jsonData.query = newData.state;
+		jsonData.query = results.query;
 		if(sort != null)
 		{
 			jsonData.sort = sort;			
@@ -828,14 +801,13 @@ function runSortedSearch(search, sort, callback)
 		var league = document.getElementById('league').value;
 		var path = '/api/trade/search/';
 		path += league;
-		callAjaxWithSession(path, callback, jsonData, searchInfo);
-		
+		callAjaxWithSession('POST', path, callback, jsonData, searchInfo);
 	};
 	url += '?q=';
-	callAjaxWithSession(url, sortsearches);
+	callAjaxWithSession('GET', url, sortsearches)
 }
 
-function callAjaxWithSession(path, callback, jsonData, searchInfo)
+function callAjaxWithSession(method, path, callback, jsonData, searchInfo)
 {
 	var myHeaders = 
     {
@@ -857,7 +829,7 @@ function callAjaxWithSession(path, callback, jsonData, searchInfo)
 		host: 'www.pathofexile.com',
 		port: 443,
 		path: path,
-  		method: 'POST',
+  		method: method,
 		headers: myHeaders
 	};
 	
