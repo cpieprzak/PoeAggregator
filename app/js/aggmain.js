@@ -751,12 +751,18 @@ function orderByValue()
 var outputToView = function(data, parameters)
 {
 	var viewId = 'display-window';
+	var json = JSON.parse(data);
+	var loadedItems = json.result;
+	
 	if(parameters != null)
 	{
 		viewId = parameters.viewId;
+		if(parameters.orgin && parameters.orgin == 'run')
+		{
+			loadedItems = loadedItems.reverse();
+		}
 	}
-	var json = JSON.parse(data);
-	var loadedItems = json.result;
+	
 	var listings = [];
 	for(var i = 0; i < loadedItems.length; i++)
 	{
@@ -787,6 +793,7 @@ function runSortedSearch(search, sort, callback)
 	var url = '/api/trade/search/';
 	var searchInfo = new SearchListing();
 	searchInfo.searchUrlPart = search;
+	searchInfo.orgin = 'run';
 	url += search;
 	var sortsearches = function(data)
 	{

@@ -61,6 +61,7 @@ function SearchListing(listingString)
 	this.searchCategory = '';
 	this.autoCopy  = '0';
 	this.viewId = 'display-window';
+	this.orgin = 'live-search';
 	
 	if(listingString != null)
 	{
@@ -95,6 +96,7 @@ function SearchListing(listingString)
 		clonedNode.searchCategory = this.searchCategory;
 		clonedNode.autoCopy = this.autoCopy;
 		clonedNode.viewId = this.viewId;
+		clonedNode.orgin = this.orgin;
 		
 		return clonedNode;
 	}
