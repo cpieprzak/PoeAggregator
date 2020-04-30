@@ -55,7 +55,6 @@ function ItemFetcher()
 		{
 			callback = addItem;
 		}
-		console.log(callback);
 		var xmlhttp = new XMLHttpRequest();
 	    xmlhttp.onreadystatechange = function()
 	    {		
