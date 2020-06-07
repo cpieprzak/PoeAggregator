@@ -59,8 +59,10 @@ currencyImages['splinter-chayula'] = 'https://web.poecdn.com/image/Art/2DItems/C
 
 function loadCurrency()
 {
+	var host = 'poe';
+	host += '.ninja';
 	var league = document.getElementById('league').value;
-	var path = 'https://poe.ninja/api/data/currencyoverview?league=' + league + '&type=Currency&language=en';
+	var path = 'https://' + host + '/api/data/currencyoverview?league=' + league + '&type=Currency&language=en';
 	
 	var myHeaders = 
     {        
@@ -69,7 +71,7 @@ function loadCurrency()
 
     const options =
 	{
-		host: 'poe.ninja',
+		host: host,
 		port: 443,
 		path: path,
   		method: 'GET',
