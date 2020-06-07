@@ -57,11 +57,52 @@ currencyImages['splinter-esh'] = 'https://web.poecdn.com/image/Art/2DItems/Curre
 currencyImages['splinter-uul'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/Breach/BreachShardPhysical.png?v=25f31f4a5e1ba4540cb7bfa03b82c1e8';
 currencyImages['splinter-chayula'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/Breach/BreachShardChaos.png?v=2c18cbe5384375bbe4643cd8b83ea32d';
 
-var loadCurrency = function()
+function loadCurrency()
 {
 	var league = document.getElementById('league').value;
-	var currencyUrl = 'https://api.poe.watch/get?league=' + league + '&category=currency';
-	callAjax(currencyUrl, loadCurrencyAjax);
+	var path = 'https://poe.ninja/api/data/currencyoverview?league=' + league + '&type=Currency&language=en';
+	
+	var myHeaders = 
+    {        
+		'User-Agent': 'Mozilla/5.0'
+    };
+
+    const options =
+	{
+		host: 'poe.ninja',
+		port: 443,
+		path: path,
+  		method: 'GET',
+		headers: myHeaders
+	};
+	
+	var data = '';
+	const req = https.request(options, res => 
+	{
+		if(res.statusCode == 200)
+		{
+			res.setEncoding('utf8');
+		  	res.on('data', d => 
+			{
+		    	data += d;
+		  	})
+		  	res.on('end', d => 
+			{
+				loadCurrencyAjax(data);
+		  	})
+		}
+		else
+		{
+			console.log('Bad request: ' + res.statusCode);
+		}
+	})
+
+	req.on('error', error => 
+	{
+  		console.error(error)
+	})
+
+	req.end()
 }
 
 currencyRatios = [];
@@ -82,20 +123,21 @@ var mapCurrencyInputs = function mapCurrencyInputs()
 	}
 }
 mapCurrencyInputs();
-var loadCurrencyAjax = function(data, parameters)
+var loadCurrencyAjax = function(data)
 {
-	var pulledRatios = JSON.parse(data);
-	for (var i = 0; i < pulledRatios.length; i++)
+	var json = JSON.parse(data);
+	var lines = json.lines;
+	
+	console.log(json);
+	for (var i = 0; i < lines.length; i++)
 	{
-		var currencyRatio = pulledRatios[i];
-		var currencyName = currencyRatio.name;
-		var medianPrice = currencyRatio.median;
-		var acceptedTags = tags[currencyName];
+		var line = lines[i];
+		var currencyName = line.currencyTypeName;
 		
 		var input = document.getElementById(currencyName);
 		if(input != null)
 		{
-			input.value = medianPrice;
+			input.value = line.chaosEquivalent;
 		}
 	}
 };
