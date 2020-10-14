@@ -103,7 +103,8 @@ function callAjax(url, callback, searchInfo)
         	callback(xmlhttp.responseText, searchInfo);
         }		
     }
-    xmlhttp.open("GET", url, true);
+	xmlhttp.open("GET", url, true);
+	xmlhttp.setRequestHeader('User-Agent', "PoeAggregator Version: " + require('electron').remote.app.getVersion())
     xmlhttp.send();
 }
 

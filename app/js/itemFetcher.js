@@ -103,7 +103,8 @@ function ItemFetcher()
 				playSound(searchInfo.soundId, searchInfo.soundVolume);
 			}		
 	    }
-	    xmlhttp.open("GET", url, true);
+		xmlhttp.open("GET", url, true);
+		xmlhttp.setRequestHeader('User-Agent', "PoeAggregator Version: " + require('electron').remote.app.getVersion())
 		xmlhttp.send();
 	}
 }

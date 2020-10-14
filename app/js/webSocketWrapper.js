@@ -80,7 +80,8 @@ function WebSocketWrapper(url, searchInfo, connectionManager)
 			    	'origin' : 'https://www.pathofexile.com/',
 			        'headers': 
 			        {
-			            'Cookie': cookie.serialize('POESESSID', poesessionid)
+						'Cookie': cookie.serialize('POESESSID', poesessionid),
+						'User-Agent': "PoeAggregator Version: " + require('electron').remote.app.getVersion()
 			        }
 			    }
 			);
