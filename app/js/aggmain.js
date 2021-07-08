@@ -1,5 +1,6 @@
 const ipc = require('electron').ipcRenderer;
 const https = require('https');
+const version = require('electron').remote.app.getVersion();
 
 var lastItem = null;
 var openSockets = 0;
@@ -12,6 +13,7 @@ var currencyRatios = [];
 var genericId = 0;
 var currentView = document.getElementById('display-window');
 var poesessionid = '';
+var userAgent = "PoeAggregator" + version;
 
 function openBrowserWindow(url)
 {
@@ -103,7 +105,7 @@ function callAjax(url, callback, searchInfo)
         	callback(xmlhttp.responseText, searchInfo);
         }		
     }
-    xmlhttp.open("GET", url, true);
+    xmlhttp.open("GET", url, true);	
     xmlhttp.send();
 }
 
@@ -736,7 +738,8 @@ function callAjaxWithSession(method, path, callback, jsonData, searchInfo)
 {
 	var myHeaders = 
     {
-        'Cookie': cookie.serialize('POESESSID', poesessionid)
+        'Cookie': cookie.serialize('POESESSID', poesessionid),
+		'User-Agent':userAgent
     };
 
 	if(jsonData != null)
@@ -745,13 +748,14 @@ function callAjaxWithSession(method, path, callback, jsonData, searchInfo)
 	    {
 	        'Cookie': cookie.serialize('POESESSID', poesessionid),
 			'Content-Length': Buffer.byteLength(jsonData),
-	      	'Content-Type': 'application/json'
+	      	'Content-Type': 'application/json',
+			'User-Agent': userAgent
 	    };
 	}
 
     const options =
 	{
-		host: 'www.pathofexile.com',
+		hostname: 'www.pathofexile.com',
 		port: 443,
 		path: path,
   		method: method,

@@ -9,14 +9,15 @@ async function createWindow ()
 	    height: 600,
 	    webPreferences: 
 	    {
-	    	nodeIntegration: true
+	    	nodeIntegration: true,
+            contextIsolation: false,
+			enableRemoteModule: true
 	    }
-	})
-
+	});
 	var url = 'index.html';
 	mainWindow.maximize();
 	mainWindow.loadFile(url);
-	//mainWindow.webContents.openDevTools();
+	mainWindow.webContents.openDevTools();
 	mainWindow.once('focus', () => mainWindow.flashFrame(false));	
 }
 

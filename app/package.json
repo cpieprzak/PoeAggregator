@@ -1,6 +1,6 @@
 {
   "name": "PoeAggregator",
-  "version": "2.1.5",
+  "version": "3.0.0",
   "description": "testapp",
   "main": "main.js",
   "scripts": {
@@ -11,15 +11,15 @@
   "author": "cpieprzak",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^8.0.0",
-    "electron-builder": "^22.3.2"
+    "electron": "^13.1.6",
+    "electron-builder": "^22.11.7"
   },
   "build": {
     "appId": "poe-aggregator"
   },
   "dependencies": {
-    "cookie": "^0.4.0",
+    "cookie": "^0.4.1",
     "fs": "0.0.1-security",
-    "ws": "^7.2.1"
+    "ws": "^7.5.2"
   }
 }
