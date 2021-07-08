@@ -3,7 +3,7 @@
 Installation
 
 Go to https://github.com/cpieprzak/PoeAggregator/releases
-Download the PoeAggregator.Setup.<version number>.exe
+Download the PoeAggregator.Setup.<version number>exe
 
 Once installed, click the "Settings" button.
 
