@@ -9,44 +9,14 @@
 	</head>
 	<body>
 		<input type='text' class="local-data hidden" id='watched-items' value='' />
-		<div class="all-screen" >
+		<div class="all-screen">			
 			<div class="control-panel flex-item">
 				<div class="control-panel-items" id='control-panel'>
-					<span class='button' onclick="showCurrencyRatios()" >Currency Ratios</span>
 					<span class='item-filter-controls'>
-						<label class='nowrap'>Filter<input type='text' id='filter-box' value='' /></label>		
-						<label class='nowrap'>Min Sum<input type='text' id='min-sum-box' value='' /></label>	
-						<label class='nowrap'>Min Value<input type='text' id='min-value-box' value='' /></label>
-						<label class='nowrap'>
-							Open Prefix 
-							<select id='open-prefix' onchange="filterItems()">
-								<option value='either'>Either</option>
-								<option value='yes'>Yes</option>
-								<option value='no'>No</option>
-							</select>
-						</label>
-						<label class='nowrap'>
-							Open Suffix 
-							<select id='open-suffix' onchange="filterItems()">
-								<option value='either'>Either</option>
-								<option value='yes'>Yes</option>
-								<option value='no'>No</option>
-							</select>
-						</label>
-						<label class='nowrap'>
-							Crafted 
-							<select id='is-crafted' onchange="filterItems()">
-								<option value='either'>Either</option>
-								<option value='yes'>Yes</option>
-								<option value='no'>No</option>
-							</select>
-						</label>
+						<label class='nowrap'>Filter<input type='text' id='filter-box' value='' /></label>	
+						<span class='button' onclick="showHide('advanced-filters')" >Advanced Filters</span>
+						<span class='button' onclick="showCurrencyRatios()" >Currency Ratios</span>	
 					</span>	
-					<span class='button' onclick="showHide('settings-modal')" >Settings</span>
-					<span id="league-wrapper">
-						<select class="local-data" id="league" onchange="saveLocalData('league-wrapper')">
-						</select>
-					</span>
 					<span class='nowrap' id='search-wrapper'>
 						<input type='text' class="local-data hidden" id='searches' value='[1][WWZbim][Her Mask][1][.1][]' />
 						<span class="button" onclick="openSearchesModal();">Searches</span>
@@ -57,26 +27,66 @@
 						<label>
 							<span class="button" onclick="exportSearches()">Export</span>
 						</label>
-					</span>
-				
-					<span class='nowrap'>
+					</span>	
+					
+					<span id="league-wrapper">
+						<select class="local-data" id="league" onchange="saveLocalData('league-wrapper')"></select>
 						<label class='nowrap'>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>
 						<label class='nowrap'>Queue Size<input type='text' value='0' id='queue-count' disabled /></label>
 						<span class='button' onclick="startSockets()" >Start</span>
 						<span class='button' onclick="stopSockets()" >Stop</span>
-						<span class='button' onclick="clearDisplay()" >Clear</span>
-					</span>	
-					<span class='button' onclick="showHide('notes-modal');" >Notes</span>
+						<span class='button' onclick="clearDisplay()" >Clear</span>				
+					</span>
 				</div>
 			</div>	
+			<div class="control-panel hidden" id="advanced-filters">
+				<label class='nowrap'>Min Sum<input type='text' id='min-sum-box' value='' /></label>	
+				<label class='nowrap'>Min Value<input type='text' id='min-value-box' value='' /></label>
+				<label class='nowrap'>
+					Open Prefix 
+					<select id='open-prefix' onchange="filterItems()">
+						<option value='either'>Either</option>
+						<option value='yes'>Yes</option>
+						<option value='no'>No</option>
+					</select>
+				</label>
+				<label class='nowrap'>
+					Open Suffix 
+					<select id='open-suffix' onchange="filterItems()">
+						<option value='either'>Either</option>
+						<option value='yes'>Yes</option>
+						<option value='no'>No</option>
+					</select>
+				</label>
+				<label class='nowrap'>
+					Crafted 
+					<select id='is-crafted' onchange="filterItems()">
+						<option value='either'>Either</option>
+						<option value='yes'>Yes</option>
+						<option value='no'>No</option>
+					</select>
+				</label>	
+			</div>
 			<div class='display-window-wrapper flex-item condensed view-tab' id='display-window'>
 			</div>
-			<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'>
-			</div>
-			
+			<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'>			
+			</div>			
 			<div class='tab-control-panel'>
-				<div class='overlay-control' onclick="setCurrentWindow('display-window');"">Main</div>
+				<div class='overlay-control' onclick="setCurrentWindow('display-window');">Main</div>
 				<div class='overlay-control' onclick="setCurrentWindow('watched-display-window');">Watched</div>
+				<div class='overlay-control'>
+					<label>
+						<span>
+							<img title="exalted" 
+							class="currency-img" 
+							src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png">
+						</span>
+						<input name="Exalted Orb" type="text" class="exa ex exalted">
+						<img title="chaos" 
+							class="currency-img" 
+							src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png">
+					</label>
+				</div>
 			</div>
 			
 			<div id='scroll-to-top' class='overlay-control' onclick='scrollToTop();'>Top</div>
@@ -509,57 +519,49 @@
 				</div>
 			</div>
 		</div>
-		
+						
 		<div class="modal-wrapper">
 			<div class="hidden" id="currency-ratios">
 				<div class="modal-background" onclick="hideCurrencyRatios()"></div>
 				<div class="modal-content-box">
 					<div class="modal-header">Currency Ratios</div>
 					<div id="currency-body-modal">
-						<label><span>Exalted Orb</span><input id="Exalted Orb" type="text" class="local-data exa ex exalted"></label>
-						<label><span>Cartographer's Chisel</span><input id="Cartographer's Chisel" type="text" class="local-data chisel cart"></label>
-						<label><span>Orb of Alchemy</span><input id="Orb of Alchemy" type="text" class="local-data alch alchemy"></label>
-						<label><span>Orb of Fusing</span><input id="Orb of Fusing" type="text" class="local-data fuse fus"></label>
-						<label><span>Regal Orb</span><input id="Regal Orb" type="text" class="local-data regal rega"></label>
-						<label><span>Orb of Annulment</span><input id="Orb of Annulment" type="text" class="local-data orb-of-annulment"></label>
-						<label><span>Vaal Orb</span><input id="Vaal Orb" type="text" class="local-data vaal"></label>
-						<label><span>Divine Orb</span><input id="Divine Orb" type="text" class="local-data divine div"></label>
-						<label><span>Chromatic Orb</span><input id="Chromatic Orb" type="text" class="local-data chrom chrome"></label>
-						<label><span>Jeweller's Orb</span><input id="Jeweller's Orb" type="text" class="local-data jew"></label>
-						<label><span>Silver Coin</span><input id="Silver Coin" type="text" class="local-data silver"></label>
-						<label><span>Blessed Orb</span><input id="Blessed Orb" type="text" class="local-data blesse"></label>
-						<label><span>Orb of Chance</span><input id="Orb of Chance" type="text" class="local-data chance chanc"></label>
-						<label><span>Orb of Augmentation</span><input id="Orb of Augmentation" type="text" class="local-data aug"></label>
-						<label><span>Orb of Alteration</span><input id="Orb of Alteration" type="text" class="local-data alt"></label>
-						<label><span>Scroll of Wisdom</span><input id="Scroll of Wisdom" type="text" class="local-data wis"></label>
-						<label><span>Mirror of Kalandra</span><input id="Mirror of Kalandra" type="text" class="local-data mir kal"></label>
-						<label><span>Mirror Shard</span><input id="Mirror Shard" type="text" class="local-data mirror-shard"></label>
-						<label><span>Blessing of Chayula</span><input id="Blessing of Chayula" type="text" class="local-data blessing-chayula blessing-of-chayula"></label>
-						<label><span>Ancient Orb</span><input id="Ancient Orb" type="text" class="local-data ancient-orb"></label>
-						<label><span>Harbinger's Orb</span><input id="Harbinger's Orb" type="text" class="local-data harbingers-orb"></label>
-						<label><span>Exalted Shard</span><input id="Exalted Shard" type="text" class="local-data exalted-shard"></label>
-						<label><span>Blessing of Esh</span><input id="Blessing of Esh" type="text" class="local-data blessing-esh blessing-of-esh"></label>
-						<label><span>Blessing of Uul-Netol</span><input id="Blessing of Uul-Netol" type="text" class="local-data blessing-uul-netol blessing-of-uul-netol"></label>
-						<label><span>Stacked Deck</span><input id="Stacked Deck" type="text" class="local-data"></label>
-						<label><span>Annulment Shard</span><input id="Annulment Shard" type="text" class="local-data annulment-shard"></label>
-						<label><span>Blessing of Tul</span><input id="Blessing of Tul" type="text" class="local-data blessing-tul blessing-of-tul"></label>
-						<label><span>Blessing of Xoph</span><input id="Blessing of Xoph" type="text" class="local-data blessing-xoph blessing-of-xoph"></label>
-						<label><span>Splinter of Chayula</span><input id="Splinter of Chayula" type="text" class="local-data splinter-chayula splinter-of-chayula"></label>
-						<label><span>Gemcutter's Prism</span><input id="Gemcutter's Prism" type="text" class="local-data gemc gcp"></label>
-						<label><span>Orb of Scouring</span><input id="Orb of Scouring" type="text" class="local-data scour"></label>
-						<label><span>Orb of Horizons</span><input id="Orb of Horizons" type="text" class="local-data orb-of-horizons"></label>
-						<label><span>Orb of Regret</span><input id="Orb of Regret" type="text" class="local-data regret regr"></label>
-						<label><span>Splinter of Uul-Netol</span><input id="Splinter of Uul-Netol" type="text" class="local-data splinter-uul-netol splinter-of-uul-netol"></label>
-						<label><span>Orb of Binding</span><input id="Orb of Binding" type="text" class="local-data orb-of-binding"></label>
-						<label><span>Splinter of Xoph</span><input id="Splinter of Xoph" type="text" class="local-data splinter-xoph splinter-of-xoph"></label>
-						<label><span>Engineer's Orb</span><input id="Engineer's Orb" type="text" class="local-data engineers-orb"></label>
-						<label><span>Splinter of Tul</span><input id="Splinter of Tul" type="text" class="local-data splinter-tul splinter-of-tul"></label>
-						<label><span>Splinter of Esh</span><input id="Splinter of Esh" type="text" class="local-data splinter-esh splinter-of-esh"></label>
-						<label><span>Glassblower's Bauble</span><input id="Glassblower's Bauble" type="text" class="local-data glass bauble"></label>
-						<label><span>Blacksmith's Whetstone</span><input id="Blacksmith's Whetstone" type="text" class="local-data blacksmith whetstone"></label>
-						<label><span>Orb of Transmutation</span><input id="Orb of Transmutation" type="text" class="local-data tra"></label>
-						<label><span>Portal Scroll</span><input id="Portal Scroll" type="text" class="local-data port"></label>
-						<label><span>Armourer's Scrap</span><input id="Armourer's Scrap" type="text" class="local-data armour"></label>	
+						<label><span>Exalted Orb</span><input id="Exalted Orb" name="Exalted Orb" type="text" class="local-data exa ex exalted"></label>
+						<label><span>Cartographer's Chisel</span><input id="Cartographer's Chisel" name="Cartographer's Chisel" type="text" class="local-data chisel cart"></label>
+						<label><span>Orb of Alchemy</span><input id="Orb of Alchemy" name="Orb of Alchemy" type="text" class="local-data alch alchemy"></label>
+						<label><span>Orb of Fusing</span><input id="Orb of Fusing" name="Orb of Fusing" type="text" class="local-data fuse fus"></label>
+						<label><span>Regal Orb</span><input id="Regal Orb" name="Regal Orb" type="text" class="local-data regal rega"></label>
+						<label><span>Orb of Annulment</span><input id="Orb of Annulment" name="Orb of Annulment" type="text" class="local-data orb-of-annulment"></label>
+						<label><span>Vaal Orb</span><input id="Vaal Orb" name="Vaal Orb" type="text" class="local-data vaal"></label>
+						<label><span>Divine Orb</span><input id="Divine Orb" name="Divine Orb" type="text" class="local-data divine div"></label>
+						<label><span>Chromatic Orb</span><input id="Chromatic Orb" name="Chromatic Orb" type="text" class="local-data chrom chrome"></label>
+						<label><span>Jeweller's Orb</span><input id="Jeweller's Orb" name="Jeweller's Orb" type="text" class="local-data jew"></label>
+						<label><span>Silver Coin</span><input id="Silver Coin" name="Silver Coin" type="text" class="local-data silver"></label>
+						<label><span>Blessed Orb</span><input id="Blessed Orb" name="Blessed Orb" type="text" class="local-data blesse"></label>
+						<label><span>Orb of Chance</span><input id="Orb of Chance" name="Orb of Chance" type="text" class="local-data chance chanc"></label>
+						<label><span>Orb of Augmentation</span><input id="Orb of Augmentation" name="Orb of Augmentation" type="text" class="local-data aug"></label>
+						<label><span>Orb of Alteration</span><input id="Orb of Alteration" name="Orb of Alteration" type="text" class="local-data alt"></label>
+						<label><span>Mirror of Kalandra</span><input id="Mirror of Kalandra" name="Mirror of Kalandra" type="text" class="local-data mir kal"></label>
+						<label><span>Mirror Shard</span><input id="Mirror Shard" name="Mirror Shard" type="text" class="local-data mirror-shard"></label>
+						<label><span>Blessing of Chayula</span><input id="Blessing of Chayula" name="Blessing of Chayula" type="text" class="local-data blessing-chayula blessing-of-chayula"></label>
+						<label><span>Ancient Orb</span><input id="Ancient Orb" name="Ancient Orb" type="text" class="local-data ancient-orb"></label>
+						<label><span>Harbinger's Orb</span><input id="Harbinger's Orb" name="Harbinger's Orb" type="text" class="local-data harbingers-orb"></label>
+						<label><span>Exalted Shard</span><input id="Exalted Shard" name="Exalted Shard" type="text" class="local-data exalted-shard"></label>
+						<label><span>Blessing of Esh</span><input id="Blessing of Esh" name="Blessing of Esh" type="text" class="local-data blessing-esh blessing-of-esh"></label>
+						<label><span>Blessing of Uul-Netol</span><input id="Blessing of Uul-Netol" name="Blessing of Uul-Netol" type="text" class="local-data blessing-uul-netol blessing-of-uul-netol"></label>
+						<label><span>Stacked Deck</span><input id="Stacked Deck" name="Stacked Deck" type="text" class="local-data"></label>
+						<label><span>Annulment Shard</span><input id="Annulment Shard" name="Annulment Shard" type="text" class="local-data annulment-shard"></label>
+						<label><span>Blessing of Tul</span><input id="Blessing of Tul" name="Blessing of Tul" type="text" class="local-data blessing-tul blessing-of-tul"></label>
+						<label><span>Blessing of Xoph</span><input id="Blessing of Xoph" name="Blessing of Xoph" type="text" class="local-data blessing-xoph blessing-of-xoph"></label>
+						<label><span>Gemcutter's Prism</span><input id="Gemcutter's Prism" name="Gemcutter's Prism" type="text" class="local-data gemc gcp"></label>
+						<label><span>Orb of Scouring</span><input id="Orb of Scouring" name="Orb of Scouring" type="text" class="local-data scour"></label>
+						<label><span>Orb of Horizons</span><input id="Orb of Horizons" name="Orb of Horizons" type="text" class="local-data orb-of-horizons"></label>
+						<label><span>Orb of Regret</span><input id="Orb of Regret" name="Orb of Regret" type="text" class="local-data regret regr"></label>
+						<label><span>Orb of Binding</span><input id="Orb of Binding" name="Orb of Binding" type="text" class="local-data orb-of-binding"></label>
+						<label><span>Engineer's Orb</span><input id="Engineer's Orb" name="Engineer's Orb" type="text" class="local-data engineers-orb"></label>
+						<label><span>Glassblower's Bauble</span><input id="Glassblower's Bauble" name="Glassblower's Bauble" type="text" class="local-data glass bauble"></label>
+						<label><span>Blacksmith's Whetstone</span><input id="Blacksmith's Whetstone" name="Blacksmith's Whetstone" type="text" class="local-data blacksmith whetstone"></label>
+						<label><span>Orb of Transmutation</span><input id="Orb of Transmutation" name="Orb of Transmutation" type="text" class="local-data tra"></label>
 					</div>
 					<div class="modal-footer">
 						<div>

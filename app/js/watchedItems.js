@@ -90,6 +90,23 @@ function WatchedItemManager()
 			}
 		}
 	};
+	this.removeAll = function()
+	{
+		var tmp = this.items;
+		for(var i = tmp.length - 1; i >= 0; i--)
+		{
+			try
+			{
+				this.removeItem(tmp[i]);
+			}
+			catch(err) 
+			{
+				console.log(err);
+			}
+		}
+		this.items = [];
+		saveLocalData(this.input.id);
+	};
 	this.saveList = function()
 	{
 		var value = '';

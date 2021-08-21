@@ -56,7 +56,14 @@ function RequestManager()
 			
 			if(foundItem)
 			{
-				this.processItem(itemRequest);	
+				try
+				{
+					this.processItem(itemRequest);	
+				}
+				catch(e)
+				{
+					console.log(e);
+				}
 			}
 		}
 	};

@@ -2,13 +2,16 @@ var currencyImages = [];
 var tags = [];
 currencyImages['alt'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollMagic.png?v=6d9520174f6643e502da336e76b730d3';
 currencyImages['fuse'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketLinks.png?v=0ad7134a62e5c45e4f8bc8a44b95540f';
+currencyImages['fusing'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketLinks.png?v=0ad7134a62e5c45e4f8bc8a44b95540f';
 currencyImages['alch'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyUpgradeToRare.png?v=89c110be97333995522c7b2c29cae728';
 currencyImages['chaos'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png?v=c60aa876dd6bab31174df91b1da1b4f9';
 currencyImages['gcp'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyGemQuality.png?v=f11792b6dbd2f5f869351151bc3a4539';
-currencyImages['exalted'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png?v=1745ebafbd533b6f91bccf588ab5efc5';
 currencyImages['exa'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png?v=1745ebafbd533b6f91bccf588ab5efc5';
+currencyImages['exalted'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png?v=1745ebafbd533b6f91bccf588ab5efc5';
 currencyImages['chrom'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketColours.png?v=9d377f2cf04a16a39aac7b14abc9d7c3';
+currencyImages['chrone'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketColours.png?v=9d377f2cf04a16a39aac7b14abc9d7c3';
 currencyImages['jew'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketNumbers.png?v=2946b0825af70f796b8f15051d75164d';
+currencyImages['jewellers'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollSocketNumbers.png?v=2946b0825af70f796b8f15051d75164d';
 currencyImages['engineers-orb'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/EngineersOrb.png?v=4b291fd7d6b9022a2d35b34c43c08e87';
 currencyImages['chance'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyUpgradeRandomly.png?v=e4049939b9cd61291562f94364ee0f00';
 currencyImages['chisel'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyMapQuality.png?v=f46e0a1af7223e2d4cae52bc3f9f7a1f';
@@ -138,9 +141,13 @@ var loadCurrencyAjax = function(data)
 		var currencyName = line.currencyTypeName;
 		
 		var input = document.getElementById(currencyName);
-		if(input != null)
+		var elements = document.getElementsByName(currencyName);
+		if(elements != null)
 		{
-			input.value = line.chaosEquivalent;
+			for(var j = 0; j < elements.length; j++)
+			{
+				elements[j].value = line.chaosEquivalent;
+			}
 		}
 	}
 };

@@ -184,14 +184,22 @@ input, textarea, select
 	background-color: #ffffff;
 }
 
+#advanced-filters.control-panel
+{
+	background-color: #cccccc;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
 .control-panel-items
 {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	padding-left: 1rem;
-	padding-right: 1rem;
+	padding-left: 1px;
+	padding-right: 1px;
 }
 
 .control-panel label
@@ -1255,4 +1263,9 @@ html .all-screen .outdated .template-field
 {
 	background-color: #C45F00;
     border-color: #ff8512;
+}
+
+.overlay-control input[type="text"] {
+	width: 2.5rem;
+	height: 1rem;
 }

@@ -795,3 +795,8 @@ function callAjaxWithSession(method, path, callback, jsonData, searchInfo)
 
 	req.end()
 }
+
+function clearWatchedItems()
+{	
+	watchedItemManager.removeAll();
+}

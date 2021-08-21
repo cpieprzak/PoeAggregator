@@ -1,4 +1,4 @@
-const {app,BrowserWindow,session,protocol,ipcMain,shell} = require('electron')
+const {app,BrowserWindow,session,protocol,ipcMain,shell,Menu} = require('electron')
 
 var mainWindow = null;
 async function createWindow () 
@@ -17,8 +17,64 @@ async function createWindow ()
 	var url = 'index.html';
 	mainWindow.maximize();
 	mainWindow.loadFile(url);
-	mainWindow.webContents.openDevTools();
+	
 	mainWindow.once('focus', () => mainWindow.flashFrame(false));	
+	var menu = Menu.buildFromTemplate([
+		{
+			label: 'File',
+			submenu: [
+				{
+					label:'Settings', 
+					click() { 
+						mainWindow.webContents.executeJavaScript("showHide('settings-modal')");
+					} 
+				},			
+				{
+					label:'View Searches', 
+					accelerator: process.platform === 'darwin' ? 'Cmd+S' : 'Ctrl+S',
+					click() { 
+						mainWindow.webContents.executeJavaScript("openSearchesModal();");
+					} 
+				},		
+				{
+					label:'Export Searches', 
+					click() { 
+						mainWindow.webContents.executeJavaScript("exportSearches();");
+					} 
+				},				
+				{
+					label:'Open Notes', 
+					click() { 
+						mainWindow.webContents.executeJavaScript("showHide('notes-modal');");
+					} 
+				},
+				{
+					label:'Open Dev Tools', 
+					click() { 
+						mainWindow.webContents.openDevTools(); 
+					} 
+				},
+				{
+					label:'Exit', 
+					click() { 
+						app.quit() 
+					} 
+				}
+			]
+		},
+		{
+			label: 'Watched Items',
+			submenu: [
+				{
+					label:'Clear All', 
+					click() { 
+						mainWindow.webContents.executeJavaScript("clearWatchedItems();");
+					} 
+				}
+			]
+		}		
+	])
+	Menu.setApplicationMenu(menu); 
 }
 
 app.on('ready', () => 
