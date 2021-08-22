@@ -44,12 +44,14 @@ async function createWindow ()
 				},				
 				{
 					label:'Open Notes', 
+					accelerator: process.platform === 'darwin' ? 'Cmd+N' : 'Ctrl+N',
 					click() { 
 						mainWindow.webContents.executeJavaScript("showHide('notes-modal');");
 					} 
 				},
 				{
 					label:'Open Dev Tools', 
+					accelerator: process.platform === 'darwin' ? 'Cmd+Shift+I' : 'Ctrl+Shift+I',
 					click() { 
 						mainWindow.webContents.openDevTools(); 
 					} 

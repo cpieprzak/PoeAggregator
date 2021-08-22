@@ -1,0 +1,29 @@
+<div class="control-panel flex-item">
+    <div class="control-panel-items" id='control-panel'>
+        <span class='item-filter-controls'>
+            <label class='nowrap'>Filter<input type='text' id='filter-box' value='' /></label>	
+            <span class='button' onclick="showHide('advanced-filters')" >Advanced Filters</span>
+            <span class='button' onclick="showCurrencyRatios()" >Currency Ratios</span>	
+        </span>	
+        <span class='nowrap' id='search-wrapper'>
+            <input type='text' class="local-data hidden" id='searches' value='[1][WWZbim][Her Mask][1][.1][]' />
+            <span class="button" onclick="openSearchesModal();">Searches</span>
+            <label>
+                <span class="button">Import</span>
+                <input type="file" accept=".txt" class="hidden" id='load-searches' />
+            </label>
+            <label>
+                <span class="button" onclick="exportSearches()">Export</span>
+            </label>
+        </span>	
+        
+        <span id="league-wrapper">
+            <select class="local-data" id="league" onchange="saveLocalData('league-wrapper')"></select>
+            <label class='nowrap'>Open Sockets<input type='text' value='0' id='socket-count' disabled /></label>
+            <label class='nowrap'>Queue Size<input type='text' value='0' id='queue-count' disabled /></label>
+            <span class='button' onclick="startSockets()" >Start</span>
+            <span class='button' onclick="stopSockets()" >Stop</span>
+            <span class='button' onclick="clearDisplay()" >Clear</span>				
+        </span>
+    </div>
+</div>

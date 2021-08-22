@@ -160,5 +160,4 @@ var autoRefresh = function()
 		loadCurrency();
 	}
 };
-
 setInterval(autoRefresh, 5 * 60 * 1000);

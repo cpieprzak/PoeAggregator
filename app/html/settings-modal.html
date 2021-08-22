@@ -1,0 +1,77 @@
+<div class="modal-wrapper">
+    <div class="hidden" id="settings-modal">
+        <div class="modal-background" onclick="showHide('settings-modal')"></div>
+        <div class="modal-content-box">
+            <div class="modal-header">Settings</div>
+            <div class="modal-body">	
+                <div class="us-inline-table t-left">
+                    <div class="us-table-row">
+                        <div class="us-table-cell">
+                            Default Alert Sound
+                        </div>
+                        <div class="us-table-cell">
+                            <label class='nowrap'>
+                                <select class="local-data search-sounds" id='notification-sound'>
+                                    <option value="" selected></option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="us-table-row">
+                        <div class="us-table-cell">
+                            Font Size
+                        </div>
+                        <div class="us-table-cell">
+                            <input
+                                    type="range" 
+                                    class="local-data" 
+                                    id="font-size"
+                                    min="1" 
+                                    max="100" 
+                                    value="50" 
+                                    onchange="updateFontSize()">
+                        </div>
+                    </div>
+                    <div class="us-table-row">
+                        <div class="us-table-cell">
+                    
+                        </div>
+                        <div class="us-table-cell">
+                            <div class='button' onclick="toggleView()" >View</div>
+                        </div>
+                    </div>
+                    <div class="us-table-row">
+                        <div class="us-table-cell">
+                            Max Items Displayed
+                        </div>
+                        <div class="us-table-cell">
+                            <input class="local-data" type='text' id='max-items-displayed-box' value='300' onblur="updateMaxItemsDisplayed()" />
+                        </div>
+                    </div>
+                    <div class="us-table-row">
+                        <div class="us-table-cell">
+                            poesessionid
+                        </div>
+                        <div class="us-table-cell">
+                            <input class="local-data" type='text' id='poesessionid' value='' onblur="updatePoesessionid()" />
+                        </div>
+                    </div>
+                    <div class="us-table-row">
+                        <div class="us-table-cell">
+                            Queue Update Speed (MS)
+                        </div>
+                        <div class="us-table-cell">
+                            <input class="local-data" type='text' id='queue-update-speed' value='700' onblur="updateQueue()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <div class='button' onclick="saveLocalData();showHide('settings-modal');" >Save Settings</div>
+                    <div class="button" onclick="showHide('settings-modal')">Close</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

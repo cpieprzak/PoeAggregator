@@ -1,9 +1,10 @@
 var watchedItemManager = null;
 var requestManager = new RequestManager();
+
 var init = function(data, parameters)
 {
 	try
-	{
+	{		
 		loadLeagues(data, parameters);
 	}
 	catch(e)
@@ -14,6 +15,10 @@ var init = function(data, parameters)
 	watchedItemManager = new WatchedItemManager();
 	watchedItemManager.initialize();
 	updateQueue();
+	var searchFilter = document.getElementById('search-filter');
+	searchFilter.onkeyup = filterSearches;
+	searchFilter.onblur = filterSearches;
+	searchFilter.onclick = clearSearchFilter;
 }
 
 callAjax('https://api.pathofexile.com/leagues', init);

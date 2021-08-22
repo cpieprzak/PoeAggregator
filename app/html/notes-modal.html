@@ -1,0 +1,17 @@
+<div class="modal-wrapper">
+    <div class="hidden" id="notes-modal">
+        <div class="modal-background" onclick="showHide('notes-modal')"></div>
+        <div class="modal-content-box">
+            <div class="modal-header">Notes</div>
+            <div class="modal-body">	
+                <textarea class="notes local-data"></textarea>
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <div class="button" onclick="saveLocalData('notes-modal');showHide('notes-modal');">Save</div>
+                    <div class="button" onclick="showHide('notes-modal')">Close</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

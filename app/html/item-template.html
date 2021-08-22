@@ -1,0 +1,214 @@
+<div class="hidden">
+    <div class='item-display' id='item-template'>
+        <div class="searchinfo">
+            <span class='template-field' tf='searchinfo'></span>
+            <span class='template-field' tf='refresh-button'></span>
+            <div class='template-field' tf='search-comment'></div>
+            <span class='template-field' tf='search-time'></span>
+            <span class='template-field' tf='listing-time'></span>
+        </div>
+        <span class='template-field search-color' tf='searchcolor'></span>
+        
+        <div class='us-inline-table'>
+            <div class='us-table-row'>
+                <div class='us-table-cell'>
+                    <div class='icon-wrapper'>
+                        <div class='template-field icon' tf='icon'>		
+                        </div>
+                        <span class='stack-text'>																	
+                            <span class='template-field stack-prop' tf='item.stackSize'></span><span class='template-field stack-prop' tf='item.maxStackSize'><span class='if-present'>/</span><span class='data-target'></span></span>										
+                        </span>
+                    </div>
+                </div>
+                <div class='us-table-cell'>
+                    <div class='us-table'>
+                        <div class='us-table-row'>
+                            <div class='us-table-cell'>
+                                <span class='item-name-plate'>
+                                    <span class='template-field item-rarity' tf='item.name'>
+                                        <span class='default-text'>(Unidentified)</span>
+                                    </span>
+                                    <span class='template-field item-rarity' tf='item.typeLine'></span>
+                                </span>
+                                <span class='template-field ilvl' tf='item.ilvl'>
+                                    <span class='if-present'>( ilvl: </span>
+                                    <span class='data-target'></span>
+                                    <span class='if-present'>)</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class='us-table-row'>
+                            <div class='us-table-cell'>									
+                                <span class='template-field' tf='item.sockets'></span>
+                            </div>
+                        </div>
+                        <div class='us-table-row'>
+                            <div class='us-table-cell'>
+                                <div class='extra-status'>											
+                                    <span class='template-field corrupted' tf='item.corrupted'></span>
+                                    <span class='template-field mirrored' tf='item.mirrored'></span>
+                                    <span class='template-field shaped' tf='item.influences'></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='all-item-properties'>					
+            <div>
+                <span class='template-field' 	tf='item.modCount' 		title='Mod Counts'> </span>
+                <span class='template-field' tf='requirements.label'></span>
+                <span class='template-field' tf='item.requirements.Level'>
+                    <span class='if-present'>lvl:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field req-str' tf='item.requirements.Str'>
+                    <span class='if-present'>Str:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field req-str' tf='item.requirements.Strength'>
+                    <span class='if-present'>Str:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field req-int' tf='item.requirements.Int'>
+                    <span class='if-present'>Int:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field req-int' tf='item.requirements.Intelligence'>
+                    <span class='if-present'>Int:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field req-dex' tf='item.requirements.Dex'>
+                    <span class='if-present'>Dex:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field req-dex' tf='item.requirements.Dexterity'>
+                    <span class='if-present'>Dex:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                
+            </div>
+            <div>	
+                <div class='template-field prophecy-text' tf='item.prophecyText'></div>		
+                <span class='template-field' tf='item.properties.Level'>
+                    <span class='if-present'>lvl:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field' tf='item.additionalProperties.Experience'>
+                    <span class='if-present'>Exp:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <div class='template-field' tf='item.properties.Quality'>
+                    <span class='if-present'>Quality:</span>
+                    <span class='data-target data-value'></span>
+                </div>
+                <div class='template-field' tf='item.properties.Chance to Block'>
+                    <span class='if-present'>Chance to Block:</span>
+                    <span class='data-target data-value'></span>
+                </div>
+                
+                <span class='template-field' tf='item.properties.Map Tier'>
+                    <span class='if-present'>Map Tier:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field' tf='item.properties.Item Quantity'>
+                    <span class='if-present'>Item Quantity:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field' tf='item.properties.Item Rarity'>
+                    <span class='if-present'>Item Rarity:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field' tf='item.properties.Monster Pack Size'>
+                    <span class='if-present'>Monster Pack Size:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+            </div>
+
+            <div>
+                <span class='template-field' tf='item.extended.dps'>
+                    <span class='if-present'>Total dps:{</span>
+                    <span class='data-target data-value'></span>
+                    <span class='if-present'>}</span>
+                </span>
+                <span class='template-field' tf='item.extended.pdps'>
+                    <span class='if-present'>pdps:{</span>
+                    <span class='data-target data-value'></span>
+                    <span class='if-present'>}</span>
+                </span>
+                <span class='template-field' tf='item.extended.edps'>
+                    <span class='if-present'>edps:{</span>
+                    <span class='data-target data-value'></span>
+                    <span class='if-present'>}</span>
+                </span>
+            </div>
+
+            <div>
+                <span class='template-field' tf='item.properties.Critical Strike Chance'>
+                    <span class='if-present'>Critical Strike Chance:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field' tf='item.properties.Attacks per Second'>
+                    <span class='if-present'>Attacks per Second:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+            </div>
+            <div>
+                <span class='template-field' tf='item.extended.ar'>
+                    <span class='if-present'>Armour:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field' tf='item.extended.ev'>
+                    <span class='if-present'>Evasion:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+                <span class='template-field' tf='item.extended.es'>
+                    <span class='if-present'>Energy Shield:</span>
+                    <span class='data-target data-value'></span>
+                </span>
+            </div>
+        </div>	
+        <div>
+            <div class='v-top item-mods t-left'>
+                <div class='template-field enchant-mods' 	tf='item.enchantMods' 	title='Enchant'> </div>
+                <div class='template-field implicit-mods' 	tf='item.implicitMods' 	title='Implicit'> </div>
+                <div class='template-field fractured-mods' 	tf='item.fracturedMods' title='Fractured'> </div>
+                <div class='template-field explicit-mods' 	tf='item.explicitMods' 	title='Explicit'> </div>
+                <div class='template-field crafted-mods' 	tf='item.craftedMods' 	title='Crafted'> </div>
+                <div class='template-field veiled-mods' 	tf='item.veiledMods' 	title='Veiled'> </div>
+            </div>
+        </div>
+                
+        <span class='item-price'>
+            <span class='template-field' tf='listing.price.type'>
+                <span class='default-text'>Unpriced</span>
+                <span class='if-present'></span>
+                <span class='data-target'></span>
+            </span>
+            <span class='template-field bold' tf='listing.price.amount'></span>						
+            <span class='template-field bold' tf='listing.price.currency.img'>
+                <span class='if-present'>x</span>
+                <span class='data-target'></span>
+            </span>	
+            <span class='template-field bold' tf='listing.price.chaos.equiv'></span>										
+        </span>
+        <span class='template-field bold item-price' tf='item.total-sum-per-chaos'>				
+            <span class='if-present'>(</span>
+            <span class='data-target' onclick='orderByValue()'></span>			
+            <span class='if-present'>s/c)</span>
+        </span>		
+        
+        <span class='template-field' tf='whisper-button'></span>
+        <span class='template-field account-profile' tf='account-profile'></span>
+        <span class='template-field account-status' tf='account-status'>
+            <span class='data-target'></span>
+        </span>
+        <span class='template-field' tf='copy-item-button'></span>
+        <span class='template-field' tf='watch-item-button'></span>
+        <span class='template-field bold' tf='item.total-sum'>	
+            <span class='if-present item-price'>Sum: </span>
+            <span class='data-target item-price' onclick='orderBySum()'></span>
+        </span>	
+    </div>
+</div>	

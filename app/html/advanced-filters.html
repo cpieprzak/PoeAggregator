@@ -1,0 +1,28 @@
+<div class="control-panel hidden" id="advanced-filters">
+    <label class='nowrap'>Min Sum<input type='text' id='min-sum-box' value='' /></label>	
+    <label class='nowrap'>Min Value<input type='text' id='min-value-box' value='' /></label>
+    <label class='nowrap'>
+        Open Prefix 
+        <select id='open-prefix' onchange="filterItems()">
+            <option value='either'>Either</option>
+            <option value='yes'>Yes</option>
+            <option value='no'>No</option>
+        </select>
+    </label>
+    <label class='nowrap'>
+        Open Suffix 
+        <select id='open-suffix' onchange="filterItems()">
+            <option value='either'>Either</option>
+            <option value='yes'>Yes</option>
+            <option value='no'>No</option>
+        </select>
+    </label>
+    <label class='nowrap'>
+        Crafted 
+        <select id='is-crafted' onchange="filterItems()">
+            <option value='either'>Either</option>
+            <option value='yes'>Yes</option>
+            <option value='no'>No</option>
+        </select>
+    </label>	
+</div>

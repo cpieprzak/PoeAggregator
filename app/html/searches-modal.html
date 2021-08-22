@@ -1,0 +1,118 @@
+<datalist id="search-categories">
+</datalist>
+<div class="hidden" id="search-string-builder">
+    <div class="modal-background"></div>
+    <div class="modal-content-box">
+        <div class="modal-header">
+            Modify Searches
+            <div class="filter-panel">
+                <input
+                    id="search-filter"
+                    type="text" 
+                    value="Filter Searches"
+                    list="search-categories"
+                    autocomplete="off"
+                />
+                <div class="button" onclick="activateSearches();" title="Activate All Visible Searches">
+                    +
+                </div>
+                <div class="button" onclick="deactivateSearches();" title="Deactivate All Visible Searches">
+                    -
+                </div>
+            </div>
+            
+        </div>
+        <div id="search-body-content" class="all-searches">
+            <div class="us-table" id="all-searches-table">
+                <div class="search-header-row us-table-row">
+                    <div class="us-table-cell">Active</div>
+                    <div class="us-table-cell">Url</div>
+                    <div class="us-table-cell">Comment</div>
+                    <div class="us-table-cell">Sound</div>
+                    <div class="us-table-cell">Volume</div>
+                    <div class="us-table-cell">Color</div>
+                    <div class="us-table-cell">Category</div>
+                    <div class="us-table-cell">Auto Copy</div>
+                    <div class="us-table-cell"></div>
+                </div>
+            </div>
+        </div>
+        <div class="add-new-search us-table">
+            <div class="search-header-row us-table-row">
+                <div class="us-table-cell">Active</div>
+                <div class="us-table-cell">Url</div>
+                <div class="us-table-cell">Comment</div>
+                <div class="us-table-cell">Sound</div>
+                <div class="us-table-cell">Volume</div>
+                <div class="us-table-cell">Color</div>
+                <div class="us-table-cell">Category</div>
+                <div class="us-table-cell">Auto Copy</div>
+                <div class="us-table-cell"></div>
+            </div>
+            <div class="us-table-row search-row" id="new-search-row">
+                <div class="us-table-cell">
+                    <input checked="checked" class="search-control search-active" type="checkbox" value="0" onclick="checkActives(this)">
+                </div>
+                <div class="us-table-cell">
+                    <div class="us-table">
+                        <div class="us-table-row">								
+                            <div class="us-table-cell">
+                                <span class="button" onclick="loadSearchItems(this)">Run</span>			
+                            </div>
+                            <div class="us-table-cell">
+                                <input class="search-control search-url" type="text">
+                            </div>
+                            <div class="us-table-cell">
+                                <span class="button" onclick="openTradeWebsite(this)">Go</span>
+                            </div>
+                        </div>
+                    </div>						
+                </div>
+                <div class="us-table-cell">
+                    <input class="search-control search-comment" type="text">
+                </div>
+                <div class="us-table-cell">
+                    <div class="us-table">
+                        <div class="us-table-row">
+                            <div class="us-table-cell">
+                                <select class="search-control search-sounds" id="">
+                                    <option></option>											
+                                </select>
+                            </div>
+                            <div class="us-table-cell">
+                                <div class="button test-sound-button" title="Test Sound" onclick="testSound(this)">?</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="us-table-cell">
+                    <input class="search-control search-volume" type="range" min="10" max="100" value="25">
+                </div>
+                <div class="us-table-cell">
+                    <input class="search-control search-color" type="color">
+                </div>
+                <div class="us-table-cell">
+                    <input class="search-control search-category" type="text" list="search-categories">
+                </div>
+                <div class="us-table-cell">
+                    <input class="search-control search-auto-copy" type="checkbox" value="1">
+                </div>
+                
+                <div class="us-table-cell button-cell">
+                    <div class="button add-new-button" onclick="addNewSearchRow()">
+                        Add New
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <input type="button" class="button" value="Run Actives" onclick="runActiveSearches();">
+                <input type="button" class="button" value="Sort Actives" onclick="sortActiveSearches();">
+                <input type="button" class="button" value="Sort Categories" onclick="sortSearchesByCategory();">
+                <input type="button" class="button" value="Save" onclick="saveSearchString();">
+                <input type="button" class="button" value="Cancel" onclick="showHide('search-string-builder')">
+            </div>
+        </div>
+    </div>
+</div>
