@@ -223,7 +223,7 @@ function addNewSearchRow()
 function testSound(element)
 {
 	var parent = element.parentNode;
-	while(!parent.classList.contains('search-row'))
+	while(!parent.classList.contains('sound-wrapper'))
 	{
 		parent = parent.parentNode;
 	}

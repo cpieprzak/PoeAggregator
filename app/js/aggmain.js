@@ -148,7 +148,6 @@ function startSockets()
 		
 		var socketUrl = socketPath + league + '/';
 		var searchesString = document.getElementById('searches').value;
-		var soundId = document.getElementById('notification-sound').value;
 
 		var listingManager = new ListingManager(searchesString);
 		var providedSearches = listingManager.searches;

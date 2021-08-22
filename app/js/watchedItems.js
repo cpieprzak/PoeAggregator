@@ -5,8 +5,8 @@ function WatchedItemManager()
 	this.input = document.getElementById('watched-items');
 	this.view = document.getElementById('watched-display-window');
 	this.interval = 20 * 1000;
-	this.getSoundId = function(){return '3';};
-	this.getSoundVolume = function(){return .8};
+	this.getSoundId = function(){return '10';};
+	this.getSoundVolume = function(){return 75};
 
 	this.initialize = function()
 	{
@@ -154,9 +154,8 @@ function updateWatched(data, searchInfo)
 		if(newNode.trackedStats.alert(oldStats))
 		{
 			var display = document.getElementById('display-window');
-
-			var soundId = watchedItemManager.getSoundId();
-			var soundVolume = watchedItemManager.getSoundVolume();
+			var soundId = document.getElementById('watched-notification-sound').value;
+			var soundVolume = document.getElementById('watched-notification-sound-volume').value;
 			playSound(soundId, soundVolume);
 			remote.getCurrentWindow().flashFrame(true);
 			newNode.classList.add('watched-item');
