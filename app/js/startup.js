@@ -19,6 +19,7 @@ var init = function(data, parameters)
 	searchFilter.onkeyup = filterSearches;
 	searchFilter.onblur = filterSearches;
 	searchFilter.onclick = clearSearchFilter;
+	loadCurrency();
 }
 
 callAjax('https://api.pathofexile.com/leagues', init);
