@@ -34,6 +34,7 @@ currencyImages['ba'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/Curren
 currencyImages['tra'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyUpgradeToMagic.png?v=333b8b5e28b73c62972fc66e7634c5c8';
 currencyImages['aug'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToMagic.png?v=97e63b85807f2419f4208482fd0b4859';
 currencyImages['mir'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyDuplicate.png?v=6fd68c1a5c4292c05b97770e83aa22bc';
+currencyImages['mirror'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyDuplicate.png?v=6fd68c1a5c4292c05b97770e83aa22bc';
 currencyImages['ete'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyImprintOrb.png?v=0483ded9ac1f08c320fc21d5ddc208c0';
 currencyImages['p'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyCoin.png?v=b971d7d9ea1ad32f16cce8ee99c897cf';
 currencyImages['silver'] = 'https://web.poecdn.com/image/Art/2DItems/Currency/SilverObol.png?v=93c1b204ec2736a2fe5aabbb99510bcf';
@@ -133,7 +134,7 @@ var loadCurrencyAjax = function(data)
 {
 	var json = JSON.parse(data);
 	var lines = json.lines;
-	
+
 	for (var i = 0; i < lines.length; i++)
 	{
 		var line = lines[i];
