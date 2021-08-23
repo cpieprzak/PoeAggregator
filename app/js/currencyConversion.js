@@ -134,7 +134,6 @@ var loadCurrencyAjax = function(data)
 	var json = JSON.parse(data);
 	var lines = json.lines;
 	
-	console.log(json);
 	for (var i = 0; i < lines.length; i++)
 	{
 		var line = lines[i];

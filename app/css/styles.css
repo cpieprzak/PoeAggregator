@@ -546,6 +546,23 @@ textarea.notes
 	text-shadow: 1px 1px 3px rgba(255,255,255,.35);
 }
 
+.notable-mods .header
+{	
+	color: #88f;
+	font-weight: bold;
+    text-decoration: underline solid;
+}
+
+.notable-mods ul 
+{
+	list-style-type: none;
+}
+
+.notable-mods ul ul li
+{
+	color: rgb(119, 119, 153);
+}
+
 ul 
 {
 	display: block;

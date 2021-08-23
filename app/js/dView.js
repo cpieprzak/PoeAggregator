@@ -310,6 +310,37 @@ function dView(result, searchInfo)
 			overrides['item.fracturedMods'] = makeModList(getMods(result.item, 'fractured'), 'fractured');
 		}
 
+		if(result.item.notableProperties)
+		{
+			var notables = result.item.notableProperties;
+			var ul = document.createElement('ul');
+			for(var i = 0; i < notables.length; i++)
+			{
+				var notable = notables[i];
+				var li = document.createElement('li');
+				var header = document.createElement('div');
+				header.innerHTML = notable.name;
+				header.classList.add('header');
+				li.append(header);
+				var values = notable.values;
+				if(values)
+				{
+					var valueList = document.createElement('ul');
+					for(var j = 0; j < values.length; j++)
+					{
+						var value = values[j];
+						var vli = document.createElement('li');
+						vli.innerHTML = value[0];
+						valueList.append(vli);
+					}
+					li.append(valueList);
+				}
+				ul.append(li);
+			}
+			
+			overrides['item.notableProperties'] = ul;
+		}
+
 		var modCountPanel = document.createElement('span');
 		
 		if(result.item.explicitMods)
