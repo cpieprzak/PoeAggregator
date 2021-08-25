@@ -21,6 +21,7 @@ function loadTemplate(id)
             var parent = placeholder.parentNode;
             var content = document.createElement('div');
             content.innerHTML = xhr.responseText;
+            content = content.firstChild;
             parent.insertBefore(content, placeholder);
             placeholder.remove();
         }

@@ -1,0 +1,31 @@
+<div id="trade-whisper-template" class="trade-whisper hidden">
+    
+    <div class='header'>
+        <poe-var rel="league"> </poe-var> @ <poe-var rel="timestamp"></poe-var>
+        <input type="button" class="button close" value="X">
+    </div>
+    <div class="us-table">
+        <div class="us-table-row">
+            <div class="us-table-cell">From:</div>
+            <div class="us-table-cell"><poe-var rel="from"></poe-var></div>
+        </div>
+        <div class="us-table-row">
+            <div class="us-table-cell">Item:</div>
+            <div class="us-table-cell"><poe-var rel="itemName"></poe-var></div>
+        </div>
+        <div class="us-table-row">
+            <div class="us-table-cell">Price:</div>
+            <div class="us-table-cell"><poe-var rel="price"></poe-var></div>
+        </div>
+        <div class="us-table-row">
+            <div class="us-table-cell">Stash:</div>
+            <div class="us-table-cell"><poe-var rel="tab"></poe-var>(<poe-var rel="position"></poe-var>)</div>
+        </div>
+    </div>
+    <div>
+        <span><input type="button" class="button" value="Wait"></span>
+        <span><input type="button" class="button" value="Still interested?"></span>
+        <span><input type="button" class="button" value="Invite"></span>
+        <span><input type="button" class="button" value="Sold"></span>
+    </div>
+</div>

@@ -12,6 +12,13 @@
                 src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png">
         </label>
     </div>
-    <div class='overlay-control' onclick="setCurrentWindow('display-window');">Main</div>
-    <div class='overlay-control' onclick="setCurrentWindow('watched-display-window');">Watched</div>
+    <div class='overlay-control' onclick="setCurrentWindow('display-window',this);">Main</div>
+    <div class='overlay-control' onclick="setCurrentWindow('watched-display-window',this);">Watched</div>
+    <div 
+        class='overlay-control' 
+        onclick="setCurrentWindow('trade-whisper-display-window',this);"
+        id="trade-whisper-display-button"
+    >
+        Whispers
+    </div>
 </div>

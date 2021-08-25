@@ -13,6 +13,9 @@
 			<poe-agg-template id="advanced-filters.html"></poe-agg-template>
 			<div class='display-window-wrapper flex-item condensed view-tab' id='display-window'></div>
 			<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'></div>	
+			<div class='display-window-wrapper flex-item condensed view-tab hidden' id='trade-whisper-display-window'>
+				<poe-agg-template id="template/tradeWhisper.html"></poe-agg-template>
+			</div>	
 			<poe-agg-template id="tab-control-panel.html"></poe-agg-template>
 			<div id='scroll-to-top' class='overlay-control' onclick='scrollToTop();'>Top</div>
 		</div>
@@ -39,5 +42,7 @@
 		<script type="text/javascript" src="./js/itemRequest.js"></script>
 		<script type="text/javascript" src="./js/requestManager.js"></script>		
 		<script type="text/javascript" src="./js/startup.js"></script>		
+		<script type="text/javascript" src="./js/clientLogReader.js"></script>	
+		<script type="text/javascript" src="./js/tradeWhisper.js"></script>		
 	</body>
 </html>

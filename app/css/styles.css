@@ -234,6 +234,7 @@ textarea.notes
 	background-color: #1c1e23;
 	text-shadow: 1px 1px 1px rgba(0, 0, 0, 1);
     justify-content: flex-start;
+    align-content: flex-start;
 }
 
 .display-window-wrapper.condensed
@@ -394,6 +395,54 @@ textarea.notes
 	min-width: 90vw;
 	max-width: 90vw;
 }
+
+#trade-whisper-display-window
+{
+	background-color: #8e8787;
+    justify-content: space-around;
+}
+.trade-whisper
+{
+	padding: 5px;
+    margin: 5px;
+    flex: inherit;
+    color: #bdd0e0;
+	background-color: #1c1e23;
+    border: 1px solid #257b6f;
+    min-height: 5rem;
+    min-width: 20rem;
+    max-width: 20rem;
+	position: relative;
+}
+
+.trade-whisper .header
+{
+	position: relative;
+    padding: 5px;
+    background: #257b6f;
+}
+
+.trade-whisper .close 
+{
+	position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+.trade-whisper .us-table
+{
+	text-align: left;
+	display: inline-table;
+	width: auto;
+	padding: 5px;
+}
+
+.trade-whisper .us-table-cell
+{	
+	padding-left: 5px;
+    padding-right: 5px;
+}
+
 
 .item-display.is-corrupted
 {
@@ -1158,8 +1207,15 @@ html .all-screen .outdated .template-field
 
 .display-window-wrapper .item-display.unviewed .searchinfo
 {
-	
-	animation-duration: 3s;
+	animation-duration: 1.5s;
+	animation-name: flash-new;
+	animation-iteration-count: infinite;
+  	animation-direction: alternate;
+}
+
+#trade-whisper-display-button.unviewed
+{
+	animation-duration: 1.5s;
 	animation-name: flash-new;
 	animation-iteration-count: infinite;
   	animation-direction: alternate;
@@ -1169,11 +1225,11 @@ html .all-screen .outdated .template-field
 {
 	from
 	{
-		background-color: #09111d;
+		background-color:rgba(109, 0, 103, 0);
 	}
 	to
 	{
-		background-color: #2d0b11;
+		background-color:rgb(82, 5, 78);
 	}
 }
 #auto-load + .button

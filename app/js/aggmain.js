@@ -20,7 +20,7 @@ function openBrowserWindow(url)
 	ipc.send('loadGH',url);
 }
 
-function setCurrentWindow(id)
+function setCurrentWindow(id,obj)
 {
 	var views = document.querySelectorAll('.view-tab');
 	for (var i = 0; i < views.length; i++)
@@ -33,6 +33,7 @@ function setCurrentWindow(id)
 			currentWindow = view;
 		}
 	}
+	obj.classList.remove('unviewed');
 }
 
 function getItems()
