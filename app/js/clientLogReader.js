@@ -2,33 +2,56 @@ const fs = require('fs');
 const readline = require('readline');
 var clientLogPathInput = document.getElementById('client-log-path');
 var clientLog = '';
+var logwatcher;
+var done = true;
 function updateClientLogPath()
 {
-    clientLog = document.getElementById('client-log-path').value + '/Client.txt';
+    if(logwatcher)
+    {
+        console.log('Closing file reader on ' + clientLog);
+        fs.unwatchFile(clientLog);
+        logwatcher = null;
+    }
+    var path = document.getElementById('client-log-path').value;
+    clientLog = path + '/Client.txt';
+    console.log('Updating log path to: ' + clientLog);
+    logwatcher = null;
+    done = true;
+    logInit();
 }
-
-clientLogPathInput.onblur = updateClientLogPath;
-
 
 var lastClientLogLineRead = 0;
 var currentLine = 0;
 function logInit()
 {
-    updateClientLogPath();
-    readfile(()=>{lastClientLogLineRead++},periodicRead);
+    lastClientLogLineRead = 0;
+    currentLine = 0;
+      
+    if (fs.existsSync(clientLog)) 
+    {
+        console.log('Initializing log reader on: ' + clientLog);
+        readfile(()=>{lastClientLogLineRead++},periodicRead);
+    }
+    else
+    {
+        console.log('Client.txt does not exist at ' + clientLog);
+    }
 }
 
-var done = true;
 function periodicRead()
-{   
-    fs.watchFile(clientLog, { interval: 50 }, (curr, prev) => {
-        if(done)
-        {
-            done = false;
-            currentLine = 1;
-            readfile(lineRead,()=>{done = true;});
-        }
-    });
+{ 
+    if(logwatcher == null)
+    {
+        console.log('Client log reader successfully initialized.');
+        logwatcher = fs.watchFile(clientLog, { interval: 50 }, (curr, prev) => {
+            if(done)
+            {
+                done = false;
+                currentLine = 1;
+                readfile(lineRead,()=>{done = true;});
+            }
+        });
+    }
 }
 
 function lineRead(line)
@@ -77,6 +100,3 @@ function readfile (online,onclose)
     lineReader.on('line', online);
     lineReader.on('close', onclose);
 }
-
-logInit();
-

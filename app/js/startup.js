@@ -20,6 +20,8 @@ var init = function(data, parameters)
 	searchFilter.onblur = filterSearches;
 	searchFilter.onclick = clearSearchFilter;
 	loadCurrency();
+	clientLogPathInput.onchange = updateClientLogPath;
+	updateClientLogPath();
 }
 
 callAjax('https://api.pathofexile.com/leagues', init);
