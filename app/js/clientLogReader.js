@@ -80,9 +80,13 @@ function lineRead(line)
                 {
                     playSound(soundId, volume);
                 }
-                var whisper = new TradeWhisper(line,isBigTrade).toElement();
-                document.getElementById('trade-whisper-display-button').classList.add('unviewed');
-                document.getElementById('trade-whisper-display-window').prepend(whisper);
+                var whisper = new TradeWhisper(line,isBigTrade);
+                if(autoCopyTradeWhisperInvite)
+                {
+                    copyTextToClipboard(whisper.inviteMsg);
+                }
+                document.getElementById('trade-whisper-display-button').classList.add('new');
+                document.getElementById('trade-whisper-display-window').prepend(whisper.toElement());
             }
         }
         

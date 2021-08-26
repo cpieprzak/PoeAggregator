@@ -1,7 +1,10 @@
+var initialized = false;
 function loadPoeWebsite()
 {	
-	var url = 'https://www.pathofexile.com/trade/search';
+	var url = !initialized ? 'https://www.pathofexile.com/trade/search' : null;
+	initialized = true;
 	loadOfficialTradeWebsite(url);
+	
 }
 
 function loadOfficialTradeWebsite(url)
@@ -21,7 +24,7 @@ function loadOfficialTradeWebsite(url)
 	}
 	var poetrade = document.getElementById('poe-webview');
 	var sessionId = document.getElementById('poesessionid').value;
-	if(sessionId != null)
+	if(sessionId != null && url)
 	{
 		var options = {
 			extraHeaders : 'cookie: POESESSID=' + sessionId

@@ -33,14 +33,17 @@ function setCurrentWindow(id,obj)
 			currentWindow = view;
 		}
 	}
-	obj.classList.remove('unviewed');	
+	if(obj && obj.classList)
+	{
+		obj.classList.remove('new');	
+	}
 }
 
 function showHideWindow(id,obj)
 {
 	var view = document.getElementById(id);
 	view.classList.toggle('hidden');
-	obj.classList.remove('unviewed');
+	obj.classList.remove('new');
 }
 
 function getItems()
@@ -694,7 +697,7 @@ var outputToView = function(data, parameters)
 	for(var i = 0; i < loadedItems.length; i++)
 	{
 		var itemId = loadedItems[i];
-		if(itemId != null && itemId.length > 0 && i < 20)
+		if(itemId != null && itemId.length > 0)
 		{
 			listings.push(itemId);
 		}

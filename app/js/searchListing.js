@@ -270,12 +270,30 @@ function runActiveSearches()
 
 function loadSearchItems(element)
 {
-	var parent = element.parentNode;
-	while(!parent.classList.contains('search-row'))
+	if(!element.classList.contains('disabled'))
 	{
-		parent = parent.parentNode;
+		var runButtons = document.querySelectorAll('.run-button');
+		for(var i = 0; i < runButtons.length; i++)
+		{
+			var runButton = runButtons[i];
+			runButton.classList.add('disabled');
+		}
+		var parent = element.parentNode;
+		while(!parent.classList.contains('search-row'))
+		{
+			parent = parent.parentNode;
+		}
+		setTimeout(()=>
+		{
+			var runButtons = document.querySelectorAll('.run-button');
+			for(var i = 0; i < runButtons.length; i++)
+			{
+				var runButton = runButtons[i];
+				runButton.classList.remove('disabled');
+			}
+		},5000);
+		runSearch(parent);
 	}
-	runSearch(parent);
 }
 
 function runSearch(searchRow)

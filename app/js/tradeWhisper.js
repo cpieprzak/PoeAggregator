@@ -15,6 +15,7 @@ function TradeWhisper(line,isBigTrade)
     this.position = '';
     this.msg = '';
     this.isBigTrade = isBigTrade;
+    this.inviteMsg = '';
 
     this.parseMessage = () => {
         var parts = this.line.split(' ');
@@ -25,6 +26,7 @@ function TradeWhisper(line,isBigTrade)
         {
             this.from = this.from.split('>')[1].trim();
         }
+        this.inviteMsg = '/invite ' + this.from
         if(this.line.includes(': Hi, I would like to buy your '))
         {
             this.itemName = this.line.split(': Hi, I would like to buy your ')[1].split(' listed for ')[0].trim();
@@ -36,11 +38,17 @@ function TradeWhisper(line,isBigTrade)
             this.position = this.line.split('"; position:')[1].split(')')[0].trim();
         }
     }
-    
+    this.parseMessage();
+
     this.toElement = () => {
-        this.parseMessage();
         var element = whisperTemplate.cloneNode(true);
         element.classList.remove('hidden');
+        element.querySelector('.trade-whisper-wrapper').classList.add('new');
+        element.addEventListener("mouseenter", (e)=>{
+            e.target.querySelector('.trade-whisper-wrapper').classList.remove('new');
+            document.querySelector('#trade-whisper-display-button').classList.remove('new');
+        });
+        element.add
         if(this.isBigTrade)
         {
             element.classList.add('big-trade');
@@ -53,6 +61,8 @@ function TradeWhisper(line,isBigTrade)
             var varTarget = variable.getAttribute('rel');
             var data = this[varTarget];
             var newElement = document.createElement('span');
+            var newElementClass = 'v-' + varTarget;
+            newElement.classList.add(newElementClass);
             var node = document.createTextNode(data);
             if(varTarget == 'priceType')
             {
@@ -74,6 +84,7 @@ function TradeWhisper(line,isBigTrade)
         for(var i = 0; i < buttons.length; i++)
         {
             var button = buttons[i];
+            button.inviteMsg = this.inviteMsg;
             button.from = this.from;
             button.itemName = this.itemName;
             button.price = this.price;
@@ -86,6 +97,7 @@ function TradeWhisper(line,isBigTrade)
                 }
                 else
                 {
+                    myself.classList.add('copied');
                     var content = myself.value;
                     var msg = '';
                     var whisperPrefix = '@' + myself.from + ' ';
@@ -99,18 +111,17 @@ function TradeWhisper(line,isBigTrade)
                             msg = whisperPrefix + 'Are you still interested in ' + myItem + '?';
                             break;
                         case 'Invite' :
-                            msg = '/invite ' + myself.from;
+                            msg = invietMsg;
                             break;
                         case 'Sold' :
                             msg = whisperPrefix + 'I\'m sorry but ' + myItem + ' has sold. :(';
                             break;
                     }
                     copyTextToClipboard(msg);
-                    myself.classList.add('copied');
                 }
             };
         }
-
+        
         return element;
     }
 }
@@ -124,3 +135,12 @@ var getFormattedTime = function (militaryTime){
 
     return hours + ':' + minutes + amPm;
 };
+
+var c = false;
+function updateAutoCopyTradeWhisperInvite(checkbox)
+{
+    if(checkbox)
+    {
+        autoCopyTradeWhisperInvite = checkbox.checked;
+    }
+}
