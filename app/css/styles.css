@@ -5,15 +5,21 @@ html
 	padding: 0px;
 }
 
+li
+{
+	list-style: none;
+}
+
 body
 {
-	font-size: 16px;
+	font-size: 14px;
 	vertical-align: middle;
 	color: #7F7F70;
 	background-color: #1C1E23;
 	height:100%;
 	margin: 0px;
 	padding: 0px;
+	font-family: cursive;
 }
 
 body.font-size-10
@@ -393,6 +399,7 @@ textarea.notes
 	border-bottom: 1px solid #E9CF9F;
 	vertical-align: middle;
 	border-right: 1px solid #E9CF9F;
+	border-top: 1px solid #E9CF9F;
 	border-left: 1px solid #E9CF9F;
 	border-collapse: collapse;
 	padding: .5rem;    
@@ -403,6 +410,8 @@ textarea.notes
     margin-left: auto;
 	min-width: 90vw;
 	max-width: 90vw;
+    margin-top: 2px;
+    margin-bottom: 5px;
 }
 
 #trade-whisper-display-window
@@ -1100,9 +1109,7 @@ a:visited
 	left: 0px;
 	width: .5rem;
 	height: 100%;
-	border-left: 1px solid #E9CF9F;
 	box-sizing: border-box;
-	
 }
 
 .at-prefix
