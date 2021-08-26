@@ -8,16 +8,36 @@
 	</head>
 	<body>
 		<input type='text' class="local-data hidden" id='watched-items' value='' />
-		<div class="all-screen">			
-			<poe-agg-template id="control-panel.html"></poe-agg-template>
-			<poe-agg-template id="advanced-filters.html"></poe-agg-template>
-			<div class='display-window-wrapper flex-item condensed view-tab' id='display-window'></div>
-			<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'></div>	
-			<div class='display-window-wrapper flex-item condensed view-tab hidden' id='trade-whisper-display-window'>
-				<poe-agg-template id="template/tradeWhisper.html"></poe-agg-template>
-			</div>	
-			<poe-agg-template id="tab-control-panel.html"></poe-agg-template>
-			<div id='scroll-to-top' class='overlay-control' onclick='scrollToTop();'>Top</div>
+		<div class="all-screen">
+			<table>
+				<tr>
+					<td><poe-agg-template id="control-panel.html"></poe-agg-template></td>
+				</tr>
+				<tr>
+					<td><poe-agg-template id="advanced-filters.html"></poe-agg-template></td>
+				</tr>
+				<tr>
+					<td>
+						<div class="screen-columns">
+							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='trade-whisper-display-window'>
+								<poe-agg-template id="template/tradeWhisper.html"></poe-agg-template>
+							</div>
+							<div class='display-window-wrapper flex-item condensed view-tab' id='display-window'>
+								<div id='scroll-to-top' class='overlay-control' onclick='scrollToTop();'>Top</div>
+							</div>
+							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'></div>	
+							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='poe-search-window'>
+								<webview id="poe-webview" src="https://www.pathofexile.com/trade/search" style="width: 100%;height:100%" ></webview>
+								<div class='overlay-control hidden' id='trade-url-overlay'>
+									<div id='trade-url-part'></div>
+									<span class="button hidden" id='save-trade-button' onclick="saveTrade()">Save Search</span>
+								</div>
+							</div>
+							<poe-agg-template id="tab-control-panel.html"></poe-agg-template>
+						</div>
+					</td>
+				</tr>
+			</table>						
 		</div>
 		<poe-agg-template id="item-template.html"></poe-agg-template>
 		<poe-agg-template id="settings-modal.html"></poe-agg-template>
@@ -44,5 +64,6 @@
 		<script type="text/javascript" src="./js/startup.js"></script>		
 		<script type="text/javascript" src="./js/clientLogReader.js"></script>	
 		<script type="text/javascript" src="./js/tradeWhisper.js"></script>		
+		<script type="text/javascript" src="./js/loadPoeTradeSite.js"></script>		
 	</body>
 </html>

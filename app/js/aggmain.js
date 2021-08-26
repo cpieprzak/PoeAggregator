@@ -33,6 +33,13 @@ function setCurrentWindow(id,obj)
 			currentWindow = view;
 		}
 	}
+	obj.classList.remove('unviewed');	
+}
+
+function showHideWindow(id,obj)
+{
+	var view = document.getElementById(id);
+	view.classList.toggle('hidden');
 	obj.classList.remove('unviewed');
 }
 
@@ -687,7 +694,7 @@ var outputToView = function(data, parameters)
 	for(var i = 0; i < loadedItems.length; i++)
 	{
 		var itemId = loadedItems[i];
-		if(itemId != null && itemId.length > 0)
+		if(itemId != null && itemId.length > 0 && i < 20)
 		{
 			listings.push(itemId);
 		}
@@ -715,26 +722,26 @@ function runSortedSearch(search, sort, callback)
 	searchInfo.searchUrlPart = search;
 	searchInfo.orgin = 'run';
 	url += search;
-	var sortsearches = function(data)
+	var sortsearches = function(data, searchinfo, uponcomplete, sort)
 	{
 		var results =  JSON.parse(data);
-		var jsonData = new Object();
-		jsonData.query = results.query;
+		var requestBody = new Object();
+		requestBody.query = results.query;
 		if(sort != null)
 		{
-			jsonData.sort = sort;			
+			requestBody.sort = sort;			
 		}
-		jsonData = JSON.stringify(jsonData);
+		requestBody = JSON.stringify(requestBody);
 		var league = document.getElementById('league').value;
 		var path = '/api/trade/search/';
 		path += league;
-		callAjaxWithSession('POST', path, callback, jsonData, searchInfo);
+		callAjaxWithSession('POST', path, uponcomplete, requestBody, searchInfo);
 	};
 	url += '?q=';
-	callAjaxWithSession('GET', url, sortsearches)
+	callAjaxWithSession('GET', url, sortsearches, null, searchInfo, callback, sort);
 }
 
-function callAjaxWithSession(method, path, callback, jsonData, searchInfo)
+function callAjaxWithSession(method, path, callback, requestBody, searchInfo, uponcomplete, sort)
 {
 	var myHeaders = 
     {
@@ -742,12 +749,12 @@ function callAjaxWithSession(method, path, callback, jsonData, searchInfo)
 		'User-Agent':userAgent
     };
 
-	if(jsonData != null)
+	if(requestBody != null)
 	{
 		myHeaders = 
 	    {
 	        'Cookie': cookie.serialize('POESESSID', poesessionid),
-			'Content-Length': Buffer.byteLength(jsonData),
+			'Content-Length': Buffer.byteLength(requestBody),
 	      	'Content-Type': 'application/json',
 			'User-Agent': userAgent
 	    };
@@ -774,7 +781,7 @@ function callAjaxWithSession(method, path, callback, jsonData, searchInfo)
 		  	})
 		  	res.on('end', d => 
 			{
-		    	callback(data, searchInfo);
+		    	callback(data, searchInfo, uponcomplete, sort);
 		  	})
 		}
 		else
@@ -788,9 +795,9 @@ function callAjaxWithSession(method, path, callback, jsonData, searchInfo)
   		console.error(error)
 	})
 	
-	if(jsonData != null)
+	if(requestBody != null)
 	{
-		req.write(jsonData);
+		req.write(requestBody);
 	}
 
 	req.end()

@@ -244,7 +244,7 @@ function openTradeWebsite(element)
 	{
 		var league = document.getElementById('league').value;
 		var url = 'https://www.pathofexile.com/trade/search/' + league + '/' + urlBox.value;
-		openBrowserWindow(url);
+		loadOfficialTradeWebsite(url);
 	}	
 }
 

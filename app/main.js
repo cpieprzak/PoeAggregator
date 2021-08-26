@@ -11,12 +11,43 @@ async function createWindow ()
 	    {
 	    	nodeIntegration: true,
             contextIsolation: false,
-			enableRemoteModule: true
+			enableRemoteModule: true,
+			webviewTag: true
 	    }
 	});
-	var url = 'index.html';
 	mainWindow.maximize();
-	mainWindow.loadFile(url);
+	mainWindow.loadFile('index.html');
+
+	var sessionid = null;
+	await mainWindow.webContents.executeJavaScript('localStorage.getItem("poesessionid");', true).then(result => 
+	{
+		sessionid = result;
+	});
+
+	const filter = {
+		urls: ['https://*.pathofexile.com/*']
+	}
+
+	session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+		details.requestHeaders['cookie'] = 'POESESSID=' + sessionid;
+		callback({ requestHeaders: details.requestHeaders })
+	})
+
+	session.defaultSession.webRequest.onResponseStarted(filter, (details) => {
+		if(details.referrer)
+		{
+			var url = details.referrer.replace('https://www.pathofexile.com/trade/search/','');
+			var parts = url.split('/');
+			if(parts.length == 2)
+			{
+				var league = parts[0];
+				var search = parts[1];
+				var javascript = 'displayTradeUrlPart("' + search + '");';
+
+				mainWindow.webContents.executeJavaScript(javascript);
+			}
+		}
+	})
 	
 	mainWindow.once('focus', () => mainWindow.flashFrame(false));	
 	var menu = Menu.buildFromTemplate([

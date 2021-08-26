@@ -64,9 +64,6 @@ function lineRead(line)
             var isBuyMsg = line.includes('Hi, I would like to buy');
             if(isBuyMsg)
             {   
-                var whisper = new TradeWhisper(line).toElement();
-                document.getElementById('trade-whisper-display-button').classList.add('unviewed');
-                document.getElementById('trade-whisper-display-window').append(whisper);
                 var soundId = soundId = document.getElementById('trade-notification-sound').value;
                 var volume = document.getElementById('trade-notification-sound-volume').value;
                 var isBigTrade = line.includes('exalted');
@@ -83,6 +80,9 @@ function lineRead(line)
                 {
                     playSound(soundId, volume);
                 }
+                var whisper = new TradeWhisper(line,isBigTrade).toElement();
+                document.getElementById('trade-whisper-display-button').classList.add('unviewed');
+                document.getElementById('trade-whisper-display-window').prepend(whisper);
             }
         }
         

@@ -1,17 +1,20 @@
 var whisperTemplate = document.getElementById('trade-whisper-template');
 whisperTemplate.remove();
 
-function TradeWhisper(line)
+function TradeWhisper(line,isBigTrade)
 {	
     this.line = line;
     this.timestamp = '';
     this.from = '';
     this.itemName = '';
     this.price = '';
+    this.priceQuantity = '';
+    this.priceType = '';
     this.league = '';
     this.tab = '';
     this.position = '';
     this.msg = '';
+    this.isBigTrade = isBigTrade;
 
     this.parseMessage = () => {
         var parts = this.line.split(' ');
@@ -26,6 +29,8 @@ function TradeWhisper(line)
         {
             this.itemName = this.line.split(': Hi, I would like to buy your ')[1].split(' listed for ')[0].trim();
             this.price = this.line.split(' listed for ')[1].split(' in ')[0].trim();
+            this.priceQuantity = this.price.split(' ')[0].trim();
+            this.priceType = this.price.split(' ')[1].trim();
             this.league = this.line.split(' listed for ')[1].split(' in ')[1].split(' (')[0].trim();        
             this.tab = this.line.split(' (stash tab "')[1].split('"; position')[0].trim();
             this.position = this.line.split('"; position:')[1].split(')')[0].trim();
@@ -36,6 +41,10 @@ function TradeWhisper(line)
         this.parseMessage();
         var element = whisperTemplate.cloneNode(true);
         element.classList.remove('hidden');
+        if(this.isBigTrade)
+        {
+            element.classList.add('big-trade');
+        }
         element.id = '';
         var variables = element.querySelectorAll('poe-var');
         for(var i = 0; i < variables.length; i++)
@@ -44,7 +53,19 @@ function TradeWhisper(line)
             var varTarget = variable.getAttribute('rel');
             var data = this[varTarget];
             var newElement = document.createElement('span');
-            newElement.appendChild(document.createTextNode(data));
+            var node = document.createTextNode(data);
+            if(varTarget == 'priceType')
+            {
+                var priceImg = currencyImages[data];
+                if(priceImg != null)
+                {
+                    node = document.createElement('img');
+                    node.src = priceImg;
+                    node.classList.add('currency-img');
+                    node.title = data;
+                }
+            }
+            newElement.appendChild(node);
             variable.parentNode.insertBefore(newElement,variable);
             variable.remove();
         }
