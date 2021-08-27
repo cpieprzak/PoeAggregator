@@ -111,7 +111,7 @@ function TradeWhisper(line,isBigTrade)
                             msg = whisperPrefix + 'Are you still interested in ' + myItem + '?';
                             break;
                         case 'Invite' :
-                            msg = invietMsg;
+                            msg = inviteMsg;
                             break;
                         case 'Sold' :
                             msg = whisperPrefix + 'I\'m sorry but ' + myItem + ' has sold. :(';

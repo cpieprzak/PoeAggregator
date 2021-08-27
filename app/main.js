@@ -32,7 +32,14 @@ async function createWindow ()
 	}
 
 	session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-		details.requestHeaders['cookie'] = 'POESESSID=' + sessionid;
+		if(details.url.startsWith('https://www.pathofexile.com/api/trade/fetch/'))
+		{	
+			details.requestHeaders['cookie'] = '';
+		}
+		else
+		{
+			details.requestHeaders['cookie'] = 'POESESSID=' + sessionid;
+		}
 		callback({ requestHeaders: details.requestHeaders })
 	})
 

@@ -744,19 +744,17 @@ function runSortedSearch(search, sort, callback)
 	callAjaxWithSession('GET', url, sortsearches, null, searchInfo, callback, sort);
 }
 
-function callAjaxWithSession(method, path, callback, requestBody, searchInfo, uponcomplete, sort)
+function callAjaxWithSession(method, url, callback, requestBody, searchInfo, uponcomplete, sort)
 {
-	var myHeaders = 
-    {
-        'Cookie': cookie.serialize('POESESSID', poesessionid),
-		'User-Agent':userAgent
+	console.log('hitting ' + url + '[' + method + ']' + requestBody);
+	var myHeaders = {
+		'User-Agent': userAgent
     };
 
 	if(requestBody != null)
 	{
 		myHeaders = 
 	    {
-	        'Cookie': cookie.serialize('POESESSID', poesessionid),
 			'Content-Length': Buffer.byteLength(requestBody),
 	      	'Content-Type': 'application/json',
 			'User-Agent': userAgent
@@ -767,7 +765,7 @@ function callAjaxWithSession(method, path, callback, requestBody, searchInfo, up
 	{
 		hostname: 'www.pathofexile.com',
 		port: 443,
-		path: path,
+		path: url,
   		method: method,
 		headers: myHeaders
 	};

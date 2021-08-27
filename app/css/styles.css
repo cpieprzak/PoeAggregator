@@ -215,6 +215,8 @@ input, textarea, select
 
 .control-panel
 {
+	padding-right: 2px;
+	padding-left: 2px;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;

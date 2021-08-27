@@ -41,70 +41,81 @@ function ItemFetcher()
 		return passesRateTest;
 	}
 	
-	
 	this.fetch = function(itemRequest)
 	{
-		this.fetchTimes.push(new Date());
-		var searchInfo = itemRequest.searchInfo;
-		var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
-		var url = getItemUrl + itemRequest.listings;
-		url += '?query=' + itemRequest.searchInfo.searchUrlPart;
-		
-		var callback = itemRequest.callback;
-		if(callback == null)
+		if(this.canFetch)
 		{
-			callback = addItem;
-		}
-		var xmlhttp = new XMLHttpRequest();
-	    xmlhttp.onreadystatechange = function()
-	    {		
-	        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-	        {
-	        	callback(xmlhttp.responseText, searchInfo);
-				if(ItemFetchManager.dontSendPrior != null)
-				{
-					if(ItemFetchManager.dontSendPrior < new Date())
-					{
-						ItemFetchManager.dontSendCount = 1;
-					}
-				}
-	        }
-			else if (xmlhttp.status === 429) 
+			this.fetchTimes.push(new Date());
+			var searchInfo = itemRequest.searchInfo;
+			var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
+			var url = getItemUrl + itemRequest.listings;
+			url += '?query=' + itemRequest.searchInfo.searchUrlPart;
+			
+			var callback = itemRequest.callback;
+			if(callback == null)
 			{
-        		ItemFetchManager.dontSendCount++;
-				
-				var delay = 15 * ItemFetchManager.dontSendCount * 1000;
-				ItemFetchManager.dontSendPrior = new Date(new Date().getTime() + delay);
-    		}
-	
-			var ratelimitPolicy = xmlhttp.getResponseHeader('x-rate-limit-policy');
-			if(ratelimitPolicy != null && ratelimitPolicy == 'trade-fetch-request-limit')
-			{
-				var rateLimits = xmlhttp.getResponseHeader('x-rate-limit-ip');
-				if(rateLimits != null)
-				{
-					if(ItemFetchManager.allRates == null || ItemFetchManager.allRates != rateLimits)
-					{
-						ItemFetchManager.allRates = rateLimits;
-						ItemFetchManager.rates = [];
-						
-						var parts = rateLimits.split(',');
-						for(var i = 0; i < parts.length; i++)
-						{							
-							var rl = new RateLimit();
-							rl.parse(parts[i]);
-							ItemFetchManager.rates.push(rl);
-						}
-					}					
-				}
+				callback = addItem;
 			}
-			if(searchInfo.viewId == 'display-window')
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.mycallback = callback;
+			xmlhttp.onreadystatechange = function()
 			{
-				playSound(searchInfo.soundId, searchInfo.soundVolume);
-			}		
-	    }
-	    xmlhttp.open("GET", url, true);
-		xmlhttp.send();
+				if (xmlhttp.readyState == 4)
+				{
+					if(xmlhttp.status == 200)
+					{
+						this.mycallback(xmlhttp.responseText, searchInfo);
+						if(ItemFetchManager.dontSendPrior != null)
+						{
+							if(ItemFetchManager.dontSendPrior < new Date())
+							{
+								ItemFetchManager.dontSendCount = 1;
+							}
+						}
+					}
+					else if (xmlhttp.status === 429) 
+					{
+						ItemFetchManager.dontSendCount++;
+						
+						var delay = 15 * ItemFetchManager.dontSendCount * 1000;
+						ItemFetchManager.dontSendPrior = new Date(new Date().getTime() + delay);
+					}
+					updateRateLimits(xmlhttp);
+					if(searchInfo.viewId == 'display-window')
+					{
+						playSound(searchInfo.soundId, searchInfo.soundVolume);
+					}
+				}		
+			}
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+		}
+	}
+}
+
+
+var updateRateLimits = (xmlhttp) => {
+			
+	var ratelimitPolicy = xmlhttp.getResponseHeader('x-rate-limit-policy');
+	if(ratelimitPolicy != null && ratelimitPolicy == 'trade-fetch-request-limit')
+	{
+		var rateLimits = xmlhttp.getResponseHeader('x-rate-limit-ip');
+		if(rateLimits != null)
+		{
+			if(ItemFetchManager.allRates == null || ItemFetchManager.allRates != rateLimits)
+			{
+				ItemFetchManager.allRates = rateLimits;
+				ItemFetchManager.rates = [];
+				
+				var parts = rateLimits.split(',');
+				for(var i = 0; i < parts.length; i++)
+				{							
+					var rl = new RateLimit();
+					rl.parse(parts[i]);
+					ItemFetchManager.rates.push(rl);
+				}
+			}					
+		}
 	}
 }
 
