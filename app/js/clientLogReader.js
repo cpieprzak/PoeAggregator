@@ -61,7 +61,7 @@ function lineRead(line)
         var isBuyMsg = line.includes('@From');
         if(line.includes('@From'))
         {
-            var isBuyMsg = line.includes('Hi, I would like to buy');
+            var isBuyMsg = line.includes('Hi,') && line.includes('like to buy');
             if(isBuyMsg)
             {   
                 var soundId = soundId = document.getElementById('trade-notification-sound').value;

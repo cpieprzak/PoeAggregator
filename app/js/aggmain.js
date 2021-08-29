@@ -204,7 +204,8 @@ function addItem(data, searchInfo)
 				}
 			}
 			remote.getCurrentWindow().flashFrame(true);
-			if(searchInfo.autoCopy == '1')
+			var isHidden = newNode.classList.contains('hidden');
+			if(!isHidden && searchInfo.autoCopy == '1')
 			{
 				copyTextToClipboard(result.listing.whisper);
 			}
@@ -362,6 +363,33 @@ minSumBox.onkeyup = function()
 	}
 };
 
+var maxChaos = 0;
+var maxChaosBox = document.getElementById('max-chaos-box');
+maxChaosBox.onkeyup = function()
+{
+	var valueString = this.value;
+	if(valueString != null && valueString.trim().length > 0)
+	{
+		try
+		{
+			maxChaos = parseFloat(valueString);
+		}
+		catch(error)
+		{
+			maxChaos = 0;
+		}
+	}
+	else
+	{
+		maxChaos = 0;	
+	}
+	for(var i = 0; i < allDisplayedItems.length; i++)
+	{
+		var item = allDisplayedItems[i];
+		filterItem(item);		
+	}
+};
+
 var minValue = 0;
 var minValueBox = document.getElementById('min-value-box');
 minValueBox.onkeyup = filterItems;
@@ -458,27 +486,25 @@ function filterItem(item)
 	}
 	if(showItem && minValue > 0)
 	{
-		if(item.totalItemValue && item.totalItemValue > minValue)
-		{
-			
-		}
-		else
+		if(!(item.totalItemValue && item.totalItemValue > minValue))
 		{
 			showItem = false;
 		}
 	}
 	if(showItem && minSum > 0)
 	{
-		if(item.totalSum && item.totalSum > minSum)
-		{
-			
-		}
-		else
+		if(!(item.totalSum && item.totalSum > minSum))
 		{
 			showItem = false;
 		}
 	}
-	
+	if(showItem && maxChaos > 0)
+	{
+		if(item.chaosEquiv > maxChaos)
+		{
+			showItem = false;
+		}	
+	}
 	
 	if(showItem)
 	{
@@ -746,7 +772,6 @@ function runSortedSearch(search, sort, callback)
 
 function callAjaxWithSession(method, url, callback, requestBody, searchInfo, uponcomplete, sort)
 {
-	console.log('hitting ' + url + '[' + method + ']' + requestBody);
 	var myHeaders = {
 		'User-Agent': userAgent
     };

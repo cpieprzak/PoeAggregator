@@ -102,6 +102,7 @@ function dView(result, searchInfo)
 			unpriced.appendChild(document.createTextNode('Unpriced'));
 			overrides['listing.price.type'] = unpriced;
 		}
+		newNode.chaosEquiv = chaosEquiv;
 	}
 	overrides['item.total-sum-per-chaos'] = '';
 	if(result.item.pseudoMods)
@@ -171,13 +172,9 @@ function dView(result, searchInfo)
 		searchLink.classList.add('link');
 		searchLink.appendChild(document.createTextNode(searchInfo.searchUrlPart));
 		searchLink.url = 'https://www.pathofexile.com/trade/search/' + league + '/' + searchInfo.searchUrlPart;
-		searchLink.addEventListener('click', function(event)
-		{
-		    openBrowserWindow(this.url);
-		});
-		
-		
+		searchLink.addEventListener('click', (e)=> {loadOfficialTradeWebsite(e.target.url);});
 		overrides['searchinfo'] = searchLink;
+
 		var colorIndicator = document.createElement('div');
 		if(searchInfo.color && searchInfo.color.length > 0)
 		{
@@ -611,7 +608,7 @@ function dView(result, searchInfo)
 	}
 	
 	newNode.allText = JSON.stringify(newNode).toLowerCase() + getTextFromNode(newNode).toLowerCase();
-	filterItem(newNode);	
+	filterItem(newNode);
 
 	newNode.classList.add(gggId);
 	var stats = new TrackedStats();

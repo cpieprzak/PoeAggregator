@@ -209,10 +209,19 @@ function addNewSearchRow()
 			}
 		}
 		
+		var soundVolume = searchRow.querySelector('.search-control.search-sounds');
+		soundVolume.value = newRow.querySelector('.search-control.search-sounds').value;
 		makeDraggable(searchRow,'search-row');
 		searchRow.querySelector('.search-category').addEventListener("blur", function(e){remakeCategories();});
-		
-		searchesTable.appendChild(searchRow);
+		var headerRow = searchesTable.querySelector('.search-header-row');
+		if(headerRow.nextSibling)
+		{
+			searchesTable.insertBefore(searchRow, headerRow.nextSibling);
+		}
+		else
+		{
+			searchesTable.appendChild(searchRow);
+		}		
 	}
 	else
 	{

@@ -71,4 +71,8 @@ function saveTrade()
 		}
 	}
 	openSearchesModal();
+	searchControls.querySelectorAll('.search-comment')[0].focus();
+	newSearchRow.classList.add('new');
+	setTimeout(()=>{newSearchRow.classList.remove('new');},2000);
+
 }
