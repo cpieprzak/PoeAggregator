@@ -61,32 +61,11 @@ function lineRead(line)
         var isBuyMsg = line.includes('@From');
         if(line.includes('@From'))
         {
-            var isBuyMsg = line.includes('Hi,') && line.includes('like to buy');
+            var isBuyMsg = line.includes('Hi') && line.includes('like to buy');
             if(isBuyMsg)
             {   
-                var soundId = soundId = document.getElementById('trade-notification-sound').value;
-                var volume = document.getElementById('trade-notification-sound-volume').value;
-                var isBigTrade = line.includes('exalted');
-                if(isBigTrade)
-                {
-                    var bigSound = document.getElementById('big-trade-notification-sound').value
-                    if(bigSound.trim() != '')
-                    {
-                        soundId = bigSound;
-                        volume = document.getElementById('big-trade-notification-sound-volume').value;
-                    }
-                }
-                if(soundId.trim() != '')
-                {
-                    playSound(soundId, volume);
-                }
-                var whisper = new TradeWhisper(line,isBigTrade);
-                if(autoCopyTradeWhisperInvite)
-                {
-                    copyTextToClipboard(whisper.inviteMsg);
-                }
                 document.getElementById('trade-whisper-display-button').classList.add('new');
-                document.getElementById('trade-whisper-display-window').prepend(whisper.toElement());
+                document.getElementById('trade-whisper-display-window').prepend(new TradeWhisper(line).toElement());
             }
         }
         
