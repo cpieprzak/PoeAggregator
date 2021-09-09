@@ -123,19 +123,22 @@ function WatchedItemManager()
 	}
 	this.refreshItems = function()
 	{
-		var listings = [];
-		for(var i = 0; i < this.items.length; i++)
+		if(!ItemFetchManager.isRateLimited())
 		{
-			var itemId = this.items[i];
-			listings.push(itemId);
-		}
-		if(listings.length > 0)
-		{
-			var searchinfo = new SearchListing();
-			searchinfo.viewId = 'watched-display-window';
-			var itemRequest = new ItemRequest(searchinfo,listings);
-			itemRequest.callback = updateWatched;
-		    requestManager.addRequest(itemRequest);
+			var listings = [];
+			for(var i = 0; i < this.items.length; i++)
+			{
+				var itemId = this.items[i];
+				listings.push(itemId);
+			}
+			if(listings.length > 0)
+			{
+				var searchinfo = new SearchListing();
+				searchinfo.viewId = 'watched-display-window';
+				var itemRequest = new ItemRequest(searchinfo,listings);
+				itemRequest.callback = updateWatched;
+				requestManager.addRequest(itemRequest);
+			}
 		}
 	}
 }

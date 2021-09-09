@@ -158,6 +158,7 @@ function dView(result, searchInfo)
 		overrides['account-profile'] = buildAccountLink(result.listing.account.name);
 	}
 	overrides['whisper-button'] = buildCopyButton(whisperButtonText, result.listing.whisper);
+	overrides['whisper-to-poe-button'] = buildCopyButton('↩', result.listing.whisper, true);	
 	overrides['item.corrupted'] = '';
 	overrides['item.mirrored'] = '';
 	overrides['search-comment'] = '';
@@ -1007,17 +1008,29 @@ function getTextFromNode(node)
 	return text;
 }
 
-function buildCopyButton(buttonText, textToCopy)
+function buildCopyButton(buttonText, textToCopy, sendToPoe)
 {
 	var inputElement = document.createElement('input');
 	inputElement.type = "button";
 	inputElement.className = "button";
 	inputElement.value = buttonText;
-	inputElement.addEventListener('click', function(event)
+	if(sendToPoe)
 	{
-	    copyTextToClipboard(textToCopy);
-	    event.target.classList.add('copied');
-	});
+		inputElement.addEventListener('click', function(event)
+		{
+			copyTextToClipboard(textToCopy);
+			sendCopyPasteToPoe();
+			event.target.classList.add('copied');
+		});
+	}
+	else
+	{
+		inputElement.addEventListener('click', function(event)
+		{
+			copyTextToClipboard(textToCopy);
+			event.target.classList.add('copied');
+		});
+	}
 
 	return inputElement;
 }

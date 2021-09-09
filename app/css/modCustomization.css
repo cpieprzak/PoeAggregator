@@ -28,3 +28,34 @@
 	color: #4fceff;
 }
 
+.explicit-mods .increased-movement-speed
+{
+	color: #0ec3ff;
+}
+
+.explicit-mods .to-chaos-resistance
+{
+	color: #9370db;
+}
+
+.explicit-mods .to-dexterity
+{
+	color: #118911;
+}
+
+.explicit-mods .to-strength
+{
+	color: #d00056;
+}
+
+.explicit-mods .to-intelligence
+{
+	color: #1d68ff;
+}
+
+.explicit-mods .to-maximum-mana
+{
+	color: #6196ff;
+}
+
+

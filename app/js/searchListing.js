@@ -307,6 +307,7 @@ function loadSearchItems(element)
 
 function runSearch(searchRow)
 {
+	setCurrentWindow('display-window');	
 	var urlBox = searchRow.querySelector('.search-url');
 	if(urlBox.value != null && urlBox.value.trim().length > 0)
 	{

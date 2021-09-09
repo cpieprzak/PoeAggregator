@@ -5,6 +5,15 @@ function ItemFetcher()
 	this.fetchTimes = [];
 	this.dontSendCount = 1;
 	this.dontSendPrior = null;
+	this.isRateLimited = function() {
+		var isRateLimited = false;
+		var now = new Date();
+		if(this.dontSendPrior != null && this.dontSendPrior > now)
+		{
+			isRateLimited = true;
+		}
+		return isRateLimited;
+	}
 	this.canFetch = function()
 	{
 		var passesRateTest = true;
@@ -81,10 +90,6 @@ function ItemFetcher()
 						ItemFetchManager.dontSendPrior = new Date(new Date().getTime() + delay);
 					}
 					updateRateLimits(xmlhttp);
-					if(searchInfo.viewId == 'display-window')
-					{
-						playSound(searchInfo.soundId, searchInfo.soundVolume);
-					}
 				}		
 			}
 			xmlhttp.open("GET", url, true);

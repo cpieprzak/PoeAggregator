@@ -2,13 +2,12 @@ var initialized = false;
 function loadPoeWebsite()
 {	
 	var url = !initialized ? 'https://www.pathofexile.com/trade/search' : null;
-	initialized = true;
-	loadOfficialTradeWebsite(url);
-	
+	loadOfficialTradeWebsite(url);	
 }
 
 function loadOfficialTradeWebsite(url)
 {
+	initialized = true;
 	var id = 'poe-search-window';
 	hide('trade-url-overlay');
 	var views = document.querySelectorAll('.view-tab');
@@ -71,8 +70,8 @@ function saveTrade()
 		}
 	}
 	openSearchesModal();
-	searchControls.querySelectorAll('.search-comment')[0].focus();
-	newSearchRow.classList.add('new');
-	setTimeout(()=>{newSearchRow.classList.remove('new');},2000);
+	newSearchRow.querySelectorAll('.search-comment')[0].focus();
+	newSearchRow.parentNode.classList.add('new');
+	setTimeout(()=>{newSearchRow.parentNode.classList.remove('new');},500);
 
 }

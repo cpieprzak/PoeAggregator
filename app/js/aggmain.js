@@ -108,16 +108,19 @@ setInterval(updateTimes, 1000);
 
 function callAjax(url, callback, searchInfo)
 {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function()
-    {		
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-        {
-        	callback(xmlhttp.responseText, searchInfo);
-        }		
-    }
-    xmlhttp.open("GET", url, true);	
-    xmlhttp.send();
+	if(!ItemFetchManager.isRateLimited())
+	{
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function()
+		{		
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+			{
+				callback(xmlhttp.responseText, searchInfo);
+			}		
+		}
+		xmlhttp.open("GET", url, true);	
+		xmlhttp.send();
+	}
 }
 
 function consoleOut(data)
@@ -129,7 +132,10 @@ function consoleOut(data)
 function clearDisplay()
 {
 	var display = document.getElementById('display-window');
-	display.innerHTML = '';
+	display.querySelectorAll('.item-display').forEach((element)=>{
+		element.remove();
+
+	});
 	allDisplayedItems = [];
 	lastItem = null;
 }
@@ -192,14 +198,18 @@ function addItem(data, searchInfo)
 		display.insertBefore(newNode, display.firstChild);
 		if(viewId == 'display-window')
 		{
+			if(!newNode.classList.contains('hidden'))
+			{
+				playSound(searchInfo.soundId, searchInfo.soundVolume);
+			}
 			lastItem = newNode;
 			allDisplayedItems.push(lastItem);
 			while(allDisplayedItems.length > maxItemsDisplayed)
 			{
 				var oldestItem = allDisplayedItems.shift();
-				if(oldestItem != null)
+				if(oldestItem)
 				{
-					oldestItem.parentNode.removeChild(oldestItem);
+					oldestItem.remove();
 					oldestItem = null;			
 				}
 			}
@@ -472,7 +482,18 @@ function filterItem(item)
 			var textParts = filterText.split(' ');
 			for(var i = 0; i < textParts.length; i++)
 			{
-				if(itemText.indexOf(textParts[i]) < 0)
+				var textPart = textParts[i];
+				var isNot = textPart.startsWith('!');
+				if(isNot)
+				{
+					textPart = textPart.substring(1);
+					if(textPart.length > 0 && itemText.indexOf(textPart) >= 0)
+					{
+						showItem = false;
+						break;
+					}
+				}
+				else if(itemText.indexOf(textPart) < 0)
 				{
 					showItem = false;
 					break;
@@ -746,87 +767,94 @@ var outputToView = function(data, parameters)
 
 function runSortedSearch(search, sort, callback)
 {
-	var url = '/api/trade/search/';
-	var searchInfo = new SearchListing();
-	searchInfo.searchUrlPart = search;
-	searchInfo.orgin = 'run';
-	url += search;
-	var sortsearches = function(data, searchinfo, uponcomplete, sort)
+	if(!ItemFetchManager.isRateLimited())
 	{
-		var results =  JSON.parse(data);
-		var requestBody = new Object();
-		requestBody.query = results.query;
-		if(sort != null)
+		var url = '/api/trade/search/';
+		var searchInfo = new SearchListing();
+		searchInfo.searchUrlPart = search;
+		searchInfo.orgin = 'run';
+		url += search;
+		var sortsearches = function(data, searchinfo, uponcomplete, sort)
 		{
-			requestBody.sort = sort;			
-		}
-		requestBody = JSON.stringify(requestBody);
-		var league = document.getElementById('league').value;
-		var path = '/api/trade/search/';
-		path += league;
-		callAjaxWithSession('POST', path, uponcomplete, requestBody, searchInfo);
-	};
-	url += '?q=';
-	callAjaxWithSession('GET', url, sortsearches, null, searchInfo, callback, sort);
+			var results =  JSON.parse(data);
+			var requestBody = new Object();
+			requestBody.query = results.query;
+			if(sort != null)
+			{
+				requestBody.sort = sort;			
+			}
+			requestBody = JSON.stringify(requestBody);
+			var league = document.getElementById('league').value;
+			var path = '/api/trade/search/';
+			path += league;
+			callAjaxWithSession('POST', path, uponcomplete, requestBody, searchInfo);
+		};
+		url += '?q=';
+		callAjaxWithSession('GET', url, sortsearches, null, searchInfo, callback, sort);
+	}
 }
 
 function callAjaxWithSession(method, url, callback, requestBody, searchInfo, uponcomplete, sort)
 {
-	var myHeaders = {
-		'User-Agent': userAgent
-    };
-
-	if(requestBody != null)
+	if(!ItemFetchManager.isRateLimited())
 	{
-		myHeaders = 
-	    {
-			'Content-Length': Buffer.byteLength(requestBody),
-	      	'Content-Type': 'application/json',
+		var myHeaders = {
 			'User-Agent': userAgent
-	    };
-	}
-
-    const options =
-	{
-		hostname: 'www.pathofexile.com',
-		port: 443,
-		path: url,
-  		method: method,
-		headers: myHeaders
-	};
+		};
 	
-	var data = '';
-	const req = https.request(options, res => 
-	{
-		if(res.statusCode == 200)
+		if(requestBody != null)
 		{
-			res.setEncoding('utf8');
-		  	res.on('data', d => 
-			{
-		    	data += d;
-		  	})
-		  	res.on('end', d => 
-			{
-		    	callback(data, searchInfo, uponcomplete, sort);
-		  	})
+			myHeaders = 
+			{				
+				'Cookie': cookie.serialize('POESESSID', poesessionid),
+				'Content-Length': Buffer.byteLength(requestBody),
+				'Content-Type': 'application/json',
+				'User-Agent': userAgent
+			};
 		}
-		else
-		{
-			console.log('Bad request: ' + res.statusCode);
-		}
-	})
-
-	req.on('error', error => 
-	{
-  		console.error(error)
-	})
 	
-	if(requestBody != null)
-	{
-		req.write(requestBody);
-	}
-
-	req.end()
+		const options =
+		{
+			hostname: 'www.pathofexile.com',
+			port: 443,
+			path: url,
+			method: method,
+			headers: myHeaders
+		};
+		
+		var data = '';
+		const req = https.request(options, res => 
+		{
+			if(res.statusCode == 200)
+			{
+				res.setEncoding('utf8');
+				  res.on('data', d => 
+				{
+					data += d;
+				  })
+				  res.on('end', d => 
+				{
+					callback(data, searchInfo, uponcomplete, sort);
+				  })
+			}
+			else
+			{
+				console.log('Bad request: ' + res.statusCode);
+			}
+		})
+	
+		req.on('error', error => 
+		{
+			  console.error(error)
+		})
+		
+		if(requestBody != null)
+		{
+			req.write(requestBody);
+		}
+	
+		req.end();
+	}	
 }
 
 function clearWatchedItems()

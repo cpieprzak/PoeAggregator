@@ -41,6 +41,23 @@ body
 	right: 2px;
 }
 
+::-webkit-scrollbar 
+{
+    width: 12px;
+}
+ 
+::-webkit-scrollbar-track 
+{	
+	background-color: #c0c0c0;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.7);
+  border: solid 1px #c0c0c0;
+  border-radius: 15px;
+}
+
 li
 {
 	list-style: none;
@@ -349,6 +366,7 @@ textarea.notes
 	opacity: 1;
 	transition: background-color 1s, opacity 1s;
 	transition-timing-function: ease-out;
+	margin: 1px;
 }
 
 
@@ -421,7 +439,7 @@ textarea.notes
 	background: #51585f;
     justify-content: space-around;
     max-width: 25rem;
-	overflow-y: auto;
+	overflow-y: scroll;	
 }
 
 .trade-whisper
@@ -454,6 +472,13 @@ textarea.notes
 	position: relative;
     padding: 5px;
     background: #880101;
+}
+
+.trade-whisper.commoditye-trade .header
+{
+	position: relative;
+    padding: 5px;
+    background: #4e7b12;
 }
 
 .trade-whisper .header .v-itemName
@@ -620,7 +645,7 @@ textarea.notes
 .implicit-mods li 
 {
 	color: #958e87;	
-    text-decoration: underline dotted;
+    text-decoration: underline;
 }
 
 .explicit-mods 
@@ -1054,7 +1079,7 @@ a:visited
 .modal-header
 {		
 	background-color: #2c6ace;
-	padding: .5rem;
+	padding: .6rem;
     border-radius: 1rem 1rem 0px 0px;
     color: white;
     font-weight: bold;
@@ -1296,6 +1321,17 @@ html .all-screen .outdated .template-field
 	animation-name: flash-new;
 	animation-iteration-count: infinite;
   	animation-direction: alternate;
+}
+
+.add-new-search.us-table
+{
+	transition: background-color 1s;
+}
+
+.add-new-search.us-table.new
+{
+	animation-name: none;
+	background-color:rgb(82, 5, 78);
 }
 
 @keyframes flash-new 

@@ -1,8 +1,8 @@
 var whisperTemplate = document.getElementById('trade-whisper-template');
 whisperTemplate.remove();
 
-function TradeWhisper(line,isBigTrade)
-{	
+function TradeWhisper(line)
+{
     this.line = line;
     this.timestamp = '';
     this.from = '';
@@ -14,31 +14,49 @@ function TradeWhisper(line,isBigTrade)
     this.tab = '';
     this.position = '';
     this.msg = '';
-    this.isBigTrade = isBigTrade;
+    this.isBigTrade = line.includes('exalted');
     this.inviteMsg = '';
+    this.isCommodityTrade = false;
 
     this.parseMessage = () => {
-        var parts = this.line.split(' ');
-        this.timestamp = getFormattedTime(parts[1]);
-        parts = this.line.split(' @From ');
-        this.from = this.line.split(' @From ')[1].split(':')[0].trim();
-        if(this.from.includes('>'))
-        {
-            this.from = this.from.split('>')[1].trim();
+        try {
+            var parts = this.line.split(' ');
+            this.timestamp = getFormattedTime(parts[1]);
+            parts = this.line.split(' @From ');
+            this.from = this.line.split(' @From ')[1].split(':')[0].trim();
+            if(this.from.includes('>')) {
+                this.from = this.from.split('>')[1].trim();
+            }
+            this.inviteMsg = '/invite ' + this.from;
+            if(autoCopyTradeWhisperInvite) {copyTextToClipboard(this.inviteMsg);}
+            this.isCommodityTrade = this.line.includes('Hi, I\'d like to buy your ');
+            if(this.isCommodityTrade) {
+                this.isBigTrade = false;
+                this.itemName = this.line.split('d like to buy your ')[1].split(' for my ')[0].trim();
+                this.price = this.line.split('d like to buy your ')[1].split(' for my ')[1].trim().split(' in ')[0].trim();
+                this.priceQuantity = this.price.split(' ')[0].trim();
+                this.priceType = this.price.substr(this.price.indexOf(' ')+1).trim().toLowerCase();            
+                this.league = this.line.split('d like to buy your ')[1].split(' for my ')[1].trim().split(' in ')[1].trim().replace('.',''); 
+            }
+            else if(this.line.includes(': Hi, I would like to buy your ')) {
+                this.itemName = this.line.split(': Hi, I would like to buy your ')[1].split(' listed for ')[0].trim();
+                this.price = this.line.split(' listed for ')[1].split(' in ')[0].trim();
+                this.priceQuantity = this.price.split(' ')[0].trim();
+                this.priceType = this.price.split(' ')[1].trim();
+                this.league = this.line.split(' listed for ')[1].split(' in ')[1].split(' (')[0].trim();        
+                this.tab = this.line.split(' (stash tab "')[1].split('"; position')[0].trim();
+                this.position = this.line.split('"; position:')[1].split(')')[0].trim();
+                if(this.position != '') {
+                    this.position = '(' + this.position + ')';
+                }
+            }
         }
-        this.inviteMsg = '/invite ' + this.from
-        if(this.line.includes(': Hi, I would like to buy your '))
-        {
-            this.itemName = this.line.split(': Hi, I would like to buy your ')[1].split(' listed for ')[0].trim();
-            this.price = this.line.split(' listed for ')[1].split(' in ')[0].trim();
-            this.priceQuantity = this.price.split(' ')[0].trim();
-            this.priceType = this.price.split(' ')[1].trim();
-            this.league = this.line.split(' listed for ')[1].split(' in ')[1].split(' (')[0].trim();        
-            this.tab = this.line.split(' (stash tab "')[1].split('"; position')[0].trim();
-            this.position = this.line.split('"; position:')[1].split(')')[0].trim();
+        catch (e) {
+            console.log('Failed to parse line: ' + this.line);
         }
     }
     this.parseMessage();
+    playTradeSound(this);
 
     this.toElement = () => {
         var element = whisperTemplate.cloneNode(true);
@@ -52,6 +70,10 @@ function TradeWhisper(line,isBigTrade)
         if(this.isBigTrade)
         {
             element.classList.add('big-trade');
+        }
+        if(this.isCommodityTrade)
+        {
+            element.classList.add('commoditye-trade');
         }
         element.id = '';
         var variables = element.querySelectorAll('poe-var');
@@ -67,12 +89,20 @@ function TradeWhisper(line,isBigTrade)
             if(varTarget == 'priceType')
             {
                 var priceImg = currencyImages[data];
-                if(priceImg != null)
+                for (const [key, value] of Object.entries(currencyImages))
                 {
-                    node = document.createElement('img');
-                    node.src = priceImg;
-                    node.classList.add('currency-img');
-                    node.title = data;
+                    var priceTypeString = data.toLowerCase()
+                    .replace(' ','-')
+                    .replace('\'','');
+                    var currencyKey = key.toLowerCase();
+                    if(priceTypeString.includes(currencyKey))
+                    {
+                        node = document.createElement('img');
+                        node.src = value;
+                        node.classList.add('currency-img');
+                        node.title = data;
+                        break;
+                    }
                 }
             }
             newElement.appendChild(node);
@@ -111,13 +141,14 @@ function TradeWhisper(line,isBigTrade)
                             msg = whisperPrefix + 'Are you still interested in ' + myItem + '?';
                             break;
                         case 'Invite' :
-                            msg = inviteMsg;
+                            msg = myself.inviteMsg;
                             break;
                         case 'Sold' :
                             msg = whisperPrefix + 'I\'m sorry but ' + myItem + ' has sold. :(';
                             break;
                     }
                     copyTextToClipboard(msg);
+                    sendCopyPasteToPoe();
                 }
             };
         }
@@ -136,7 +167,6 @@ var getFormattedTime = function (militaryTime){
     return hours + ':' + minutes + amPm;
 };
 
-var c = false;
 function updateAutoCopyTradeWhisperInvite(checkbox)
 {
     if(checkbox)
@@ -144,3 +174,24 @@ function updateAutoCopyTradeWhisperInvite(checkbox)
         autoCopyTradeWhisperInvite = checkbox.checked;
     }
 }
+
+function playTradeSound(tradeWhisper)
+{
+    var line = tradeWhisper.line;
+    var soundId = document.getElementById('trade-notification-sound').value;
+    var volume = document.getElementById('trade-notification-sound-volume').value;
+    if(tradeWhisper.isBigTrade)
+    {
+        var bigSound = document.getElementById('big-trade-notification-sound').value
+        if(bigSound.trim() != '')
+        {
+            soundId = bigSound;
+            volume = document.getElementById('big-trade-notification-sound-volume').value;
+        }
+    }
+    if(soundId.trim() != '')
+    {
+        playSound(soundId, volume);
+    }
+}
+                
