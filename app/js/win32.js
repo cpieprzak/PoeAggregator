@@ -164,10 +164,12 @@ function sendCopyPasteToPoe()
 {
     if(setForegroundWindowToPoe())
     {
-        KeyTap(VK_RETURN);
-        KeyToggle(VK_CONTROL, "down");
-        KeyTap(keycode.codes.v);
-        KeyToggle(VK_CONTROL, "up");
-        KeyTap(VK_RETURN);
+        setTimeout(()=>{
+            KeyTap(VK_RETURN);
+            KeyToggle(VK_CONTROL, "down");
+            KeyTap(keycode.codes.v);
+            KeyToggle(VK_CONTROL, "up");
+            KeyTap(VK_RETURN);
+        },25);
     }
 }

@@ -137,14 +137,21 @@ function TradeWhisper(line)
                         case 'Wait' :
                             msg = whisperPrefix + 'I\'m currently busy. Can I message you back in a few?';
                             break;
-                        case 'Still interested?' :
-                            msg = whisperPrefix + 'Are you still interested in ' + myItem + '?';
+                        case 'Interested?' :
+                            msg = whisperPrefix + 'Are you still interested in my ' + myItem + '?';
                             break;
                         case 'Invite' :
                             msg = myself.inviteMsg;
                             break;
                         case 'Sold' :
                             msg = whisperPrefix + 'I\'m sorry but ' + myItem + ' has sold. :(';
+                            break;                            
+                        case 'Trade' :
+                            msg = '/tradewith ' + myself.from;
+                            break;                                                     
+                        case 'Kick' :
+                            msg = '/kick ' + myself.from;
+                            element.remove();
                             break;
                     }
                     copyTextToClipboard(msg);
