@@ -369,10 +369,10 @@ textarea.notes
 	margin: 1px;
 }
 
-
 .button:hover
 {
 	opacity: 1;
+	background-color: #163669;
 }
 
 .button.disabled
