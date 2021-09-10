@@ -1019,7 +1019,7 @@ function buildCopyButton(buttonText, textToCopy, sendToPoe)
 		inputElement.addEventListener('click', function(event)
 		{
 			copyTextToClipboard(textToCopy);
-			sendCopyPasteToPoe();
+			sendClipboardTextToPoe();
 			event.target.classList.add('copied');
 		});
 	}

@@ -29,8 +29,8 @@ var lpctstr = ref.refType(ref.types.CString);
 
 var user32 = ffi.Library("user32", {
     SendInput: ["int", ["int", Input, "int"]],
-    FindWindowExW: ["int", ["int", "int", lpctstr, lpctstr]],
-    SetForegroundWindow: ["int", ["int"]]
+    FindWindowExW: ["uint64", ["int", "int", lpctstr, lpctstr]],
+    SetForegroundWindow: ["int", ["uint64"]]
 });
 
 const extendedKeyPrefix = 0xe000;
@@ -122,11 +122,6 @@ function ConvertKeyCodeToScanCode(keyCode) {
     return result;
 }
 
-copyTextToClipboard(' ');
-setTimeout(()=>{
-    sendCopyPasteToPoe();
-},1000);
-
 var poeWinHandle = 0;
 function getPoeWindowsHandle()
 {
@@ -160,7 +155,7 @@ function setForegroundWindowToPoe()
     return success;
 }
 
-function sendCopyPasteToPoe() 
+function sendClipboardTextToPoe() 
 {
     if(setForegroundWindowToPoe())
     {

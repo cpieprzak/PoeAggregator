@@ -155,7 +155,7 @@ function TradeWhisper(line)
                             break;
                     }
                     copyTextToClipboard(msg);
-                    sendCopyPasteToPoe();
+                    sendClipboardTextToPoe();
                 }
             };
         }
