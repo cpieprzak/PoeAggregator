@@ -3,6 +3,7 @@ const ffi = require('ffi-napi');
 const ref = require('ref-napi');
 const os = require('os');
 const import_Struct = require('ref-struct-di');
+const {promisify} = require('util');
 
 var arch = os.arch();
 const Struct = import_Struct(ref);
@@ -30,8 +31,12 @@ var lpctstr = ref.refType(ref.types.CString);
 var user32 = ffi.Library("user32", {
     SendInput: ["int", ["int", Input, "int"]],
     FindWindowExW: ["uint64", ["int", "int", lpctstr, lpctstr]],
-    SetForegroundWindow: ["int", ["uint64"]]
+    SetForegroundWindow: ["bool", ["uint64"]]
 });
+
+const sendInput = promisify(user32.SendInput.async);
+const findWindowExW = promisify(user32.FindWindowExW.async);
+const setForegroundWindow = promisify(user32.SetForegroundWindow.async);
 
 const extendedKeyPrefix = 0xe000;
 const INPUT_KEYBOARD = 1;
@@ -50,7 +55,6 @@ function KeyToggle_Options() {
     this.asScanCode = true;
     this.keyCodeIsScanCode = false;
     this.flags = null;
-    this.async = false; // async can reduce stutter in your app, if frequently sending key-events
 }
 
 let entry = new Input();
@@ -58,10 +62,11 @@ entry.type = INPUT_KEYBOARD;
 entry.time = 0;
 entry.dwExtraInfo = 0;
 
-function KeyToggle(keyCode, type, options) {
+function keyToggle(keyCode, type, options) {
+    
     if(virtualKeys.includes(keyCode))
     {
-        options = new Object();
+        options = {};
         options.keyCodeIsScanCode = true;
         options.asScanCode = false;
     }
@@ -94,21 +99,14 @@ function KeyToggle(keyCode, type, options) {
     if (type == "up") {
         entry.dwFlags |= KEYEVENTF_KEYUP;
     }
+    
+    return sendInput(1, entry, arch === "x64" ? 40 : 28);
 
-    if (opt.async) {
-        return new Promise((resolve, reject) => {
-            user32.SendInput.async(1, entry, arch === "x64" ? 40 : 28, (error, result) => {
-                if (error) reject(error);
-                resolve(result);
-            });
-        });
-    }
-    return user32.SendInput(1, entry, arch === "x64" ? 40 : 28);
 }
 
-function KeyTap(keyCode, opt) {
-    KeyToggle(keyCode, "down", opt);
-    KeyToggle(keyCode, "up", opt);
+async function keyTap(keyCode, opt) {
+    await keyToggle(keyCode, "down", opt);
+    await keyToggle(keyCode, "up", opt);
 }
 
 // Scan-code for a char equals its index in this list. List based on: https://qb64.org/wiki/Scancodes, https://www.qbasic.net/en/reference/general/scan-codes.htm
@@ -122,49 +120,38 @@ function ConvertKeyCodeToScanCode(keyCode) {
     return result;
 }
 
-var poeWinHandle = 0;
 function getPoeWindowsHandle()
 {
-    if(poeWinHandle == 0)
-    {
-        poeWinHandle = user32.FindWindowExW(0, 0, null, convertStringToBuffer('Path of Exile'));
-        if(poeWinHandle > 0)
-        {
-            KeyTap(VK_CONTROL);
-        }
-    }
-    return poeWinHandle;
+    return findWindowExW(0, 0, null, convertStringToBuffer('Path of Exile'));
 }
+ 
+keyTap(keycode.codes.v);
 
-function setForegroundWindowToPoe()
+async function setForegroundWindowToPoe()
 {
-    var success = false;
-    var handle = getPoeWindowsHandle();
-    if(handle && handle > 0)
+    var isSuccessful = false;
+    var handle = await getPoeWindowsHandle();
+    if(handle > 0)
     {
-        if(user32.SetForegroundWindow(handle) > 0)
+        if(await setForegroundWindow(handle))
         {
-            success = true;
-        }
-        else
-        {
-            poeWinHandle = 0;
+            isSuccessful = true;
         }
     }
 
-    return success;
+    return isSuccessful;
 }
 
-function sendClipboardTextToPoe() 
+async function sendClipboardTextToPoe() 
 {
-    if(setForegroundWindowToPoe())
+    if(await setForegroundWindowToPoe())
     {
-        setTimeout(()=>{
-            KeyTap(VK_RETURN);
-            KeyToggle(VK_CONTROL, "down");
-            KeyTap(keycode.codes.v);
-            KeyToggle(VK_CONTROL, "up");
-            KeyTap(VK_RETURN);
+        setTimeout(async ()=>{
+            await keyTap(VK_RETURN);
+            await keyToggle(VK_CONTROL, "down");
+            await keyTap(keycode.codes.v);
+            await keyToggle(VK_CONTROL, "up");
+            await keyTap(VK_RETURN);
         },25);
     }
 }

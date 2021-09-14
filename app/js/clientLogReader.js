@@ -64,8 +64,11 @@ function lineRead(line)
             var isBuyMsg = line.includes('Hi') && line.includes('like to buy');
             if(isBuyMsg)
             {   
+                ipc.send('trade-whisper',line);                
                 document.getElementById('trade-whisper-display-button').classList.add('new');
-                document.getElementById('trade-whisper-display-window').prepend(new TradeWhisper(line).toElement());
+                var tradeWhisper = new TradeWhisper(line);
+                playTradeSound(tradeWhisper);
+                document.getElementById('trade-whisper-display-window').prepend(tradeWhisper.toElement());
             }
         }
         

@@ -18,7 +18,7 @@ body
 	background-color:rgba(3, 45, 53, 0);
 }
 
-#title-bar
+.title-bar
 {
 	padding: 5px;
 	-webkit-app-region: drag;
@@ -445,14 +445,16 @@ textarea.notes
 .trade-whisper
 {
     margin: 5px;
+	margin-left: auto;
+	margin-right: auto;
     flex: inherit;
     color: #bdd0e0;
 	background-color: #1c1e23;
     border: 1px solid #257b6f;
-    min-height: 5rem;
-    min-width: 20rem;
-    max-width: 20rem;
+    min-width: 21rem;
+    max-width: 21rem;
 	position: relative;
+    height: fit-content;
 }
 
 .trade-whisper-wrapper
@@ -474,7 +476,7 @@ textarea.notes
     background: #880101;
 }
 
-.trade-whisper.commoditye-trade .header
+.trade-whisper.commodity-trade .header
 {
 	position: relative;
     padding: 5px;
@@ -506,6 +508,12 @@ textarea.notes
 .trade-whisper .us-table-cell
 {
 	padding-right: 5px;
+}
+
+.trade-whisper-button-wrapper
+{
+	display: flex;
+	justify-content: space-between;
 }
 
 .item-display.is-corrupted

@@ -223,39 +223,6 @@ function addItem(data, searchInfo)
 	}
 } 
 
-function copyTextToClipboard(text)
-{
-	var textArea = document.createElement("textarea");
-	textArea.classList.add('copy-text-area');
-	textArea.value = text;
-	document.body.appendChild(textArea);
-	textArea.focus();
-	textArea.select();
-	try
-	{
-		document.execCommand('copy');
-	}
-	catch(error) 
-	{
-		
-	}
-	document.body.removeChild(textArea);
-}
-
-
-function showHide()
-{
-	var target = this.showHideTarget;
-	if(target.classList.contains('hidden'))
-	{
-		target.classList.remove('hidden');
-	}
-	else
-	{
-		target.classList.add('hidden');
-	}
-}
-
 function showCurrencyRatios()
 {
 	document.getElementById('currency-ratios').classList.remove('hidden');
@@ -264,25 +231,6 @@ function showCurrencyRatios()
 function hideCurrencyRatios()
 {
 	document.getElementById('currency-ratios').classList.add('hidden');
-}
-
-
-function showHide(elementId)
-{
-	var element = document.getElementById(elementId);
-	if(element != null)
-	{
-		var classList = element.classList;
-		var hidden = 'hidden';
-		if(classList.contains(hidden))
-		{
-			classList.remove(hidden);
-		}
-		else
-		{
-			classList.add(hidden);
-		}
-	}	
 }
 
 function updateFontSize()
@@ -739,6 +687,7 @@ var outputToView = function(data, parameters)
 			loadedItems = loadedItems.reverse();
 		}
 	}
+	console.log(loadedItems);
 	
 	var listings = [];
 	for(var i = 0; i < loadedItems.length; i++)
@@ -773,15 +722,16 @@ function runSortedSearch(search, sort, callback)
 		var searchInfo = new SearchListing();
 		searchInfo.searchUrlPart = search;
 		searchInfo.orgin = 'run';
-		url += search;
-		var sortsearches = function(data, searchinfo, uponcomplete, sort)
+		url += search + '?q=';
+
+		var sortsearches = function(data, searchinfo, uponcomplete, mySort)
 		{
 			var results =  JSON.parse(data);
 			var requestBody = new Object();
 			requestBody.query = results.query;
-			if(sort != null)
+			if(mySort != null)
 			{
-				requestBody.sort = sort;			
+				requestBody.sort = mySort;			
 			}
 			requestBody = JSON.stringify(requestBody);
 			var league = document.getElementById('league').value;
@@ -789,7 +739,7 @@ function runSortedSearch(search, sort, callback)
 			path += league;
 			callAjaxWithSession('POST', path, uponcomplete, requestBody, searchInfo);
 		};
-		url += '?q=';
+
 		callAjaxWithSession('GET', url, sortsearches, null, searchInfo, callback, sort);
 	}
 }
@@ -828,31 +778,17 @@ function callAjaxWithSession(method, url, callback, requestBody, searchInfo, upo
 			if(res.statusCode == 200)
 			{
 				res.setEncoding('utf8');
-				  res.on('data', d => 
-				{
-					data += d;
-				  })
-				  res.on('end', d => 
-				{
-					callback(data, searchInfo, uponcomplete, sort);
-				  })
+				res.on('data', d => {data += d;});
+				res.on('end', d => {console.log(JSON.parse(data)); callback(data, searchInfo, uponcomplete, sort);});
 			}
 			else
 			{
 				console.log('Bad request: ' + res.statusCode);
 			}
-		})
+		});
 	
-		req.on('error', error => 
-		{
-			  console.error(error)
-		})
-		
-		if(requestBody != null)
-		{
-			req.write(requestBody);
-		}
-	
+		req.on('error', error => {console.error(error)});
+		if(requestBody != null){req.write(requestBody);}	
 		req.end();
 	}	
 }

@@ -28,7 +28,7 @@ function loadTemplate(id)
     }
     xhr.open("GET", url, false);
     xhr.setRequestHeader('Content-type', 'text/html');
-    xhr.send();
+    xhr.send();    
 }
 
 var templates = document.querySelectorAll(templateTag);

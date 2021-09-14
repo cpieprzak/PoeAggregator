@@ -1,0 +1,30 @@
+html
+{
+	border: 1px solid red;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.overlay-window
+{
+	opacity: .8;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.title-bar
+{
+	display: flex;
+	opacity: .5;
+	background-color: black;
+	-webkit-app-region: drag;
+}
+.overlay-body
+{	
+	display: flex;
+	height: 100%;
+	background: transparent;   
+	overflow-y: scroll;
+	flex-direction: column;
+}
