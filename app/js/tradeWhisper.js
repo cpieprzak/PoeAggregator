@@ -1,3 +1,12 @@
+const tradeIpc = require('electron').ipcRenderer;
+const crypto = require('crypto');
+
+tradeIpc.on('trade-whisper', (e,line) => {
+    try{
+        document.querySelector('.overlay-body').prepend(new TradeWhisper(line).toElement());
+    } catch (e){console.log(e);}
+});
+
 var whisperTemplate = document.getElementById('trade-whisper-template');
 whisperTemplate.remove();
 
@@ -17,6 +26,7 @@ function TradeWhisper(line)
     this.isBigTrade = line.includes('exalted');
     this.inviteMsg = '';
     this.isCommodityTrade = false;
+    this.tradeId = '';
 
     this.parseMessage = () => {
         try {
@@ -50,30 +60,31 @@ function TradeWhisper(line)
                     this.position = '(' + this.position + ')';
                 }
             }
+            this.tradeId = generateTradeId(this.itemName + '-' + this.price + '-' + this.from);
         }
         catch (e) {
             console.log('Failed to parse line: ' + this.line);
         }
     }
     this.parseMessage();
-    playTradeSound(this);
 
     this.toElement = () => {
         var element = whisperTemplate.cloneNode(true);
+        element.classList.add(this.tradeId);
         element.classList.remove('hidden');
         element.querySelector('.trade-whisper-wrapper').classList.add('new');
         element.addEventListener("mouseenter", (e)=>{
             e.target.querySelector('.trade-whisper-wrapper').classList.remove('new');
-            document.querySelector('#trade-whisper-display-button').classList.remove('new');
+            var button = document.querySelector('#trade-whisper-display-button');
+            if (button){button.classList.remove('new')};
         });
-        element.add
         if(this.isBigTrade)
         {
             element.classList.add('big-trade');
         }
         if(this.isCommodityTrade)
         {
-            element.classList.add('commoditye-trade');
+            element.classList.add('commodity-trade');
         }
         element.id = '';
         var variables = element.querySelectorAll('poe-var');
@@ -118,12 +129,13 @@ function TradeWhisper(line)
             button.from = this.from;
             button.itemName = this.itemName;
             button.price = this.price;
+            button.tradeId = this.tradeId;
             button.onclick = (e) =>
             {
                 var myself = e.target;
                 if(myself.value == 'X')
                 {
-                    element.remove();
+                    callAllWindowFunction('closeTradeByTradeId(\'' + this.tradeId + '\')');
                 }
                 else
                 {
@@ -137,7 +149,7 @@ function TradeWhisper(line)
                         case 'Wait' :
                             msg = whisperPrefix + 'I\'m currently busy. Can I message you back in a few?';
                             break;
-                        case 'Interested?' :
+                        case 'Want?' :
                             msg = whisperPrefix + 'Are you still interested in my ' + myItem + '?';
                             break;
                         case 'Invite' :
@@ -148,20 +160,35 @@ function TradeWhisper(line)
                             break;                            
                         case 'Trade' :
                             msg = '/tradewith ' + myself.from;
-                            break;                                                     
+                            break;                                     
+                        case 'Thx' :
+                            msg = whisperPrefix + 'ty gl!';
+                            break;                                                    
                         case 'Kick' :
                             msg = '/kick ' + myself.from;
-                            element.remove();
+                            callAllWindowFunction('closeTradeByTradeId(\'' + this.tradeId + '\')');
                             break;
                     }
                     copyTextToClipboard(msg);
-                    sendClipboardTextToPoe();
+                    callMainWindowFunction('sendClipboardTextToPoe();');
                 }
             };
         }
         
         return element;
     }
+}
+
+function closeTradeByTradeId(tradeId)
+{
+    var trades = document.querySelectorAll('.' + tradeId);
+    Array.from(trades).forEach(trade => trade.remove());
+    var whispers = document.querySelectorAll('.trade-whisper');
+    if(whispers.length == 0)
+    {
+        tradeIpc.send('collapse-overlay-window','tradeOverlayWindow'); 
+    }
+
 }
 
 var getFormattedTime = function (militaryTime){
@@ -173,6 +200,8 @@ var getFormattedTime = function (militaryTime){
 
     return hours + ':' + minutes + amPm;
 };
+
+var autoCopyTradeWhisperInvite = false;
 
 function updateAutoCopyTradeWhisperInvite(checkbox)
 {
@@ -201,4 +230,13 @@ function playTradeSound(tradeWhisper)
         playSound(soundId, volume);
     }
 }
+
+function updateShowTradeWhisperOverlay()
+{
+    var checked = document.getElementById('show-trade-whisper-overlay').checked;
+    tradeIpc.send('show-overlay-window','tradeOverlayWindow',checked); 
+}
+
+const hashId = (id) => crypto.createHash('md5').update(id).digest('hex');
+const generateTradeId = (id) => !id ? 'trade-whisper-bad-id' : `trade-whisper-${hashId(id)}`;
                 
