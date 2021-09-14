@@ -34,7 +34,11 @@ async function createWindow() {
 
 	var sessionid = await getLocalStorageValue('poesessionid');
 	configurePosition();
-	if(await getLocalStorageValue('show-trade-whisper-overlay')){tradeOverlayWindow.show();}
+	if(await getLocalStorageValue('show-trade-whisper-overlay')){
+		tradeOverlayWindow.show();
+		tradeOverlayWindow.setAlwaysOnTop(true, "screen-saver");
+		tradeOverlayWindow.setVisibleOnAllWorkspaces(true);
+	}
 	
 	//mainWindow.webContents.openDevTools();
 
@@ -129,7 +133,14 @@ ipcMain.on('show-overlay-window', (event,windowName,show)=>{
 	if(overlays.has(windowName))
 	{
 		var overlay = overlays.get(windowName);
-		show ? overlay.show() : overlay.hide();
+		if(show) {
+			overlay.show();
+			overlay.setAlwaysOnTop(true, "screen-saver");
+			overlay.setVisibleOnAllWorkspaces(true);
+		}
+		else {
+			overlay.hide();
+		}
 	}	
 });
 
@@ -267,12 +278,10 @@ function buildTradeOverlayWindow()
 				backgroundThrottling: false
 			},
 		});
-		tradeOverlayWindow.hide();
 
+		tradeOverlayWindow.hide();
 		tradeOverlayWindow.loadFile('./html/overlay/overlay.html');
-		tradeOverlayWindow.setAlwaysOnTop(true);
 		//tradeOverlayWindow.webContents.openDevTools();
-		tradeOverlayWindow.resiz
 
 	return tradeOverlayWindow;
 }
