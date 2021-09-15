@@ -91,32 +91,36 @@ ipcMain.on('loadGH', (event, arg) => {
 	shell.openExternal(arg);
 });
 
-
 ipcMain.on('trade-whisper', (event,line)=>{		
 	var overlayName = 'tradeOverlayWindow';
-	
 	if(overlays.has(overlayName))
 	{
 		var overlay = overlays.get(overlayName);
-		var {width,height} = overlay.getBounds();
-		if(height < minTradeHeight)
-		{
-			var newHeight = minTradeHeight;
-			if(overlayHeights.get(overlayName))
-			{
-				newHeight = overlayHeights.get(overlayName)
+		getLocalStorageValue('show-trade-whisper-overlay').then((showOverlay)=>{
+			if(showOverlay){
+				overlay.show();
+				getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
+					var stashBoundConifgured = bounds ? true : false;
+					tradeOverlayWindow.webContents.send('trade-whisper',line,stashBoundConifgured);
+				});
+				var {width,height} = overlay.getBounds();
+				if(height < minTradeHeight)
+				{
+					var lastHeight = overlayHeights.get(overlayName);
+					overlay.setResizable(true);
+					overlay.setSize(width, lastHeight ? lastHeight : minTradeHeight);
+				}
 			}
-			overlay.setSize(width, newHeight);
-		}
+		});
 	}
-	getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
-		var stashBoundConifgured = bounds ? true : false;
-		tradeOverlayWindow.webContents.send('trade-whisper',line,stashBoundConifgured);
-	});
 });
 
 ipcMain.on('main-window-function', (event,javascript)=>{
 	mainWindow.webContents.executeJavaScript(javascript, true);
+});
+
+ipcMain.on('show-main-window', (event)=>{
+	mainWindow.show();
 });
 
 var configuringStashTabs = false;
@@ -129,41 +133,50 @@ ipcMain.on('confirm-stash-tab-area', (event)=>{
 
 ipcMain.on('configure-highlight-stash', (event) => {
 	configuringStashTabs = true;
-	stashTabHighlightingWindow.setSize(300,300);
-	stashTabHighlightingWindow.setIgnoreMouseEvents(false);
-	stashTabHighlightingWindow.setFocusable(true);
-	stashTabHighlightingWindow.webContents.executeJavaScript('configView()', true);
+	getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
+		if(bounds){
+			bounds = JSON.parse(bounds);
+			stashTabHighlightingWindow.setSize(bounds.width,bounds.height);
+			stashTabHighlightingWindow.setPosition(bounds.x,bounds.y);
+		}
+		else{
+			stashTabHighlightingWindow.setSize(300,300);
+		}
+		stashTabHighlightingWindow.setMinimumSize(200,200);
+		stashTabHighlightingWindow.setIgnoreMouseEvents(false);
+		stashTabHighlightingWindow.setFocusable(true);
+		stashTabHighlightingWindow.webContents.executeJavaScript('configView()', true);
+	});
 
 	showWindow(stashTabHighlightingWindow);
 });
 
 ipcMain.on('highlight-stash', (event,x,y,tabType) => {
-	if(!configuringStashTabs)
-	{
-		var bounds = getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
-			if(tabType == 'Hide' || stashTabHighlightingWindow.isVisible())
-			{
-				stashTabHighlightingWindow.hide();
-			}
-			else if(bounds != null)
-			{
-				bounds = JSON.parse(bounds);
-				var slots = 12;
-				if(tabType == '4x'){slots = 24}
-				var width = parseInt(bounds.height / slots);
-				var height = width;
-				var newX = ((Number.parseInt(x)-1) * width) + bounds.x;
-				var newY = ((Number.parseInt(y)-1) * height) + bounds.y;
-				stashTabHighlightingWindow.setPosition(newX,newY);
-				stashTabHighlightingWindow.setSize(height,height);
-				stashTabHighlightingWindow.setIgnoreMouseEvents(true);
-				stashTabHighlightingWindow.setFocusable(false);
-				stashTabHighlightingWindow.webContents.executeJavaScript('highlightView()', true);
-	
-				showWindow(stashTabHighlightingWindow);
-			}
-		});
-	}
+	getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
+		if(tabType == 'Hide' || stashTabHighlightingWindow.isVisible())
+		{
+			stashTabHighlightingWindow.hide();
+			configuringStashTabs = false;
+		}
+		else if(bounds != null && !configuringStashTabs)
+		{
+			bounds = JSON.parse(bounds);
+			var slots = 12;
+			if(tabType == '4x'){slots = 24}
+			var width = bounds.height / slots;
+			var height = width;
+			var newX = ((Number.parseInt(x)-1) * width) + bounds.x;
+			var newY = ((Number.parseInt(y)-1) * height) + bounds.y;
+			stashTabHighlightingWindow.setPosition(Number.parseInt(newX),Number.parseInt(newY));
+			stashTabHighlightingWindow.setMinimumSize(Number.parseInt(width),Number.parseInt(height));
+			stashTabHighlightingWindow.setSize(Number.parseInt(width),Number.parseInt(height));
+			stashTabHighlightingWindow.setIgnoreMouseEvents(true);
+			stashTabHighlightingWindow.setFocusable(false);
+			stashTabHighlightingWindow.webContents.executeJavaScript('highlightView()', true);
+
+			showWindow(stashTabHighlightingWindow);
+		}
+	});
 });
 
 ipcMain.on('all-window-function', (event,javascript)=>{
@@ -178,6 +191,7 @@ ipcMain.on('collapse-overlay-window', (event,windowName)=>{
 		var {width,height} = overlay.getBounds();
 		if(height > minTradeHeight){overlayHeights.set(windowName,height);}			
 		overlay.setSize(width, 30);
+		overlay.setResizable(false);
 	}	
 });
 
@@ -314,9 +328,10 @@ function buildTradeOverlayWindow()
 	var tradeOverlayWindow = new BrowserWindow(
 		{
 			width: 390,
-			height: 30,
+			height: 40,
 			minWidth: 390,
-			minHeight: 30,
+			minHeight: 40,
+			resizable: false,
 			frame: false,
 			transparent: true,
 			skipTaskbar: true,
@@ -332,6 +347,7 @@ function buildTradeOverlayWindow()
 
 		tradeOverlayWindow.hide();
 		tradeOverlayWindow.loadFile('./html/overlay/trade-whisper-overlay.html');
+		//tradeOverlayWindow.openDevTools();
 
 	return tradeOverlayWindow;
 }
@@ -342,8 +358,8 @@ function buildStashTabHighlightingWindow()
 		{
 			width: 400,
 			height: 400,
-			minWidth: 15,
-			minHeight: 15,
+			minWidth: 200,
+			minHeight: 200,
 			frame: false,
 			transparent: true,
 			skipTaskbar: true,
