@@ -120,12 +120,14 @@ function ConvertKeyCodeToScanCode(keyCode) {
     return result;
 }
 
-function getPoeWindowsHandle()
+var poeWindowsHandle = 0;
+async function getPoeWindowsHandle()
 {
-    return findWindowExW(0, 0, null, convertStringToBuffer('Path of Exile'));
+    poeWindowsHandle = poeWindowsHandle == 0 ? findWindowExW(0, 0, null, convertStringToBuffer('Path of Exile')) : poeWindowsHandle;
+    return poeWindowsHandle;
 }
- 
-keyTap(keycode.codes.v);
+
+setTimeout(()=>{keyTap(keycode.codes.v);},1000);
 
 async function setForegroundWindowToPoe()
 {
@@ -136,6 +138,10 @@ async function setForegroundWindowToPoe()
         if(await setForegroundWindow(handle))
         {
             isSuccessful = true;
+        }
+        else
+        {
+            poeWindowsHandle = 0;
         }
     }
 

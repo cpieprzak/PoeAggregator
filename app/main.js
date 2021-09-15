@@ -5,7 +5,7 @@ var tradeOverlayWindow = null;
 var stashTabHighlightingWindow = null;
 var overlays = new Map();
 var overlayHeights = new Map();
-var minTradeHeight = 250;
+var minTradeHeight = 150;
 
 async function createWindow() {
 	mainWindow = new BrowserWindow(
