@@ -52,3 +52,9 @@ function goToHideout()
 	copyTextToClipboard('/hideout');
 	callMainWindowFunction('sendClipboardTextToPoe();');
 }
+
+function newSearch()
+{
+	utilIpc.send('show-main-window');
+	callMainWindowFunction('loadOfficialTradeWebsite(\'https://www.pathofexile.com/trade/search\');');
+}
