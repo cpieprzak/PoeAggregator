@@ -687,7 +687,6 @@ var outputToView = function(data, parameters)
 			loadedItems = loadedItems.reverse();
 		}
 	}
-	console.log(loadedItems);
 	
 	var listings = [];
 	for(var i = 0; i < loadedItems.length; i++)
@@ -779,7 +778,7 @@ function callAjaxWithSession(method, url, callback, requestBody, searchInfo, upo
 			{
 				res.setEncoding('utf8');
 				res.on('data', d => {data += d;});
-				res.on('end', d => {console.log(JSON.parse(data)); callback(data, searchInfo, uponcomplete, sort);});
+				res.on('end', d => {callback(data, searchInfo, uponcomplete, sort);});
 			}
 			else
 			{

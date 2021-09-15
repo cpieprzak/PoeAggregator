@@ -614,34 +614,39 @@ textarea.notes
 	font-weight: bold;
 }
 
-.inf-elder
+.inf-elder, .elder-mod
 {
 	color: #4b8250;
 }
 
-.inf-shaper
+.inf-shaper, .shadper-mod
 {
 	color: #b45fff;
 }
 
-.inf-warlord
+.inf-warlord, .warlord-mod
 {
 	color: #bb1a1e;
 }
 
-.inf-redeemer
+.inf-redeemer, .redeemer-mod
 {
 	color: #92b8cd;
 }
 
-.inf-crusader
+.inf-crusader, .crusader-mod
 {
 	color: #2fa3ce;
 }
 
-.inf-hunter
+.inf-hunter, .hunter-mod
 {
 	color: #52b013;
+}
+
+.influence-mod
+{
+	text-decoration: underline;
 }
 
 .currency-img
@@ -1227,6 +1232,22 @@ a:visited
 .overlay-control:hover
 {
 	background-color: rgba(0,0,0,.25);
+}
+
+.overlay-control #ex-ratio-tracker-fill
+{
+	display: none;
+}
+
+.overlay-control:hover #ex-ratio-tracker-fill
+{
+	display: inline-block;
+}
+
+.ex-fraction
+{
+	width: 1.3rem;
+    display: inline-block;
 }
 
 .tab-control-panel

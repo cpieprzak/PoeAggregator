@@ -1,3 +1,35 @@
+var influenceMods = new Map();
+// Shaper
+influenceMods['The Shaper\'s'] = 'shadper-mod';
+influenceMods['of Shaping'] = 'shadper-mod';
+influenceMods['Elevated Shaper\'s'] = 'shadper-mod';
+influenceMods['of Elevated Shaping'] = 'shadper-mod';
+// Elder
+influenceMods['Eldritch'] = 'elder-mod';
+influenceMods['of the Elder'] = 'elder-mod';
+influenceMods['Elevated Eldritch'] = 'elder-mod';
+influenceMods['of the Elevated Elder'] = 'elder-mod';
+// Crusader
+influenceMods['Crusader\'s'] = 'crusader-mod';
+influenceMods['of the Crusade'] = 'crusader-mod';
+influenceMods['Elevated Crusader\'s'] = 'crusader-mod';
+influenceMods['of the Elevated Crusade'] = 'crusader-mod';
+// Redeemer
+influenceMods['Redeemer\'s'] = 'redeemer-mod';
+influenceMods['of Redemption'] = 'redeemer-mod';
+influenceMods['Elevated Redeemer\'s'] = 'redeemer-mod';
+influenceMods['of Elevated Redemption'] = 'redeemer-mod';
+// Hunter
+influenceMods['Hunter\'s'] = 'hunter-mod';
+influenceMods['of the Hunt'] = 'hunter-mod';
+influenceMods['Elevated Hunter\'s'] = 'hunter-mod';
+influenceMods['of the Elevated Hunt'] = 'hunter-mod';
+// Warlord
+influenceMods['Warlord\'s'] = 'warlord-mod';
+influenceMods['of the Conquest'] = 'warlord-mod';
+influenceMods['Elevated Warlord\'s'] = 'warlord-mod';
+influenceMods['of the Elevated Conquest'] = 'warlord-mod';
+
 function dView(result, searchInfo)
 {
 	var template = document.getElementById('item-template');
@@ -679,7 +711,7 @@ function makeModList(compositeMods, affixListType)
 						if(itemMod.modTier  != null && itemMod.modTier  != '')
 						{
 							var modTier = document.createElement('span');
-							modTier.classList.add('mod-tier');
+							modTier.classList.add('mod-tier');							
 							modTier.appendChild(document.createTextNode(' (' + itemMod.modTier + ') '));
 							modBox.classList.add(itemMod.modTier);
 							modBox.appendChild(modTier);
@@ -687,7 +719,11 @@ function makeModList(compositeMods, affixListType)
 						if(itemMod.modName  != null && itemMod.modName  != '')
 						{
 							var modName = document.createElement('span');
-							modName.classList.add('mod-name');
+							modName.classList.add('mod-name');							
+							if(itemMod.modName && influenceMods[itemMod.modName.trim()]){
+								modName.classList.add(influenceMods[itemMod.modName.trim()]);
+								modName.classList.add('influence-mod');
+							}
 							modName.appendChild(document.createTextNode(itemMod.modName));
 							modBox.appendChild(modName);
 						}

@@ -84,6 +84,7 @@ var loadCurrencyAjax = function(data)
 			for(var j = 0; j < elements.length; j++)
 			{
 				elements[j].value = line.chaosEquivalent;
+				if(elements[j].onchange){elements[j].onchange()}
 			}
 		}
 	}
@@ -99,3 +100,21 @@ var autoRefresh = function()
 };
 
 setInterval(autoRefresh, 5 * 60 * 1000);
+
+function buildExRatios(exPrice)
+{
+	var container = document.getElementById('ex-ratio-tracker-fill');
+	container.innerHTML = '';
+
+	for(var i = 1; i < 10; i++)
+	{
+		var baseNode = document.getElementById('ex-ratio-tracker').cloneNode(true);
+		baseNode.id = '';
+		var input = baseNode.querySelector('input');
+		baseNode.querySelector('.ex-fraction').innerHTML = (.1 * i).toFixed(1);
+		input.value = (.1 * i * exPrice).toFixed(1);
+		input.className = '';
+		input.onchange = '';
+		container.append(baseNode);
+	}	
+}

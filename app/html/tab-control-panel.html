@@ -1,16 +1,22 @@
 <div class='tab-control-panel'>
     <div class='overlay-control'>
-        <label>
-            <span>
-                <img title="exalted" 
-                class="currency-img" 
-                src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png">
-            </span>
-            <input name="Exalted Orb" type="text" class="exa ex exalted">
-            <img title="chaos" 
-                class="currency-img" 
-                src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png">
-        </label>
+        <div  id='ex-ratio-tracker-fill'>
+
+        </div>
+        <div id='ex-ratio-tracker'>
+            <label>
+                <span class='ex-fraction'>1.0</span>
+                <span>
+                    <img title="exalted" 
+                    class="currency-img" 
+                    src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyAddModToRare.png">
+                </span>
+                <input name="Exalted Orb" type="text" class="exa ex exalted" onchange="buildExRatios(this.value)" >
+                <img title="chaos" 
+                    class="currency-img" 
+                    src="https://web.poecdn.com/image/Art/2DItems/Currency/CurrencyRerollRare.png">
+            </label>
+        </div>
     </div>
     <div class='overlay-control' onclick="setCurrentWindow('display-window',this);">Main</div>
     <div class='overlay-control' onclick="setCurrentWindow('watched-display-window',this);">Watched</div>

@@ -46,3 +46,9 @@ function callAllWindowFunction(javascript)
 {
 	utilIpc.send('all-window-function',javascript);
 }
+
+function goToHideout()
+{
+	copyTextToClipboard('/hideout');
+	callMainWindowFunction('sendClipboardTextToPoe();');
+}

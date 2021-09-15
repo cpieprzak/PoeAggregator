@@ -20,11 +20,23 @@ html
 	background-color: black;
 	-webkit-app-region: drag;
 }
+
 .overlay-body
 {	
 	display: flex;
 	height: 100%;
-	background: transparent;   
+	background: transparent;
 	overflow-y: scroll;
 	flex-direction: column;
+}
+
+.overlay-body.stash-tab-highlight
+{
+	justify-content: center;
+    text-align: center;
+}
+
+.no-scroll
+{
+	overflow: hidden;
 }

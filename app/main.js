@@ -2,6 +2,7 @@ const { app, BrowserWindow, session, protocol, ipcMain, shell, Menu } = require(
 
 var mainWindow = null;
 var tradeOverlayWindow = null;
+var stashTabHighlightingWindow = null;
 var overlays = new Map();
 var overlayHeights = new Map();
 var minTradeHeight = 250;
@@ -30,14 +31,15 @@ async function createWindow() {
 
 	mainWindow.loadFile('index.html');
 	tradeOverlayWindow = buildTradeOverlayWindow();
+	stashTabHighlightingWindow = buildStashTabHighlightingWindow();
+
 	overlays.set('tradeOverlayWindow',tradeOverlayWindow);
+	overlays.set('stashTabHighlightingWindow',stashTabHighlightingWindow);
 
 	var sessionid = await getLocalStorageValue('poesessionid');
 	configurePosition();
 	if(await getLocalStorageValue('show-trade-whisper-overlay')){
-		tradeOverlayWindow.show();
-		tradeOverlayWindow.setAlwaysOnTop(true, "screen-saver");
-		tradeOverlayWindow.setVisibleOnAllWorkspaces(true);
+		showWindow(tradeOverlayWindow);
 	}
 	
 	//mainWindow.webContents.openDevTools();
@@ -107,11 +109,61 @@ ipcMain.on('trade-whisper', (event,line)=>{
 			overlay.setSize(width, newHeight);
 		}
 	}
-	tradeOverlayWindow.webContents.send('trade-whisper',line);
+	getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
+		var stashBoundConifgured = bounds ? true : false;
+		tradeOverlayWindow.webContents.send('trade-whisper',line,stashBoundConifgured);
+	});
 });
 
 ipcMain.on('main-window-function', (event,javascript)=>{
 	mainWindow.webContents.executeJavaScript(javascript, true);
+});
+
+var configuringStashTabs = false;
+ipcMain.on('confirm-stash-tab-area', (event)=>{
+	var bounds = stashTabHighlightingWindow.getBounds();
+	stashTabHighlightingWindow.hide();
+	saveLocalStorageValue('stash-tab-bounds', JSON.stringify(bounds));
+	configuringStashTabs = false;
+});
+
+ipcMain.on('configure-highlight-stash', (event) => {
+	configuringStashTabs = true;
+	stashTabHighlightingWindow.setSize(300,300);
+	stashTabHighlightingWindow.setIgnoreMouseEvents(false);
+	stashTabHighlightingWindow.setFocusable(true);
+	stashTabHighlightingWindow.webContents.executeJavaScript('configView()', true);
+
+	showWindow(stashTabHighlightingWindow);
+});
+
+ipcMain.on('highlight-stash', (event,x,y,tabType) => {
+	if(!configuringStashTabs)
+	{
+		var bounds = getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
+			if(tabType == 'Hide' || stashTabHighlightingWindow.isVisible())
+			{
+				stashTabHighlightingWindow.hide();
+			}
+			else if(bounds != null)
+			{
+				bounds = JSON.parse(bounds);
+				var slots = 12;
+				if(tabType == '4x'){slots = 24}
+				var width = parseInt(bounds.height / slots);
+				var height = width;
+				var newX = ((Number.parseInt(x)-1) * width) + bounds.x;
+				var newY = ((Number.parseInt(y)-1) * height) + bounds.y;
+				stashTabHighlightingWindow.setPosition(newX,newY);
+				stashTabHighlightingWindow.setSize(height,height);
+				stashTabHighlightingWindow.setIgnoreMouseEvents(true);
+				stashTabHighlightingWindow.setFocusable(false);
+				stashTabHighlightingWindow.webContents.executeJavaScript('highlightView()', true);
+	
+				showWindow(stashTabHighlightingWindow);
+			}
+		});
+	}
 });
 
 ipcMain.on('all-window-function', (event,javascript)=>{
@@ -134,9 +186,7 @@ ipcMain.on('show-overlay-window', (event,windowName,show)=>{
 	{
 		var overlay = overlays.get(windowName);
 		if(show) {
-			overlay.show();
-			overlay.setAlwaysOnTop(true, "screen-saver");
-			overlay.setVisibleOnAllWorkspaces(true);
+			showWindow(overlay);
 		}
 		else {
 			overlay.hide();
@@ -269,6 +319,7 @@ function buildTradeOverlayWindow()
 			minHeight: 30,
 			frame: false,
 			transparent: true,
+			skipTaskbar: true,
 			webPreferences:
 			{
 				nodeIntegration: true,
@@ -280,8 +331,40 @@ function buildTradeOverlayWindow()
 		});
 
 		tradeOverlayWindow.hide();
-		tradeOverlayWindow.loadFile('./html/overlay/overlay.html');
-		//tradeOverlayWindow.webContents.openDevTools();
+		tradeOverlayWindow.loadFile('./html/overlay/trade-whisper-overlay.html');
 
 	return tradeOverlayWindow;
+}
+
+function buildStashTabHighlightingWindow()
+{
+	var stashTabHighlightingWindow = new BrowserWindow(
+		{
+			width: 400,
+			height: 400,
+			minWidth: 15,
+			minHeight: 15,
+			frame: false,
+			transparent: true,
+			skipTaskbar: true,
+			webPreferences:
+			{
+				nodeIntegration: true,
+				contextIsolation: false,
+				enableRemoteModule: true,
+				webviewTag: true,
+				backgroundThrottling: false
+			},
+		});
+		stashTabHighlightingWindow.hide();
+		stashTabHighlightingWindow.loadFile('./html/overlay/stashTab-highlighting-overlay.html');
+
+	return stashTabHighlightingWindow;
+}
+
+function showWindow(window)
+{
+	window.show();
+	window.setAlwaysOnTop(true, "screen-saver");
+	window.setVisibleOnAllWorkspaces(true);
 }
