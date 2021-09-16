@@ -11,9 +11,10 @@ var allDisplayedItems = [];
 var hasActiveSockets = false;
 var currencyRatios = [];
 var genericId = 0;
-var currentView = document.getElementById('display-window');
+var currentView = document.getElementById('main-display-window');
 var poesessionid = '';
 var userAgent = "PoeAggregator" + version;
+var currentWindow = document.getElementById('poe-search-window');
 
 function openBrowserWindow(url)
 {
@@ -131,7 +132,7 @@ function consoleOut(data)
 
 function clearDisplay()
 {
-	var display = document.getElementById('display-window');
+	var display = document.getElementById('main-display-window');
 	display.querySelectorAll('.item-display').forEach((element)=>{
 		element.remove();
 
@@ -141,7 +142,8 @@ function clearDisplay()
 }
 
 function startSockets() 
-{	
+{
+	setCurrentWindow('main-display-window');
 	if(poesessionid == null || poesessionid.trim().length < 1)
 	{
 		alert('"poesessionid" must be set in the settings menu.')
@@ -185,18 +187,22 @@ function stopSockets()
 } 
 
 var frameType = ["Normal","Magic","Rare","Unique","Gem","Currency","DivinationCard","Quest","Prophecy","Relic"];
+
 function addItem(data, searchInfo) 
 {
 	var json = JSON.parse(data);
 	var results = json.result;
 	var viewId = searchInfo.viewId;
 	var display = document.getElementById(viewId);
+	var content = display.querySelector('.content-pane');
+	display = content ? content : display;
+	
 	for(var i = 0; i < results.length; i++)
 	{	
 		var result = results[i];
 		var newNode = dView(result, searchInfo);
 		display.insertBefore(newNode, display.firstChild);
-		if(viewId == 'display-window')
+		if(viewId == 'main-display-window')
 		{
 			if(!newNode.classList.contains('hidden'))
 			{
@@ -272,7 +278,7 @@ function updatePoesessionid()
 
 function toggleView()
 {
-	var targetElement = document.getElementById('display-window');
+	var targetElement = document.getElementById('main-display-window');
 	var targetClass = 'condensed';
 	if(targetElement.classList.contains(targetClass))
 	{
@@ -635,7 +641,7 @@ function orderBySum()
 		}
 	);
 	
-	var displayWindow = document.getElementById('display-window');
+	var displayWindow = document.getElementById('main-display-window');
 	for(var i = 0; i < allDisplayedItems.length; i++)
 	{
 		displayWindow.appendChild(allDisplayedItems[i]);
@@ -665,7 +671,7 @@ function orderByValue()
 			}
 		);
 		
-		var displayWindow = document.getElementById('display-window');
+		var displayWindow = document.getElementById('main-display-window');
 		for(var i = 0; i < allDisplayedItems.length; i++)
 		{
 			displayWindow.appendChild(allDisplayedItems[i]);
@@ -675,7 +681,7 @@ function orderByValue()
 
 var outputToView = function(data, parameters)
 {
-	var viewId = 'display-window';
+	var viewId = 'main-display-window';
 	var json = JSON.parse(data);
 	var loadedItems = json.result;
 	

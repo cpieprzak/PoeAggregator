@@ -625,7 +625,7 @@ function dView(result, searchInfo)
 		}
 	}
 	var gggId = 'ggg-id-' + result.id;
-	if(searchInfo.viewId == 'display-window')
+	if(searchInfo.viewId == 'main-display-window')
 	{
 		var oldVersions = document.querySelectorAll('.' + gggId);
 		for(var p = 0; p < oldVersions.length; p++)
@@ -988,7 +988,7 @@ function getMods(item, modType)
 
 function scrollToTop()
 {
-	document.getElementById('display-window').scrollTo(0, 0);
+	document.getElementById('main-display-window').scrollTo(0, 0);
 }
 
 function refreshItem(data, searchInfo) 
@@ -1007,20 +1007,28 @@ function updateItem(result,searchInfo)
 	var oldNode = searchInfo.refreshTarget;
 	var viewId = searchInfo.viewId;
 	var display = document.getElementById(viewId);
+	var content = display.querySelector('.content-pane');
+	display = content ? content : display;
 	var refreshedItem = dView(result, searchInfo);
-
 	var origCreateDate = oldNode.querySelector('.create-date');
 	var refreshedCreateDate = refreshedItem.querySelector('.create-date');
 	refreshedCreateDate.innerHTML = '';
 	refreshedCreateDate.appendChild(document.createTextNode('Refreshing...'));
 	refreshedCreateDate.createDate = origCreateDate.createDate;
-	display.insertBefore(refreshedItem, oldNode);
+	try{
+		display.insertBefore(refreshedItem, oldNode);
+	}
+	catch(e){
+		console.log(refreshedItem);
+		console.log(e);
+		display.append(refreshedItem);
+	}
 	if(lastItem == oldNode)
 	{
 		lastItem = refreshedItem;
 	}		
-	oldNode.parentNode.removeChild(oldNode);
-	if(viewId == 'display-window')
+	oldNode.remove();
+	if(viewId == 'main-display-window')
 	{
 		allDisplayedItems.push(refreshedItem);
 	}

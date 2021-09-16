@@ -156,7 +156,7 @@ function updateWatched(data, searchInfo)
 		allTrackedStats[newNode.id] = newNode.trackedStats;
 		if(newNode.trackedStats.alert(oldStats))
 		{
-			var display = document.getElementById('display-window');
+			var display = document.getElementById('main-display-window');
 			var soundId = document.getElementById('watched-notification-sound').value;
 			var soundVolume = document.getElementById('watched-notification-sound-volume').value;
 			playSound(soundId, soundVolume);

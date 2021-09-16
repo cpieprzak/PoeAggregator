@@ -26,10 +26,16 @@
 							<div class='display-window-wrapper flex-item condensed hidden' id='trade-whisper-display-window'>
 								<poe-agg-template id="template/tradeWhisper.html"></poe-agg-template>
 							</div>
-							<div class='display-window-wrapper flex-item condensed view-tab' id='display-window'>
+							<div class='display-window-wrapper flex-item condensed view-tab' id='main-display-window'>
 								<div id='scroll-to-top' class='overlay-control' onclick='scrollToTop();'>Top</div>
 							</div>
-							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'></div>	
+							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'>
+								<div class='display-window-title'>
+									<div class='title-text'>My Watched Items</div>
+									<div class='button' onclick="clearWatchedItems()">Clear All</div>
+								</div>
+								<div class='content-pane'></div>
+							</div>	
 							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='poe-search-window'>
 								<webview id="poe-webview" src="https://www.pathofexile.com/trade/search" style="width: 100%;height:100%" ></webview>
 								<div class='overlay-control hidden' id='trade-url-overlay'>
@@ -57,8 +63,8 @@
 		<script type="text/javascript" src="./js/connectionManager.js"></script>
 		<script type="text/javascript" src="./js/searchListing.js"></script>
 		<script type="text/javascript" src="./js/dView.js"></script>
-		<script type="text/javascript" src="./js/itemFetcher.js"></script>
 		<script type="text/javascript" src="./js/aggmain.js"></script>
+		<script type="text/javascript" src="./js/itemFetcher.js"></script>
 		<script type="text/javascript" src="./js/webSocketWrapper.js"></script>		
 		<script type="text/javascript" src="./js/leagueInfo.js"></script>
 		<script type="text/javascript" src="./js/dataPersistence.js"></script>	

@@ -60,7 +60,7 @@ function SearchListing(listingString)
 	this.color = '#1c1e23';
 	this.searchCategory = '';
 	this.autoCopy  = '0';
-	this.viewId = 'display-window';
+	this.viewId = 'main-display-window';
 	this.orgin = 'live-search';
 	
 	if(listingString != null)
@@ -307,7 +307,7 @@ function loadSearchItems(element)
 
 function runSearch(searchRow)
 {
-	setCurrentWindow('display-window');	
+	setCurrentWindow('main-display-window');	
 	var urlBox = searchRow.querySelector('.search-url');
 	if(urlBox.value != null && urlBox.value.trim().length > 0)
 	{

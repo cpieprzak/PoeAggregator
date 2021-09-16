@@ -52,10 +52,16 @@ function ItemFetcher()
 	
 	this.fetch = function(itemRequest)
 	{
-		if(this.canFetch)
+		if(this.canFetch && itemRequest.listings && itemRequest.listings.length > 0)
 		{
 			this.fetchTimes.push(new Date());
 			var searchInfo = itemRequest.searchInfo;
+			if( searchInfo && searchInfo.viewId && 
+				searchInfo.viewId == 'main-display-window' &&
+				currentWindow.id != 'main-display-window')
+			{
+				document.getElementById('display-window-button').classList.add('new');
+			}
 			var getItemUrl = 'https://www.pathofexile.com/api/trade/fetch/';	
 			var url = getItemUrl + itemRequest.listings;
 			url += '?query=' + itemRequest.searchInfo.searchUrlPart;

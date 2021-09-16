@@ -1,6 +1,7 @@
 var initialized = false;
 function loadPoeWebsite()
 {	
+	currentWindow = document.getElementById('poe-search-window');
 	var url = !initialized ? 'https://www.pathofexile.com/trade/search' : null;
 	loadOfficialTradeWebsite(url);	
 }
@@ -9,6 +10,7 @@ function loadOfficialTradeWebsite(url)
 {
 	initialized = true;
 	var id = 'poe-search-window';
+	currentWindow = document.getElementById('poe-search-window');
 	hide('trade-url-overlay');
 	var views = document.querySelectorAll('.view-tab');
 	for (var i = 0; i < views.length; i++)

@@ -3,6 +3,7 @@ html
 	border: 1px solid red;
 	height: 100%;
 	box-sizing: border-box;
+	overflow: hidden;
 }
 
 .overlay-window
@@ -19,6 +20,16 @@ html
 	opacity: .5;
 	background-color: black;
 	-webkit-app-region: drag;
+    min-height: 28px;
+	align-items: center;
+    justify-content: space-between;
+}
+
+#title-bar-btns
+{
+    top: auto;
+    right: auto;
+    position: inherit;
 }
 
 .overlay-body

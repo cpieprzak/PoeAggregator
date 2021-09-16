@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 tradeIpc.on('trade-whisper', (e,line,stashBoundConifgured) => {
     try{
-        document.querySelector('.overlay-body').prepend(new TradeWhisper(line).toElement(stashBoundConifgured));
+        document.querySelector('.overlay-body').append(new TradeWhisper(line).toElement(stashBoundConifgured));
     } catch (e){console.log(e);}
 });
 
@@ -182,7 +182,7 @@ function TradeWhisper(line)
                         case 'Kick' :
                             msg = '/kick ' + myself.from;
                             callAllWindowFunction('closeTradeByTradeId(\'' + this.tradeId + '\')');
-                            tradeIpc.send('highlight-stash',this.positionX,this.positionY,'Hide');
+                            hideHighlightOverlay();
                             break;
                     }
                     if(msg)

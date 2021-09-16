@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session, protocol, ipcMain, shell, Menu } = require('electron')
+const { app, BrowserWindow, session, protocol, ipcMain, shell, Menu, globalShortcut } = require('electron')
 
 var mainWindow = null;
 var tradeOverlayWindow = null;
@@ -26,7 +26,7 @@ async function createWindow() {
 		});
 	mainWindow.hide();
 	mainWindow.on('close',()=>{
-		app.quit();
+		quitApp();
 	});
 
 	mainWindow.loadFile('index.html');
@@ -82,10 +82,6 @@ async function createWindow() {
 	var menu = buildMenu(hotkeys);
 	Menu.setApplicationMenu(menu);
 }
-
-app.on('ready', () => {
-	createWindow();
-});
 
 ipcMain.on('loadGH', (event, arg) => {
 	shell.openExternal(arg);
@@ -208,11 +204,24 @@ ipcMain.on('show-overlay-window', (event,windowName,show)=>{
 	}	
 });
 
+app.on('ready', () => {	
+	globalShortcut.register('CommandOrControl+Alt+Shift+L', () => {
+		console.log('Focusing PoeAggregator');
+	});
+	createWindow();
+});
+
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
-		app.quit();
+		quitApp();
 	}
 })
+
+function quitApp()
+{
+	globalShortcut.unregister('CommandOrControl+Alt+Shift+L');
+	app.quit();
+}
 
 app.on('activate', () => {
 	if (BrowserWindow.getAllWindows().length === 0) {

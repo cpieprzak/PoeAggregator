@@ -45,10 +45,14 @@ const KEYEVENTF_KEYUP = 0x0002;
 const KEYEVENTF_UNICODE = 0x0004;
 const KEYEVENTF_SCANCODE = 0x0008;
 const VK_CONTROL = 0x11;
+const VK_ALT = 0x12;
+const VK_SHIFT = 0x10;
 const VK_RETURN = 0x0D;
 
 var virtualKeys = [];
 virtualKeys.push(VK_CONTROL);
+virtualKeys.push(VK_ALT);
+virtualKeys.push(VK_SHIFT);
 virtualKeys.push(VK_RETURN);
 
 function KeyToggle_Options() {
@@ -120,29 +124,14 @@ function ConvertKeyCodeToScanCode(keyCode) {
     return result;
 }
 
-var poeWindowsHandle = 0;
-async function getPoeWindowsHandle()
-{
-    poeWindowsHandle = poeWindowsHandle == 0 ? findWindowExW(0, 0, null, convertStringToBuffer('Path of Exile')) : poeWindowsHandle;
-    return poeWindowsHandle;
-}
-
-setTimeout(()=>{keyTap(keycode.codes.v);},1000);
-
 async function setForegroundWindowToPoe()
-{
+{    
     var isSuccessful = false;
-    var handle = await getPoeWindowsHandle();
+    var handle = await findWindowExW(0, 0, null, convertStringToBuffer('Path of Exile'));
     if(handle > 0)
     {
-        if(await setForegroundWindow(handle))
-        {
-            isSuccessful = true;
-        }
-        else
-        {
-            poeWindowsHandle = 0;
-        }
+        await focusAggregator();
+        isSuccessful = await setForegroundWindow(handle);
     }
 
     return isSuccessful;
@@ -160,4 +149,17 @@ async function sendClipboardTextToPoe()
             await keyTap(VK_RETURN);
         },25);
     }
+}
+
+async function focusAggregator()
+{
+    // CommandOrControl+Alt+Shift+L
+    
+    await keyToggle(VK_CONTROL, "down");
+    await keyToggle(VK_ALT, "down");
+    await keyToggle(VK_SHIFT, "down");
+    await keyTap(keycode.codes.l);
+    await keyToggle(VK_SHIFT, "up");
+    await keyToggle(VK_ALT, "up");
+    await keyToggle(VK_CONTROL, "up");
 }

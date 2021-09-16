@@ -28,6 +28,15 @@ body
 	background: linear-gradient(114deg, rgba(92,95,103,1) 0%, rgba(92,95,103,1) 63%, rgba(0,0,0,1) 99%);
 }
 
+.title-bar.locked
+{
+	-webkit-app-region: no-drag;
+}
+
+.no-drag
+{
+	-webkit-app-region: no-drag;
+}
 #settings-btn
 {
 	-webkit-app-region: no-drag;
@@ -318,9 +327,40 @@ textarea.notes
     flex-wrap: wrap;
 }
 
+.content-pane
+{
+	display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 #watched-display-window
 {
+    flex-direction: row;
 	background-color: #0a1d2f;
+	justify-content: center;
+}
+
+.display-window-title
+{
+	position: relative;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.display-window-title .title-text
+{
+	font-size: 1.25rem;
+    display: inline-block;
+	color: #ffffff;
+	text-decoration: underline;
+}
+
+#watched-display-window .display-window-title .button
+{
+	margin-left: 5px;
+	position: absolute;
 }
 	
 .nowrap
