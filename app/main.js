@@ -190,7 +190,7 @@ ipcMain.on('collapse-overlay-window', (event,windowName)=>{
 		var overlay = overlays.get(windowName);
 		var {width,height} = overlay.getBounds();
 		if(height > minTradeHeight){overlayHeights.set(windowName,height);}			
-		overlay.setSize(width, 30);
+		overlay.setSize(width, 40);
 		overlay.setResizable(false);
 	}	
 });
