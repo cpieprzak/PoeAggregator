@@ -130,8 +130,12 @@ async function setForegroundWindowToPoe()
     var handle = await findWindowExW(0, 0, null, convertStringToBuffer('Path of Exile'));
     if(handle > 0)
     {
-        await focusAggregator();
         isSuccessful = await setForegroundWindow(handle);
+        if(!isSuccessful)
+        {
+            await focusAggregator();
+            isSuccessful = await setForegroundWindow(handle);
+        }
     }
 
     return isSuccessful;

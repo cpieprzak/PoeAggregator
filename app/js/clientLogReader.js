@@ -67,8 +67,10 @@ function lineRead(line)
                 ipc.send('trade-whisper',line);                
                 document.getElementById('trade-whisper-display-button').classList.add('new');
                 var tradeWhisper = new TradeWhisper(line);
-                playTradeSound(tradeWhisper);
-                document.getElementById('trade-whisper-display-window').prepend(tradeWhisper.toElement());
+                if(pushTradeWhisper(tradeWhisper, QS('#trade-whisper-display-window')))
+                {
+                    playTradeSound(tradeWhisper);
+                }
             }
         }
         

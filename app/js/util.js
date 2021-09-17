@@ -58,3 +58,7 @@ function newSearch()
 	utilIpc.send('show-main-window');
 	callMainWindowFunction('loadOfficialTradeWebsite(\'https://www.pathofexile.com/trade/search\');');
 }
+
+const log = (msg) => console.log(msg);
+const QS = (selector,element) => {return element ? element.querySelector(selector) : document.querySelector(selector)};
+const QSA = (selector,element) => {return element ? element.querySelectorAll(selector) : document.querySelectorAll(selector)};

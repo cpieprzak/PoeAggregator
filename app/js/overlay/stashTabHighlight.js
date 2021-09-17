@@ -1,16 +1,16 @@
-const ipc = require('electron').ipcRenderer;
+const stashTabHighlightIpc = require('electron').ipcRenderer;
 
 function confirmStashTabArea()
 {
-    ipc.send('confirm-stash-tab-area'); 
+    stashTabHighlightIpc.send('confirm-stash-tab-area'); 
 }
 
 function highlightView()
 {
-    document.querySelector('.overlay-window').classList.add('hidden');
+    QS('.overlay-window').classList.add('hidden');
 }
 
 function configView()
 {
-    document.querySelector('.overlay-window').classList.remove('hidden');
+    QS('.overlay-window').classList.remove('hidden');
 }

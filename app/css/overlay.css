@@ -8,21 +8,30 @@ html
 
 .overlay-window
 {
-	opacity: .8;
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	background-color: rgba(rgba(105, 55, 55, 0.199), green, blue, alpha);
+	opacity: .9;
 }
 
 .title-bar
 {
 	display: flex;
 	opacity: .5;
-	background-color: black;
 	-webkit-app-region: drag;
     min-height: 28px;
 	align-items: center;
     justify-content: space-between;
+	opacity: .65;
+}
+
+.trade-notification
+{
+	display: inline-block;
+	width: 2rem;
+	text-align: center;
+	margin-right: 2px;
 }
 
 #title-bar-btns
@@ -32,13 +41,28 @@ html
     position: inherit;
 }
 
+#collase-btn
+{
+	width: 1.5rem;
+	text-align: center;
+}
+
 .overlay-body
 {	
 	display: flex;
 	height: 100%;
 	background: transparent;
 	overflow-y: scroll;
-	flex-direction: column;
+}
+
+.trade-whisper-container
+{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	flex-grow: 1;
+	align-items: flex-start;
+	height: fit-content;
 }
 
 .overlay-body.stash-tab-highlight

@@ -1,19 +1,19 @@
-const ipc = require('electron').ipcRenderer;
+const overlayIpc = require('electron').ipcRenderer;
 
 function hideHighlightOverlay()
 {
-	ipc.send('highlight-stash',null,null,'Hide');
+	overlayIpc.send('highlight-stash',null,null,'Hide');
 }
 
 function hideTradeOverlay()
 {
-	ipc.send('show-overlay-window','tradeOverlayWindow', false); 
+	overlayIpc.send('show-overlay-window','tradeOverlayWindow', false); 
 }
 
 function lockOverlay(button)
 {
     var buttonText = button.innerHTML;
-    var titleBar = document.querySelector('.title-bar');
+    var titleBar = QS('.title-bar');
     if(buttonText === 'Lock'){
         button.innerHTML = 'Unlock';
         titleBar.classList.add('locked');
@@ -23,3 +23,20 @@ function lockOverlay(button)
         titleBar.classList.remove('locked');
     }
 }
+
+function lockTradeClosed()
+{
+    var button = QS('#collase-btn');
+    var buttonText = button.innerHTML;
+    var isLocked = false;
+    if(buttonText === '-'){
+        button.innerHTML = '+';
+        isLocked = true;
+    }
+    else{
+        button.innerHTML = '-';
+    }
+    overlayIpc.send('lock-trade-whisper-window',isLocked,getTradeWhisperCount()); 
+}
+
+QS('.overlay-window').addEventListener('mouseenter', (e)=>{QS('.trade-notification').classList.remove('new');});

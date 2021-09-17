@@ -3,9 +3,36 @@ const crypto = require('crypto');
 
 tradeIpc.on('trade-whisper', (e,line,stashBoundConifgured) => {
     try{
-        document.querySelector('.overlay-body').append(new TradeWhisper(line).toElement(stashBoundConifgured));
+        var tradeWhisper = new TradeWhisper(line);
+        var tradeContainer = QS('.trade-whisper-container');
+        pushTradeWhisper(tradeWhisper, tradeContainer, stashBoundConifgured);
     } catch (e){console.log(e);}
 });
+
+function pushTradeWhisper(tradeWhisper, tradeContainer, stashBoundConifgured)
+{
+    var pushed = false;
+    if(!QS('.' + tradeWhisper.tradeId))
+    {
+        tradeContainer.append(tradeWhisper.toElement(stashBoundConifgured));
+        updateTradeNotifications();
+        pushed = true;
+    }
+    return pushed;
+}
+function updateTradeNotifications()
+{
+    var notification = QS('.trade-notification');
+    if(notification)
+    {
+        notification.classList.add('new');
+        notification.innerHTML = getTradeWhisperCount();
+    }
+}
+
+const getTradeWhisperCount = () => {
+    return QSA('.trade-whisper').length;
+};
 
 var whisperTemplate = document.getElementById('trade-whisper-template');
 whisperTemplate.remove();
@@ -74,12 +101,12 @@ function TradeWhisper(line)
 
     this.toElement = (stashBoundConifgured) => {
         var element = whisperTemplate.cloneNode(true);
-        element.classList.add(this.tradeId);
+        element.classList.add(this.tradeId)
         if(stashBoundConifgured){element.querySelector('.highlight-buttons').classList.remove('hidden');}
         if(!this.position){element.querySelector('.highlight-buttons').remove();}
         element.classList.remove('hidden');
         element.querySelector('.trade-whisper-wrapper').classList.add('new');
-        element.addEventListener("mouseenter", (e)=>{
+        element.addEventListener('mouseenter', (e)=>{
             e.target.querySelector('.trade-whisper-wrapper').classList.remove('new');
             var button = document.querySelector('#trade-whisper-display-button');
             if (button){button.classList.remove('new')};
@@ -155,7 +182,7 @@ function TradeWhisper(line)
                     var myItem = myself.itemName + ' listed for ' + myself.price;
                     switch(content)
                     {
-                        case 'Tab' :
+                        case '1x' :
                             tradeIpc.send('highlight-stash',this.positionX,this.positionY,content);
                             break;
                         case '4x' :
@@ -212,6 +239,8 @@ function closeTradeByTradeId(tradeId)
     {
         whisperButton.classList.remove('new');
     }
+    
+    updateTradeNotifications();
 }
 
 var getFormattedTime = function (militaryTime){
