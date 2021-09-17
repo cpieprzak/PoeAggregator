@@ -37,7 +37,7 @@ async function createWindow() {
 	overlays.set('stashTabHighlightingWindow',stashTabHighlightingWindow);
 
 	var sessionid = await getLocalStorageValue('poesessionid');
-	configurePosition();
+	await configurePosition();
 	if(await getLocalStorageValue('show-trade-whisper-overlay')){
 		showWindow(tradeOverlayWindow);
 	}
@@ -87,6 +87,7 @@ ipcMain.on('loadGH', (event, arg) => {
 	shell.openExternal(arg);
 });
 
+var isTradeWindowLocked = false;
 ipcMain.on('trade-whisper', (event,line)=>{		
 	var overlayName = 'tradeOverlayWindow';
 	if(overlays.has(overlayName))
@@ -99,15 +100,44 @@ ipcMain.on('trade-whisper', (event,line)=>{
 					var stashBoundConifgured = bounds ? true : false;
 					tradeOverlayWindow.webContents.send('trade-whisper',line,stashBoundConifgured);
 				});
-				var {width,height} = overlay.getBounds();
-				if(height < minTradeHeight)
+				
+				if(!isTradeWindowLocked)
 				{
-					var lastHeight = overlayHeights.get(overlayName);
-					overlay.setResizable(true);
-					overlay.setSize(width, lastHeight ? lastHeight : minTradeHeight);
-				}
+					var {width,height} = overlay.getBounds();
+					if(height < minTradeHeight)
+					{
+						var lastHeight = overlayHeights.get(overlayName);
+						overlay.setResizable(true);
+						overlay.setSize(width, lastHeight ? lastHeight : minTradeHeight);
+						overlay.setMinimumSize(400,40);
+					}
+				}				
 			}
 		});
+	}
+});
+
+ipcMain.on('lock-trade-whisper-window', (event,islocked,tradeWhisperCount)=>{
+	isTradeWindowLocked = islocked;
+	if(tradeWhisperCount > 0)
+	{
+		var overlayName = 'tradeOverlayWindow';
+		var overlay = overlays.get(overlayName);
+		var {width,height} = overlay.getBounds();
+		if(islocked){
+			overlay.setSize(width,40);
+			overlay.setMinimumSize(400,40);
+		}
+		else{
+			if(height < minTradeHeight)
+			{
+				var lastHeight = overlayHeights.get(overlayName);
+				overlay.setResizable(true);
+				overlay.setSize(width, lastHeight ? lastHeight : minTradeHeight);
+				overlay.setMinimumSize(400,40);
+			}
+		}
+
 	}
 });
 
@@ -206,7 +236,7 @@ ipcMain.on('show-overlay-window', (event,windowName,show)=>{
 
 app.on('ready', () => {	
 	globalShortcut.register('CommandOrControl+Alt+Shift+L', () => {
-		console.log('Focusing PoeAggregator');
+		log('Focusing PoeAggregator');
 	});
 	createWindow();
 });
@@ -239,7 +269,7 @@ async function getLocalStorageValue(key) {
 		return value;
 	}
 	catch (e) {
-		console.log(e);
+		log(e);
 	}
 }
 
@@ -251,7 +281,7 @@ async function saveLocalStorageValue(key, value) {
 		});
 	}
 	catch (e) {
-		console.log(e);
+		log(e);
 	}
 }
 
@@ -271,7 +301,7 @@ async function configurePosition() {
 				mainWindow.maximize();
 			}
 		} catch (e) {
-			console.log(e)
+			log(e);
 		}
 	}
 	else {
@@ -383,6 +413,7 @@ function buildStashTabHighlightingWindow()
 		});
 		stashTabHighlightingWindow.hide();
 		stashTabHighlightingWindow.loadFile('./html/overlay/stashTab-highlighting-overlay.html');
+		//stashTabHighlightingWindow.openDevTools();
 
 	return stashTabHighlightingWindow;
 }
@@ -392,4 +423,15 @@ function showWindow(window)
 	window.show();
 	window.setAlwaysOnTop(true, "screen-saver");
 	window.setVisibleOnAllWorkspaces(true);
+}
+
+function log(msg)
+{
+	if(msg)
+	{
+		msg = (typeof msg === 'string' || msg instanceof String) ? msg : JSON.stringify(msg);
+		msg = msg.replace('\'','\\\'');
+		var javascript = 'log(\'' + msg + '\');';
+		mainWindow.webContents.executeJavaScript(javascript);
+	}
 }
