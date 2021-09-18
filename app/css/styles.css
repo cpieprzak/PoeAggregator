@@ -6,6 +6,11 @@ html
 	user-select: none;
 }
 
+html *
+{
+	transition: background-color 1s, opacity 1s;
+}
+
 body
 {
 	font-size: 14px;
@@ -1378,18 +1383,12 @@ html .all-screen .outdated .template-field
 
 .display-window-wrapper .item-display.unviewed .searchinfo
 {
-	animation-duration: 1.5s;
-	animation-name: flash-new;
-	animation-iteration-count: infinite;
-  	animation-direction: alternate;
+	background-color:rgb(82, 5, 78);
 }
 
 .new
 {
-	animation-duration: 1.5s;
-	animation-name: flash-new;
-	animation-iteration-count: infinite;
-  	animation-direction: alternate;
+	background-color:rgb(82, 5, 78);
 }
 
 .add-new-search.us-table
@@ -1407,11 +1406,11 @@ html .all-screen .outdated .template-field
 {
 	from
 	{
-		background-color:rgba(109, 0, 103, 0);
+		background-color: rgba(109, 0, 103, 0);
 	}
 	to
 	{
-		background-color:rgb(82, 5, 78);
+		background-color: rgb(82, 5, 78);
 	}
 }
 #auto-load + .button

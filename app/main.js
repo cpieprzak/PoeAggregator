@@ -87,6 +87,18 @@ ipcMain.on('loadGH', (event, arg) => {
 	shell.openExternal(arg);
 });
 
+ipcMain.on('set-resizable', (event,resizable)=>{
+	for (const [windowName, overlay] of overlays.entries())
+	{
+		if(overlay.webContents === event.sender)
+		{
+			overlay.setResizable(resizable);
+			overlay.lastResizable = resizable;
+			break;
+		}
+	}
+});
+
 var isTradeWindowLocked = false;
 ipcMain.on('trade-whisper', (event,line)=>{		
 	var overlayName = 'tradeOverlayWindow';
@@ -107,7 +119,10 @@ ipcMain.on('trade-whisper', (event,line)=>{
 					if(height < minTradeHeight)
 					{
 						var lastHeight = overlayHeights.get(overlayName);
-						overlay.setResizable(true);
+						if(overlay.lastResizable)
+						{
+							overlay.setResizable(true);
+						}
 						overlay.setSize(width, lastHeight ? lastHeight : minTradeHeight);
 						overlay.setMinimumSize(400,40);
 					}
@@ -137,7 +152,6 @@ ipcMain.on('lock-trade-whisper-window', (event,islocked,tradeWhisperCount)=>{
 				overlay.setMinimumSize(400,40);
 			}
 		}
-
 	}
 });
 
@@ -169,8 +183,7 @@ ipcMain.on('configure-highlight-stash', (event) => {
 			stashTabHighlightingWindow.setSize(300,300);
 		}
 		stashTabHighlightingWindow.setMinimumSize(200,200);
-		stashTabHighlightingWindow.setIgnoreMouseEvents(false);
-		stashTabHighlightingWindow.setFocusable(true);
+		stashTabHighlightingWindow.setResizable(true);
 		stashTabHighlightingWindow.webContents.executeJavaScript('configView()', true);
 	});
 
@@ -179,7 +192,7 @@ ipcMain.on('configure-highlight-stash', (event) => {
 
 ipcMain.on('highlight-stash', (event,x,y,tabType) => {
 	getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
-		if(tabType == 'Hide' || stashTabHighlightingWindow.isVisible())
+		if(tabType == 'Hide')
 		{
 			stashTabHighlightingWindow.hide();
 			configuringStashTabs = false;
@@ -196,8 +209,7 @@ ipcMain.on('highlight-stash', (event,x,y,tabType) => {
 			stashTabHighlightingWindow.setPosition(Number.parseInt(newX),Number.parseInt(newY));
 			stashTabHighlightingWindow.setMinimumSize(Number.parseInt(width),Number.parseInt(height));
 			stashTabHighlightingWindow.setSize(Number.parseInt(width),Number.parseInt(height));
-			stashTabHighlightingWindow.setIgnoreMouseEvents(true);
-			stashTabHighlightingWindow.setFocusable(false);
+			stashTabHighlightingWindow.setResizable(false);
 			stashTabHighlightingWindow.webContents.executeJavaScript('highlightView()', true);
 
 			showWindow(stashTabHighlightingWindow);
@@ -215,7 +227,8 @@ ipcMain.on('collapse-overlay-window', (event,windowName)=>{
 	{
 		var overlay = overlays.get(windowName);
 		var {width,height} = overlay.getBounds();
-		if(height > minTradeHeight){overlayHeights.set(windowName,height);}			
+		if(height > minTradeHeight){overlayHeights.set(windowName,height);}		
+		overlay.setResizable(true);	
 		overlay.setSize(width, 40);
 		overlay.setResizable(false);
 	}	

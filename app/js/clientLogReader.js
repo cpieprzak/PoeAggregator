@@ -1,90 +1,58 @@
 const fs = require('fs');
-const readline = require('readline');
-var clientLogPathInput = document.getElementById('client-log-path');
+const clientLogName = 'Client.txt';
 var clientLog = '';
-var logwatcher;
-var done = true;
+var clientLogPathInput = document.getElementById('client-log-path');
+var logReader;
+
+function transformToString(buffer)
+{
+    processLine(buffer.toString());
+}
+
 function updateClientLogPath()
 {
-    if(logwatcher)
+    clientLog = `${clientLogPathInput.value}/${clientLogName}`;
+    console.log(`Updating log path to: ${clientLog}`);
+    if(logReader)
     {
-        console.log('Closing file reader on ' + clientLog);
-        fs.unwatchFile(clientLog);
-        logwatcher = null;
+        logReader.stop();
     }
-    var path = document.getElementById('client-log-path').value;
-    clientLog = path + '/Client.txt';
-    console.log('Updating log path to: ' + clientLog);
-    logwatcher = null;
-    done = true;
     logInit();
 }
 
-var lastClientLogLineRead = 0;
-var currentLine = 0;
 function logInit()
 {
-    lastClientLogLineRead = 0;
-    currentLine = 0;
-      
-    if (fs.existsSync(clientLog)) 
-    {
-        console.log('Initializing log reader on: ' + clientLog);
-        readfile(()=>{lastClientLogLineRead++},periodicRead);
-    }
-    else
-    {
-        console.log('Client.txt does not exist at ' + clientLog);
-    }
+    clientLog = `${clientLogPathInput.value}/${clientLogName}`;
+    console.log(`Connecting to: ${clientLog}`);
+    logReader = new FileStreamReader(clientLog, processLine);
+    logReader.start();    
 }
 
-function periodicRead()
-{ 
-    if(logwatcher == null)
-    {
-        console.log('Client log reader successfully initialized.');
-        logwatcher = fs.watchFile(clientLog, { interval: 50 }, (curr, prev) => {
-            if(done)
-            {
-                done = false;
-                currentLine = 1;
-                readfile(lineRead,()=>{done = true;});
-            }
-        });
-    }
-}
-
-function lineRead(line)
+function processLine(line)
 {
-    if(currentLine > lastClientLogLineRead)
+    if(line.length > 0)
     {
-        var isBuyMsg = line.includes('@From');
-        if(line.includes('@From'))
+        try
         {
-            var isBuyMsg = line.includes('Hi') && line.includes('like to buy');
-            if(isBuyMsg)
-            {   
-                ipc.send('trade-whisper',line);                
-                document.getElementById('trade-whisper-display-button').classList.add('new');
-                var tradeWhisper = new TradeWhisper(line);
-                if(pushTradeWhisper(tradeWhisper, QS('#trade-whisper-display-window')))
-                {
-                    playTradeSound(tradeWhisper);
+            var isBuyMsg = line.includes('@From');
+            if(line.includes('@From'))
+            {
+                var isBuyMsg = line.includes('Hi') && line.includes('like to buy');
+                if(isBuyMsg)
+                {   
+                    ipc.send('trade-whisper',line);                
+                    document.getElementById('trade-whisper-display-button').classList.add('new');
+                    var tradeWhisper = new TradeWhisper(line);
+                    if(pushTradeWhisper(tradeWhisper, QS('#trade-whisper-display-window')))
+                    {
+                        playTradeSound(tradeWhisper);
+                    }
                 }
             }
         }
-        
-        lastClientLogLineRead++;
+        catch (e)
+        {
+            console.log(e);
+        }
     }
-    currentLine++;
-}
-
-function readfile (online,onclose)
-{
-    var lineReader = readline.createInterface(
-    {
-        input: fs.createReadStream(clientLog, {encoding: 'utf8'})
-    });    
-    lineReader.on('line', online);
-    lineReader.on('close', onclose);
 }

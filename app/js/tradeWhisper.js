@@ -25,8 +25,15 @@ function updateTradeNotifications()
     var notification = QS('.trade-notification');
     if(notification)
     {
-        notification.classList.add('new');
-        notification.innerHTML = getTradeWhisperCount();
+        var count = getTradeWhisperCount();
+        if(count > 0)
+        {
+            notification.classList.add('new');
+        }
+        else{
+            notification.classList.remove('new');
+        }
+        notification.innerHTML = count;
     }
 }
 
@@ -95,6 +102,7 @@ function TradeWhisper(line)
         }
         catch (e) {
             console.log('Failed to parse line: ' + this.line);
+            console.log(e);
         }
     }
     this.parseMessage();
@@ -103,7 +111,10 @@ function TradeWhisper(line)
         var element = whisperTemplate.cloneNode(true);
         element.classList.add(this.tradeId)
         if(stashBoundConifgured){element.querySelector('.highlight-buttons').classList.remove('hidden');}
-        if(!this.position){element.querySelector('.highlight-buttons').remove();}
+        if(!this.position){
+            element.querySelector('.highlight-buttons').remove();
+            element.querySelector('.item-stash-position').remove();
+        }
         element.classList.remove('hidden');
         element.querySelector('.trade-whisper-wrapper').classList.add('new');
         element.addEventListener('mouseenter', (e)=>{

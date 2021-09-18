@@ -632,12 +632,13 @@ function dView(result, searchInfo)
 		{
 			oldVersions[p].classList.add('outdated');
 		}
+		/*
 		newNode.classList.add('unviewed');
 		newNode.onmouseover = function(event)
 		{
 			this.classList.remove('unviewed');
 			this.onmouseover = null;
-		}
+		}*/
 	}
 	
 	newNode.allText = JSON.stringify(newNode).toLowerCase() + getTextFromNode(newNode).toLowerCase();

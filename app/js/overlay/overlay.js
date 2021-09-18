@@ -17,10 +17,12 @@ function lockOverlay(button)
     if(buttonText === 'Lock'){
         button.innerHTML = 'Unlock';
         titleBar.classList.add('locked');
+        overlayIpc.send('set-resizable',false);
     }
     else{
         button.innerHTML = 'Lock';
         titleBar.classList.remove('locked');
+        overlayIpc.send('set-resizable',true);
     }
 }
 
@@ -39,4 +41,7 @@ function lockTradeClosed()
     overlayIpc.send('lock-trade-whisper-window',isLocked,getTradeWhisperCount()); 
 }
 
-QS('.overlay-window').addEventListener('mouseenter', (e)=>{QS('.trade-notification').classList.remove('new');});
+if(QS('.trade-notification'))
+{
+    QS('.overlay-window').addEventListener('mouseenter', (e)=>{QS('.trade-notification').classList.remove('new');});
+}
