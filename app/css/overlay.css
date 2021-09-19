@@ -69,7 +69,15 @@ html
 {
 	justify-content: center;
     text-align: center;
+	display: flex;
 }
+
+.overlay-body.stash-tab-highlight .button
+{
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
 
 .no-scroll
 {

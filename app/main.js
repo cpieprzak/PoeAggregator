@@ -5,7 +5,7 @@ var tradeOverlayWindow = null;
 var stashTabHighlightingWindow = null;
 var overlays = new Map();
 var overlayHeights = new Map();
-var minTradeHeight = 150;
+var MIN_TRADE_HEIGHT = 230;
 
 async function createWindow() {
 	mainWindow = new BrowserWindow(
@@ -116,16 +116,12 @@ ipcMain.on('trade-whisper', (event,line)=>{
 				if(!isTradeWindowLocked)
 				{
 					var {width,height} = overlay.getBounds();
-					if(height < minTradeHeight)
-					{
-						var lastHeight = overlayHeights.get(overlayName);
-						if(overlay.lastResizable)
-						{
-							overlay.setResizable(true);
-						}
-						overlay.setSize(width, lastHeight ? lastHeight : minTradeHeight);
-						overlay.setMinimumSize(400,40);
-					}
+					var lastHeight = overlayHeights.get(overlayName);
+					height = lastHeight ? lastHeight : height;
+					height = height < MIN_TRADE_HEIGHT ? MIN_TRADE_HEIGHT : height;
+					overlay.lastResizable ? overlay.setResizable(true) : '';
+					overlay.setSize(width, height);
+					overlay.setMinimumSize(400,40);
 				}				
 			}
 		});
@@ -144,11 +140,11 @@ ipcMain.on('lock-trade-whisper-window', (event,islocked,tradeWhisperCount)=>{
 			overlay.setMinimumSize(400,40);
 		}
 		else{
-			if(height < minTradeHeight)
+			if(height < MIN_TRADE_HEIGHT)
 			{
 				var lastHeight = overlayHeights.get(overlayName);
 				overlay.setResizable(true);
-				overlay.setSize(width, lastHeight ? lastHeight : minTradeHeight);
+				overlay.setSize(width, lastHeight ? lastHeight : MIN_TRADE_HEIGHT);
 				overlay.setMinimumSize(400,40);
 			}
 		}
@@ -227,7 +223,7 @@ ipcMain.on('collapse-overlay-window', (event,windowName)=>{
 	{
 		var overlay = overlays.get(windowName);
 		var {width,height} = overlay.getBounds();
-		if(height > minTradeHeight){overlayHeights.set(windowName,height);}		
+		if(height > MIN_TRADE_HEIGHT){overlayHeights.set(windowName,height);}		
 		overlay.setResizable(true);	
 		overlay.setSize(width, 40);
 		overlay.setResizable(false);
@@ -240,6 +236,12 @@ ipcMain.on('show-overlay-window', (event,windowName,show)=>{
 		var overlay = overlays.get(windowName);
 		if(show) {
 			showWindow(overlay);
+			
+			if(windowName == 'tradeOverlayWindow')
+			{
+				var javascript = 'lockOverlay(document.getElementById(\'lock-btn\'),\'Unlock\');';
+				overlay.webContents.executeJavaScript(javascript, true);
+			}
 		}
 		else {
 			overlay.hide();

@@ -297,7 +297,7 @@ function playTradeSound(tradeWhisper)
 function updateShowTradeWhisperOverlay()
 {
     var checked = document.getElementById('show-trade-whisper-overlay').checked;
-    tradeIpc.send('show-overlay-window','tradeOverlayWindow',checked); 
+    tradeIpc.send('show-overlay-window', 'tradeOverlayWindow', checked); 
 }
 
 function configureHighlightStash()

@@ -1,6 +1,6 @@
 {
   "name": "PoeAggregator",
-  "version": "4.3.7",
+  "version": "4.3.8",
   "description": "testapp",
   "main": "main.js",
   "scripts": {

@@ -10,19 +10,19 @@ function hideTradeOverlay()
 	overlayIpc.send('show-overlay-window','tradeOverlayWindow', false); 
 }
 
-function lockOverlay(button)
+function lockOverlay(button,lock)
 {
     var buttonText = button.innerHTML;
     var titleBar = QS('.title-bar');
-    if(buttonText === 'Lock'){
-        button.innerHTML = 'Unlock';
-        titleBar.classList.add('locked');
-        overlayIpc.send('set-resizable',false);
-    }
-    else{
+    if(lock || buttonText === 'Unlock'){
         button.innerHTML = 'Lock';
         titleBar.classList.remove('locked');
         overlayIpc.send('set-resizable',true);
+    }
+    else{
+        button.innerHTML = 'Unlock';
+        titleBar.classList.add('locked');
+        overlayIpc.send('set-resizable',false);
     }
 }
 
