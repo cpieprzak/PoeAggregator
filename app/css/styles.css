@@ -36,7 +36,7 @@ body
 
 .title-bar.locked
 {
-	-webkit-app-region: no-drag;
+	-webkit-app-region: no-drag;	
 }
 
 .no-drag

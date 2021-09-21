@@ -3,18 +3,18 @@ const crypto = require('crypto');
 
 tradeIpc.on('trade-whisper', (e,line,stashBoundConifgured) => {
     try{
-        var tradeWhisper = new TradeWhisper(line);
-        var tradeContainer = QS('.trade-whisper-container');
-        pushTradeWhisper(tradeWhisper, tradeContainer, stashBoundConifgured);
+        var tradeWhisper = new TradeWhisper(line).toElement(stashBoundConifgured);
+        makeClickable(tradeWhisper);
+        pushTradeWhisper(tradeWhisper, QS('.trade-whisper-container'), stashBoundConifgured);
     } catch (e){console.log(e);}
 });
 
-function pushTradeWhisper(tradeWhisper, tradeContainer, stashBoundConifgured)
+function pushTradeWhisper(tradeWhisperElement, tradeContainer, stashBoundConifgured)
 {
     var pushed = false;
-    if(!QS('.' + tradeWhisper.tradeId))
+    if(!QS('.' + tradeWhisperElement.tradeId))
     {
-        tradeContainer.append(tradeWhisper.toElement(stashBoundConifgured));
+        tradeContainer.append(tradeWhisperElement);
         updateTradeNotifications();
         pushed = true;
     }
@@ -110,6 +110,7 @@ function TradeWhisper(line)
     this.toElement = (stashBoundConifgured) => {
         var element = whisperTemplate.cloneNode(true);
         element.classList.add(this.tradeId)
+        element.tradeId = this.tradeId;
         if(stashBoundConifgured){element.querySelector('.highlight-buttons').classList.remove('hidden');}
         if(!this.position){
             element.querySelector('.highlight-buttons').remove();

@@ -274,6 +274,7 @@ function updatePoesessionid()
 {
 	var input = document.getElementById('poesessionid');
 	poesessionid = input.value.trim();
+	ipc.send('update-poesessionid',poesessionid);
 }
 
 function toggleView()

@@ -45,3 +45,34 @@ if(QS('.trade-notification'))
 {
     QS('.overlay-window').addEventListener('mouseenter', (e)=>{QS('.trade-notification').classList.remove('new');});
 }
+
+const makeClickable = (element) =>
+{
+    if(element)
+    {
+        element.addEventListener('mouseleave', () => {
+            overlayIpc.send('set-ignore-mouse-events', true, { forward: true });
+        });
+        element.addEventListener('mouseenter', () => {
+            overlayIpc.send('set-ignore-mouse-events', false);
+        });
+    }
+};
+
+const makeClickThrough = (element) =>
+{
+    if(element)
+    {
+        element.addEventListener('mouseleave', () => {
+            overlayIpc.send('set-ignore-mouse-events', false);
+        });
+        element.addEventListener('mouseenter', () => {            
+            overlayIpc.send('set-ignore-mouse-events', true, { forward: true });
+        });
+    }
+};
+
+makeClickThrough(QS('.overlay-body .click-through'));
+QS('.overlay-body').addEventListener('wheel', (event) => {
+    QS('.overlay-body').scrollLeft += event.deltaY;
+  });
