@@ -5,7 +5,23 @@ var tradeOverlayWindow = null;
 var stashTabHighlightingWindow = null;
 var overlays = new Map();
 var overlayHeights = new Map();
-var MIN_TRADE_HEIGHT = 230;
+var MIN_TRADE_WIDTH = 400;
+var MIN_TRADE_HEIGHT = 200;
+var COLLAPSED_TRADE_HEIGHT = 40;
+var isDebug = false;
+var poesessionid = null;
+
+function getPoesessionid()
+{
+	debug(`getPoesessionid: ${poesessionid}`);
+	return poesessionid;
+}
+
+function setPoesessionid(id)
+{
+	debug(`setPoesessionid: ${id}`);
+	poesessionid = id;
+}
 
 async function createWindow() {
 	mainWindow = new BrowserWindow(
@@ -36,7 +52,7 @@ async function createWindow() {
 	overlays.set('tradeOverlayWindow',tradeOverlayWindow);
 	overlays.set('stashTabHighlightingWindow',stashTabHighlightingWindow);
 
-	var sessionid = await getLocalStorageValue('poesessionid');
+	poesessionid = await getLocalStorageValue('poesessionid');
 	await configurePosition();
 	if(await getLocalStorageValue('show-trade-whisper-overlay')){
 		showWindow(tradeOverlayWindow);
@@ -54,7 +70,7 @@ async function createWindow() {
 			details.requestHeaders['cookie'] = '';
 		}
 		else {
-			details.requestHeaders['cookie'] = 'POESESSID=' + sessionid;
+			details.requestHeaders['cookie'] = 'POESESSID=' + getPoesessionid();
 		}
 		callback({ requestHeaders: details.requestHeaders })
 	})
@@ -87,17 +103,23 @@ ipcMain.on('loadGH', (event, arg) => {
 	shell.openExternal(arg);
 });
 
-ipcMain.on('set-resizable', (event,resizable)=>{
-	for (const [windowName, overlay] of overlays.entries())
-	{
-		if(overlay.webContents === event.sender)
-		{
-			overlay.setResizable(resizable);
-			overlay.lastResizable = resizable;
-			break;
-		}
-	}
+ipcMain.on('update-poesessionid', (event, id) => {
+	setPoesessionid(id);
 });
+
+ipcMain.on('set-resizable', (event,resizable)=>{
+	debug(`set-resizable: ${resizable}`);
+	var window = BrowserWindow.fromWebContents(event.sender);
+	window.setResizable(false);
+	debug(`isCollaped: ${window.isCollapsed}`);
+	if(resizable && !window.isCollapsed)
+	{
+		window.setResizable(true);
+	}
+	window.lastResizable = resizable;
+});
+
+
 
 var isTradeWindowLocked = false;
 ipcMain.on('trade-whisper', (event,line)=>{		
@@ -112,6 +134,7 @@ ipcMain.on('trade-whisper', (event,line)=>{
 					var stashBoundConifgured = bounds ? true : false;
 					tradeOverlayWindow.webContents.send('trade-whisper',line,stashBoundConifgured);
 				});
+				overlay.isCollapsed = false;
 				
 				if(!isTradeWindowLocked)
 				{
@@ -120,9 +143,9 @@ ipcMain.on('trade-whisper', (event,line)=>{
 					height = lastHeight ? lastHeight : height;
 					height = height < MIN_TRADE_HEIGHT ? MIN_TRADE_HEIGHT : height;
 					overlay.lastResizable ? overlay.setResizable(true) : '';
+					overlay.setMinimumSize(MIN_TRADE_WIDTH,MIN_TRADE_HEIGHT);
 					overlay.setSize(width, height);
-					overlay.setMinimumSize(400,40);
-				}				
+				}			
 			}
 		});
 	}
@@ -136,16 +159,16 @@ ipcMain.on('lock-trade-whisper-window', (event,islocked,tradeWhisperCount)=>{
 		var overlay = overlays.get(overlayName);
 		var {width,height} = overlay.getBounds();
 		if(islocked){
-			overlay.setSize(width,40);
-			overlay.setMinimumSize(400,40);
+			overlay.setMinimumSize(MIN_TRADE_WIDTH,COLLAPSED_TRADE_HEIGHT);
+			overlay.setSize(width,COLLAPSED_TRADE_HEIGHT);
 		}
 		else{
 			if(height < MIN_TRADE_HEIGHT)
 			{
 				var lastHeight = overlayHeights.get(overlayName);
 				overlay.setResizable(true);
+				overlay.setMinimumSize(MIN_TRADE_WIDTH,COLLAPSED_TRADE_HEIGHT);
 				overlay.setSize(width, lastHeight ? lastHeight : MIN_TRADE_HEIGHT);
-				overlay.setMinimumSize(400,40);
 			}
 		}
 	}
@@ -225,27 +248,19 @@ ipcMain.on('collapse-overlay-window', (event,windowName)=>{
 		var {width,height} = overlay.getBounds();
 		if(height > MIN_TRADE_HEIGHT){overlayHeights.set(windowName,height);}		
 		overlay.setResizable(true);	
-		overlay.setSize(width, 40);
+		overlay.setMinimumSize(MIN_TRADE_WIDTH,COLLAPSED_TRADE_HEIGHT);
+		overlay.setSize(width, COLLAPSED_TRADE_HEIGHT);
 		overlay.setResizable(false);
+		overlay.isCollapsed = true;
 	}	
 });
 
 ipcMain.on('show-overlay-window', (event,windowName,show)=>{	
 	if(overlays.has(windowName))
 	{
+		debug(`Showing ${windowName}: ${show}`);
 		var overlay = overlays.get(windowName);
-		if(show) {
-			showWindow(overlay);
-			
-			if(windowName == 'tradeOverlayWindow')
-			{
-				var javascript = 'lockOverlay(document.getElementById(\'lock-btn\'),\'Unlock\');';
-				overlay.webContents.executeJavaScript(javascript, true);
-			}
-		}
-		else {
-			overlay.hide();
-		}
+		show ? showWindow(overlay) : overlay.hide();
 	}	
 });
 
@@ -301,25 +316,20 @@ async function saveLocalStorageValue(key, value) {
 }
 
 async function configurePosition() {
-	var x = await (getLocalStorageValue('agg-main-x'));
-	var y = await (getLocalStorageValue('agg-main-y'));
-	var height = await (getLocalStorageValue('agg-main-height'));
-	var width = await (getLocalStorageValue('agg-main-width'));
+	var bounds = await (getLocalStorageValue('agg-main-bounds'));
 	var isMaximized = await (getLocalStorageValue('agg-main-maximized'));
 
-	if (x && y && height && width) {
-		try {
-			mainWindow.setPosition(Number.parseInt(x), Number.parseInt(y));
-			mainWindow.height = height;
-			mainWindow.width = width;
-			if (isMaximized) {
-				mainWindow.maximize();
-			}
-		} catch (e) {
-			log(e);
-		}
+	if (bounds && bounds != 'undefined') 
+	{
+		bounds = JSON.parse(bounds);
+		debug(bounds);
+		mainWindow.setSize(bounds.width, bounds.height);
+		mainWindow.setPosition(bounds.x,bounds.y);
+		debug(`isMaximized: ${isMaximized}`)
+		if(isMaximized === 'true'){mainWindow.maximize();}
 	}
-	else {
+	else
+	{
 		mainWindow.maximize();
 	}
 	for (const [windowName, overlay] of overlays.entries())
@@ -327,8 +337,9 @@ async function configurePosition() {
 		var bounds = await getLocalStorageValue(windowName + '-bounds');
 		if(bounds)
 		{
+			debug(`Found bounds for window ${windowName}: ${bounds}`);
 			bounds = JSON.parse(bounds);
-			overlayHeights.set(windowName,bounds.height)
+			overlayHeights.set(windowName,bounds.height);
 			overlay.setSize(bounds.width, overlay.getBounds().height);
 			overlay.setPosition(bounds.x,bounds.y);
 		}
@@ -342,14 +353,12 @@ async function configurePosition() {
 			{
 				bounds.height = overlayHeights.get(windowName);
 			}
-			saveLocalStorageValue(windowName + '-bounds', JSON.stringify(bounds));
+			bounds = JSON.stringify(bounds);
+			
+			debug(`Saving bounds for window ${windowName}: ${bounds}`);
+			saveLocalStorageValue(windowName + '-bounds', bounds);
 		}
-
-		const [x, y] = mainWindow.getPosition();
-		saveLocalStorageValue('agg-main-x', x);
-		saveLocalStorageValue('agg-main-y', y);
-		saveLocalStorageValue('agg-main-height', mainWindow.height);
-		saveLocalStorageValue('agg-main-width', mainWindow.width);
+		saveLocalStorageValue('agg-main-bounds', JSON.stringify(mainWindow.getBounds()));
 		saveLocalStorageValue('agg-main-maximized', mainWindow.isMaximized());
 	});
 }
@@ -381,14 +390,15 @@ function buildTradeOverlayWindow()
 {
 	var tradeOverlayWindow = new BrowserWindow(
 		{
-			width: 390,
-			height: 40,
-			minWidth: 390,
-			minHeight: 40,
+			width: MIN_TRADE_WIDTH,
+			height: COLLAPSED_TRADE_HEIGHT,
+			minWidth: MIN_TRADE_WIDTH,
+			minHeight: COLLAPSED_TRADE_HEIGHT,
 			resizable: false,
 			frame: false,
 			transparent: true,
 			skipTaskbar: true,
+			show: false,
 			webPreferences:
 			{
 				nodeIntegration: true,
@@ -398,10 +408,11 @@ function buildTradeOverlayWindow()
 				backgroundThrottling: false
 			},
 		});
+		tradeOverlayWindow.setPosition(0,0);
+		tradeOverlayWindow.isCollapsed = true;
 
-		tradeOverlayWindow.hide();
 		tradeOverlayWindow.loadFile('./html/overlay/trade-whisper-overlay.html');
-		//tradeOverlayWindow.openDevTools();
+		if(isDebug)tradeOverlayWindow.openDevTools();
 
 	return tradeOverlayWindow;
 }
@@ -417,6 +428,7 @@ function buildStashTabHighlightingWindow()
 			frame: false,
 			transparent: true,
 			skipTaskbar: true,
+			show: false,
 			webPreferences:
 			{
 				nodeIntegration: true,
@@ -426,9 +438,8 @@ function buildStashTabHighlightingWindow()
 				backgroundThrottling: false
 			},
 		});
-		stashTabHighlightingWindow.hide();
 		stashTabHighlightingWindow.loadFile('./html/overlay/stashTab-highlighting-overlay.html');
-		//stashTabHighlightingWindow.openDevTools();
+		if(isDebug)stashTabHighlightingWindow.openDevTools();
 
 	return stashTabHighlightingWindow;
 }
@@ -450,3 +461,8 @@ function log(msg)
 		mainWindow.webContents.executeJavaScript(javascript);
 	}
 }
+ipcMain.on('set-ignore-mouse-events', (event, ...args) => {
+	BrowserWindow.fromWebContents(event.sender).setIgnoreMouseEvents(...args)
+})
+
+const debug = (msg) => {if(isDebug)console.log(msg);}
