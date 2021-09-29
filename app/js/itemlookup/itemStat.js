@@ -18,7 +18,7 @@ class ItemStat
         this.isImplicit = modPart.isImplicit;
         this.modPart = modPart;
         this.name = modPart.statName;
-        this.value = modPart.value ? parseFloat(modPart.value) : null;
+        this.value = modPart.hasOptions ? modPart.value : modPart.value ? parseFloat(modPart.value) : null;
         this.filter = modPart.searchFilter;
         
         let resistMultiplier = totalElementalResistMods.get(modPart.statName);

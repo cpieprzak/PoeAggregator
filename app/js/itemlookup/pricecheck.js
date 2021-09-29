@@ -104,10 +104,11 @@ function buildFilters(copiedItem)
     QS('.filters').innerHTML = '';
     let filters = [];
     let rarity = copiedItem.itemProperties.get('Rarity');
-    let spread = rarity == 'Unique' ? .4 : .1;
+    let spread = .1;
     let itemClass = copiedItem.itemProperties.get('Item Class');
     let mapTier = copiedItem.itemProperties.get('Map Tier');
     let isGem = rarity === 'Gem';
+    let isJewel = itemClass == 'Jewels';
     if(itemClass && itemClassLookUp.get(itemClass))
     {        
         let original = itemClass;
@@ -125,17 +126,18 @@ function buildFilters(copiedItem)
             original
             ));
     }
-    if(rarity != 'Rare')
+    if(rarity != 'Rare' || isJewel)
     {
         if(rarity == 'Unique')
         {
             filters.push(new ItemFilter('Item Name','query.name',true,copiedItem.itemName));
-        }        
-        filters.push(new ItemFilter('Item Type','query.type',true,copiedItem.itemType));
+        }
+        let path = isGem ||  copiedItem.itemType.includes('Blighted') ? 'query.term' : 'query.type';
+        filters.push(new ItemFilter('Item Type',path,true,copiedItem.itemType));
     }
     else
     {
-        filters.push(new ItemFilter('Item Type','query.type',mapTier ? true : false,copiedItem.itemType));
+        filters.push(new ItemFilter('Item Type','query.type', mapTier ? true : false,copiedItem.itemType));
     }
     let corruptedFilter = new ItemFilter(
         'Is Corrupted?',
@@ -165,7 +167,7 @@ function buildFilters(copiedItem)
                             'Gem Level',
                             'query.filters.misc_filters.filters.gem_level',
                             !isAwakened,
-                            {min: gemLevel, max: gemLevel}
+                            {min: gemLevel, current: gemLevel, max: gemLevel}
         ));
         let quality = copiedItem.itemProperties.get('Quality');
         if(quality)
@@ -178,7 +180,7 @@ function buildFilters(copiedItem)
                     'Gem Quality',
                     'query.filters.misc_filters.filters.quality',
                     !isAwakened || copiedItem.isCorrupted,
-                    {min: min, max: null}
+                    {min: min, current: quality, max: null}
                 ));
             }
         }
@@ -258,7 +260,7 @@ function buildFilters(copiedItem)
             'Map Tier',
             'query.filters.map_filters.filters.map_tier',
             true,
-            {min: mapTier, value: mapTier, max: mapTier}));  
+            {min: mapTier, current: mapTier, max: mapTier}));  
     }
 
     if(copiedItem.socketCount > 5 && copiedItem.linkedSockets < 6)
@@ -286,6 +288,7 @@ function buildFilters(copiedItem)
             let value = itemStat.value;
             let enabled = mapTier && !itemStat.isImplicit ? false : true;
             enabled = copiedItem.isWatchstone ? false : enabled;
+            enabled = isJewel && itemStat.isImplicit ? false : enabled;
             filterValue.id = itemStat.filter.id;
             
             let tmpSpread = spread;
@@ -297,24 +300,31 @@ function buildFilters(copiedItem)
                     enabled = false;
                 }
             }
-
+            
             if(itemStat.value)
             {
-                let value = parseFloat(itemStat.value);
-                let min = value >= 0 ? value * (1.0-tmpSpread) : value * (1.0+tmpSpread);
-                let max = value >= 0 ? value * (1.0+ (2*tmpSpread)) : value * (1.0-(tmpSpread * .5));
-                filterValue.value = {
-                    current: value,
-                    min: parseFloat(min.toFixed(3)),
-                    max: parseFloat(max.toFixed(3))
-                }
-                if(itemStat.bestTier > 4 || ignoredMods.includes(itemStat.name))
+                if(itemStat.value.option)
                 {
-                    enabled = false;
-                }                    
+                    filterValue.value = itemStat.value;
+                }
+                else
+                {
+                    let value = parseFloat(itemStat.value);
+                    let min = value >= 0 ? value * (1.0-tmpSpread) : value * (1.0+tmpSpread);
+                    let max = value >= 0 ? value * (1.0+ (2*tmpSpread)) : value * (1.0-(tmpSpread * .5));
+                    filterValue.value = {
+                        current: value,
+                        min: parseFloat(min.toFixed(3)),
+                        max: parseFloat(max.toFixed(3))
+                    }
+                    if(itemStat.bestTier > 4 || ignoredMods.includes(itemStat.name))
+                    {
+                        enabled = false;
+                    }  
+                }                  
             }
 
-            if(itemStat.name != 'quality-does-not-increase-physical-damage')
+            if(!excludedMods.includes(itemStat.name))
             {
                 let filter = new ItemFilter(
                     itemStat.filter.text,
@@ -389,7 +399,11 @@ function displayFilter(filter)
     {
         displayValue = displayValue.value;
     }
-    if(displayValue.min)
+    if(displayValue.option)
+    {
+        QS('.filter-value',filterRow).innerHTML = '';
+    }
+    else if(displayValue.min)
     {
         QS('.filter-current',filterRow).innerHTML = displayValue.current;
         QS('.filter-min',filterRow).value = displayValue.min;
@@ -436,16 +450,30 @@ function buildSearchQuery(filters)
         {
             let formattedFilter = new Object();
             formattedFilter.id = statFilter.value.id;
-            if(statFilter.value && statFilter.value.value)
+            if(statFilter.value)
             {
-                formattedFilter.value = new Object();
-                if(statFilter.value.value.min)
+                if(statFilter.value.value)
                 {
-                    formattedFilter.value.min = statFilter.value.value.min;
+                    if(statFilter.value.value.option)
+                    {
+                        formattedFilter.value = statFilter.value.value;
+                    }
+                    else
+                    {
+                        formattedFilter.value = new Object();
+                        if(statFilter.value.value.min)
+                        {
+                            formattedFilter.value.min = statFilter.value.value.min;
+                        }
+                        if(statFilter.value.value.max)
+                        {
+                            formattedFilter.value.max = statFilter.value.value.max;
+                        }
+                    }
                 }
-                if(statFilter.value.value.max)
+                else
                 {
-                    formattedFilter.value.max = statFilter.value.value.max;
+                    formattedFilter.value = statFilter.value;
                 }
             }
             formattedFilter.disabled = !statFilter.enabled;
@@ -458,7 +486,7 @@ function buildSearchQuery(filters)
         };
         setValueOnObject(requestBody, [andStatFilter], 'query.stats');
     }
-
+    
     return requestBody;
 }
 
@@ -592,7 +620,7 @@ function getFiltersFromHtml()
         tmpFilter.enabled = enabled;
         let min = QS('.filter-min',filterRow);
         let max = QS('.filter-max',filterRow); 
-        if(min && min.value.length > 1)
+        if(min && min.value.length > 0)
         {
             if(tmpFilter.value.min)
             {
@@ -603,7 +631,7 @@ function getFiltersFromHtml()
                 tmpFilter.value.value.min = min.value;
             }
         }
-        if(max && max.value.length > 1)
+        if(max && max.value.length > 0)
         {
             if(tmpFilter.value.max)
             {

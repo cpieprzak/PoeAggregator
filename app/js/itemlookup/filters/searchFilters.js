@@ -53,7 +53,7 @@ function loadSearchFilters()
 									text: entry.text.replace('#',tmpOption.text),
 									type: entry.type,
 									value: {
-										option: tmpOption.id
+										option: tmpOption.id +''
 									}
 								};
 								tmpEntries.push(newFilter);

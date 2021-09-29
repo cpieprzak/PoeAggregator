@@ -12,6 +12,10 @@ ignoredMods.push('increased-damage-per-power-charge');
 ignoredMods.push('of-physical-attack-damage-leeched-as-life');
 ignoredMods.push('of-physical-attack-damage-leeched-as-mana');
 
+const excludedMods = [];
+excludedMods.push('quality-does-not-increase-physical-damage');
+
+
 const totalElementalResistMods = new Map();
 totalElementalResistMods.set('to-cold-resistance',1);
 totalElementalResistMods.set('to-fire-resistance',1);

@@ -4,6 +4,7 @@ class ModPart
     original;
     statName;
     hasRange = false;
+    hasOptions = false;
     isCrafted;
     isEnchant;
     isImplicit;
@@ -70,7 +71,7 @@ class ModPart
                 this.searchFilter = filter;
             }
         }
-        
+
         if(this.hasRange)
         {
             this.value = this.parse(text);
@@ -79,6 +80,13 @@ class ModPart
         {
             let numbers = numbersFromString(text);
             this.value = numbers && numbers.length == 1 ? parseFloat(numbers[0]).toFixed(3) : null; 
+        }
+        
+        if(this.searchFilter && this.searchFilter.value && this.searchFilter.value.option)
+        {
+            this.value = this.searchFilter.value;
+            this.hasRange = false;
+            this.hasOptions = true;
         }
     }
 
