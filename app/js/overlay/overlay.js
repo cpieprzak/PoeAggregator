@@ -10,6 +10,11 @@ function hideTradeOverlay()
 	overlayIpc.send('show-overlay-window','tradeOverlayWindow', false); 
 }
 
+function hideOverlay()
+{
+    overlayIpc.send('hide-overlay');
+}
+
 function lockOverlay(button,lock)
 {
     var buttonText = button.innerHTML;

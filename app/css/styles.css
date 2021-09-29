@@ -78,6 +78,11 @@ body
 	user-select: text;
 }
 
+.not-selectable
+{
+	user-select: none;
+}
+
 li
 {
 	list-style: none;
@@ -703,8 +708,12 @@ textarea.notes
 
 .implicit-mods li 
 {
-	color: #958e87;	
     text-decoration: underline;
+}
+
+.implicit-mods
+{
+	color: #958e87;	
 }
 
 .explicit-mods 

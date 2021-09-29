@@ -3,6 +3,8 @@ const { app, BrowserWindow, session, protocol, ipcMain, shell, Menu, globalShort
 var mainWindow = null;
 var tradeOverlayWindow = null;
 var stashTabHighlightingWindow = null;
+var priceCheckWindow = null;
+
 var overlays = new Map();
 var overlayHeights = new Map();
 var MIN_TRADE_WIDTH = 400;
@@ -48,7 +50,9 @@ async function createWindow() {
 	mainWindow.loadFile('index.html');
 	tradeOverlayWindow = buildTradeOverlayWindow();
 	stashTabHighlightingWindow = buildStashTabHighlightingWindow();
-
+	priceCheckWindow = buildPriceCheckWindow();
+	
+	overlays.set('priceCheckWindow',priceCheckWindow);
 	overlays.set('tradeOverlayWindow',tradeOverlayWindow);
 	overlays.set('stashTabHighlightingWindow',stashTabHighlightingWindow);
 
@@ -58,7 +62,7 @@ async function createWindow() {
 		showWindow(tradeOverlayWindow);
 	}
 	
-	//mainWindow.webContents.openDevTools();
+	if(isDebug)mainWindow.webContents.openDevTools();
 
 	mainWindow.show();
 	const filter = {
@@ -82,9 +86,7 @@ async function createWindow() {
 			if (parts.length == 2) {
 				var league = parts[0];
 				var search = parts[1];
-				var javascript = 'displayTradeUrlPart("' + search + '");';
-
-				mainWindow.webContents.executeJavaScript(javascript);
+				runMainCommand('displayTradeUrlPart()',search);
 			}
 		}
 	})
@@ -103,6 +105,20 @@ ipcMain.on('loadGH', (event, arg) => {
 	shell.openExternal(arg);
 });
 
+ipcMain.on('run-main-command', (event, comand, arg1, arg2, arg3) => {
+	runMainCommand(comand, arg1, arg2, arg3);
+});
+
+function runMainCommand(comand, arg1, arg2, arg3)
+{
+	runCommand(mainWindow,comand, arg1, arg2, arg3)
+}
+
+function runCommand(window,comand, arg1, arg2, arg3)
+{
+	window.webContents.send('run-command', comand, arg1, arg2, arg3);
+}
+
 ipcMain.on('update-poesessionid', (event, id) => {
 	setPoesessionid(id);
 });
@@ -120,6 +136,17 @@ ipcMain.on('set-resizable', (event,resizable)=>{
 });
 
 
+ipcMain.on('price-check', (event, copiedItem) => {
+	debug(`price-check: ${JSON.stringify(copiedItem)}`);
+	priceCheckWindow.webContents.send('price-check',copiedItem);
+	showWindow(priceCheckWindow);
+});
+
+ipcMain.on('price-check-message', (event,message) => {
+	debug(`price-check-message`);
+	priceCheckWindow.webContents.send('price-check-message',message);
+	showWindow(priceCheckWindow);
+});
 
 var isTradeWindowLocked = false;
 ipcMain.on('trade-whisper', (event,line)=>{		
@@ -182,6 +209,10 @@ ipcMain.on('show-main-window', (event)=>{
 	mainWindow.show();
 });
 
+ipcMain.on('hide-overlay', (event)=>{
+	BrowserWindow.fromWebContents(event.sender).hide();
+});
+
 var configuringStashTabs = false;
 ipcMain.on('confirm-stash-tab-area', (event)=>{
 	var bounds = stashTabHighlightingWindow.getBounds();
@@ -203,7 +234,7 @@ ipcMain.on('configure-highlight-stash', (event) => {
 		}
 		stashTabHighlightingWindow.setMinimumSize(200,200);
 		stashTabHighlightingWindow.setResizable(true);
-		stashTabHighlightingWindow.webContents.executeJavaScript('configView()', true);
+		runCommand(stashTabHighlightingWindow,'configView()');
 	});
 
 	showWindow(stashTabHighlightingWindow);
@@ -229,7 +260,7 @@ ipcMain.on('highlight-stash', (event,x,y,tabType) => {
 			stashTabHighlightingWindow.setMinimumSize(Number.parseInt(width),Number.parseInt(height));
 			stashTabHighlightingWindow.setSize(Number.parseInt(width),Number.parseInt(height));
 			stashTabHighlightingWindow.setResizable(false);
-			stashTabHighlightingWindow.webContents.executeJavaScript('highlightView()', true);
+			runCommand(stashTabHighlightingWindow,'highlightView()');
 
 			showWindow(stashTabHighlightingWindow);
 		}
@@ -237,8 +268,25 @@ ipcMain.on('highlight-stash', (event,x,y,tabType) => {
 });
 
 ipcMain.on('all-window-function', (event,javascript)=>{
-	mainWindow.webContents.executeJavaScript(javascript, true);
-	tradeOverlayWindow.webContents.executeJavaScript(javascript, true);
+	let functionNames = [];
+	let javascriptParts = javascript.split('(');
+	for (let i = 0; i < javascriptParts.length - 1; i++)
+	{
+		let part = javascriptParts[i];
+		let functionName = part.split(' ').pop().trim();
+		if(functionName.length > 0) functionNames.push(functionName);
+	}
+	let functionCheck = 'true';
+	for(const name of functionNames)
+	{
+		functionCheck += ` && typeof ${name} != 'undefined'`;
+	}
+	let javascriptWrapper = `if(${functionCheck}){${javascript}}`;
+	for (const [windowName, overlay] of overlays.entries())
+	{
+		overlay.webContents.executeJavaScript(javascriptWrapper, true);
+	}
+	mainWindow.webContents.executeJavaScript(javascriptWrapper, true);
 });
 
 ipcMain.on('collapse-overlay-window', (event,windowName)=>{	
@@ -268,20 +316,24 @@ app.on('ready', () => {
 	globalShortcut.register('CommandOrControl+Alt+Shift+L', () => {
 		log('Focusing PoeAggregator');
 	});
+	globalShortcut.register('F4', () => {		
+		mainWindow.webContents.send('start-price-check');
+	});
 	createWindow();
 });
+
+function quitApp()
+{
+	globalShortcut.unregister('CommandOrControl+Alt+Shift+L');
+	globalShortcut.unregister('F4');
+	app.quit();
+}
 
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
 		quitApp();
 	}
 })
-
-function quitApp()
-{
-	globalShortcut.unregister('CommandOrControl+Alt+Shift+L');
-	app.quit();
-}
 
 app.on('activate', () => {
 	if (BrowserWindow.getAllWindows().length === 0) {
@@ -444,6 +496,35 @@ function buildStashTabHighlightingWindow()
 	return stashTabHighlightingWindow;
 }
 
+function buildPriceCheckWindow()
+{
+	let window = new BrowserWindow(
+		{
+			x: 0,
+			y: 0,
+			width: 600,
+			height: 650,
+			minWidth: 540,
+			minHeight: 200,
+			frame: false,
+			transparent: true,
+			skipTaskbar: true,
+			show: false,
+			webPreferences:
+			{
+				nodeIntegration: true,
+				contextIsolation: false,
+				enableRemoteModule: true,
+				webviewTag: true,
+				backgroundThrottling: false
+			},
+		});
+		window.loadFile('./html/overlay/price-check-overlay.html');
+		if(isDebug)window.openDevTools();
+
+	return window;
+}
+
 function showWindow(window)
 {
 	window.show();
@@ -455,10 +536,7 @@ function log(msg)
 {
 	if(msg)
 	{
-		msg = (typeof msg === 'string' || msg instanceof String) ? msg : JSON.stringify(msg);
-		msg = msg.replace('\'','\\\'');
-		var javascript = 'log(\'' + msg + '\');';
-		mainWindow.webContents.executeJavaScript(javascript);
+		mainWindow.webContents.send('log()',msg);
 	}
 }
 ipcMain.on('set-ignore-mouse-events', (event, ...args) => {

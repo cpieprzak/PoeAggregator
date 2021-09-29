@@ -574,8 +574,7 @@ function dView(result, searchInfo)
 								typeof aTmpResult === 'number')
 						{
 							var textWrapper = document.createElement('span');
-							textWrapper.appendChild(document.createTextNode(aTmpResult));
-							
+							textWrapper.appendChild(document.createTextNode(aTmpResult));							
 							dataTarget.appendChild(textWrapper);
 						}
 						else
@@ -751,31 +750,7 @@ function makeModList(compositeMods, affixListType)
 
 function findValue(object, objectPath)
 {
-	var objectValue = object;
-	var objectParts = objectPath.split('.');
-	if(objectParts != null && objectParts.length > 0)
-	{
-		for(var i = 0; i < objectParts.length; i++)
-		{
-			var varName = objectParts[i];
-			if(objectValue != null)
-			{
-				objectValue = objectValue[varName];		
-
-				if(typeof objectValue === 'undefined')
-				{
-					objectValue = '';
-					break;
-				}
-			}
-			else
-			{
-				objectValue = '';
-				break;
-			}
-		}
-	}
-	return objectValue;
+	return findValueFromPath(object, objectPath);
 }
 
 function outputPropertyValues(propValues)

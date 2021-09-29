@@ -38,7 +38,7 @@
 							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='poe-search-window'>
 								<webview id="poe-webview" src="https://www.pathofexile.com/trade/search" style="width: 100%;height:100%" ></webview>
 								<div class='overlay-control hidden' id='trade-url-overlay'>
-									<div id='trade-url-part'></div>
+									<div class='selectable' id='trade-url-part'></div>
 									<span class="button hidden" id='save-trade-button' onclick="saveTrade()">Save Search</span>
 								</div>
 							</div>
@@ -57,6 +57,7 @@
 		<script type="text/javascript" src="./js/polyfills.js"></script>
 		<script type="text/javascript" src="./js/currencyImages.js"></script>
 		<script type="text/javascript" src="./js/util.js"></script>
+		<script type="text/javascript" src="./js/itemlookup/definedMods.js"></script>
 		<script type="text/javascript" src="./js/file/FileStreamReader.js"></script>	
 	   	<script type="text/javascript" src="./js/template.js"></script>
 		<script type="text/javascript" src="./js/audio.js"></script>		
@@ -78,6 +79,12 @@
 		<script type="text/javascript" src="./js/tradeWhisper.js"></script>		
 		<script type="text/javascript" src="./js/loadPoeTradeSite.js"></script>	
 		<script type="text/javascript" src="./js/menu.js"></script>		
-		<script type="text/javascript" src="./js/win32.js"></script>	
+		<script type="text/javascript" src="./js/win32.js"></script>
+		<script type="text/javascript" src="./js/itemlookup/pricecheck.js"></script>
+		<script type="text/javascript" src="./js/itemlookup/filters/searchFilters.js"></script>
+		<script type="text/javascript" src="./js/itemlookup/modPart.js"></script>
+		<script type="text/javascript" src="./js/itemlookup/itemStat.js"></script>
+		<script type="text/javascript" src="./js/itemlookup/itemModifier.js"></script>
+		<script type="text/javascript" src="./js/itemlookup/copiedItem.js"></script>		
 	</body>
 </html>

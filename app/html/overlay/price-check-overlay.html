@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/overlay.css">
+    <link rel="stylesheet" href="../../css/modCustomization.css">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Poe Overlay</title>
+</head>
+
+<body>
+    <div class="overlay-window price-check">
+        <div class="title-bar">
+            <span id="title">Price Check</span>      
+            <div id="title-bar-btns" class="nowrap">
+                <span id='show-in-aggregator' slug='' onclick='showInAggregator(this)' class="button">
+                    View in Aggregator
+                </span>
+                <button id="close-btn" onclick="hideOverlay()">x</button>
+            </div>
+        </div>
+        <div class="overlay-body">
+            <div class='error-msg'></div>
+            <div class='header divider-after'>
+                <span class='header-text'>Filters:</span>
+                <span class="button" onclick="showHideClass('filter-display',this)">Show</span>
+                <span class="button filter-display hidden" onclick="rerunPriceLookup()">Run</span>   
+                <span class="filter-display hidden search-slug selectable"></span>            
+            </div>
+            <div id='filter-options' class='filter-display hidden'>
+                <div id='filters' class='us-table filters'></div> 
+            </div>            
+            <div class='header divider-after'>
+                <span class='header-text'>Results: <span class='result-count'></span></span>
+            </div>
+            <div class='us-table price-check-results divider-after'></div> 
+            <div><span class="button" onclick="showHide('copied-item-text',this)">Show Copied Item Text</span></div>
+            <div id='copied-item-text' class='hidden copied-item-text selectable'></div>       
+        </div>
+    </div>
+
+    <div class='us-table-row' id='price-check-result-template'>
+        <div class='us-table-cell price-check-amount' data-placeholder='listing.price.amount'></div>
+        <div class='us-table-cell' data-placeholder='listing.price.currency'></div>        
+        <div class='us-table-cell' data-placeholder='listing.indexed'></div>        
+        <div class='us-table-cell'>
+            <span data-placeholder='listing.account.lastCharacterName'></span>
+        </div>    
+        <div class='us-table-cell'>
+            <div data-placeholder='listing.account.online'></div>
+        </div>
+    </div>
+
+    <div class='us-table-row filter-row' id='search-filter-template'>
+        <label>
+        <div class='us-table-cell'><input type='checkbox'/></div>
+        <div class='us-table-cell'><div class='filter-display-name'></div></div>  
+        </label>      
+        <div class='us-table-cell filter-value selectable nowrap'>
+            <span 
+                class='filter-current not-selectable' 
+                title='Copy Over'
+                onclick='setExactValue(this)'>
+            </span>
+            <input class='filter-min' type='text'>
+            <span class='dash'>–</span> 
+            <input class='filter-max' type='text'>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="../../js/currencyImages.js"></script>
+    <script type="text/javascript" src="../../js/util.js"></script>
+    <script type="text/javascript" src="../../js/template.js"></script>
+    <script type="text/javascript" src="../../js/overlay/overlay.js"></script>
+    <script type="text/javascript" src="../../js/itemlookup/pricecheck.js"></script>
+    <script type="text/javascript" src="../../js/itemlookup/copiedItem.js"></script>
+    <script type="text/javascript" src="../../js/itemlookup/definedMods.js"></script>
+</body>
+
+</html>

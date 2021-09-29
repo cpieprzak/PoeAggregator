@@ -145,11 +145,9 @@ function TradeWhisper(line)
             if(varTarget == 'priceType')
             {
                 var priceImg = currencyImages[data];
+                var priceTypeString = data.toLowerCase().replace(' ','-').replace('\'','').replace(' ','-');
                 for (const [key, value] of Object.entries(currencyImages))
                 {
-                    var priceTypeString = data.toLowerCase()
-                    .replace(' ','-')
-                    .replace('\'','');
                     var currencyKey = key.toLowerCase();
                     if(priceTypeString.includes(currencyKey))
                     {
@@ -227,7 +225,7 @@ function TradeWhisper(line)
                     if(msg)
                     {
                         copyTextToClipboard(msg);
-                        callMainWindowFunction('sendClipboardTextToPoe();');
+                        sendClipboardTextToPoe();
                     }
                 }
             };
@@ -239,20 +237,26 @@ function TradeWhisper(line)
 
 function closeTradeByTradeId(tradeId)
 {
-    var trades = document.querySelectorAll('.' + tradeId);
-    Array.from(trades).forEach(trade => trade.remove());
-    var whispers = document.querySelectorAll('.trade-whisper');
-    if(whispers.length == 0)
-    {
-        tradeIpc.send('collapse-overlay-window','tradeOverlayWindow'); 
+    try{
+        var trades = document.querySelectorAll('.' + tradeId);
+        Array.from(trades).forEach(trade => trade.remove());
+        var whispers = document.querySelectorAll('.trade-whisper');
+        if(whispers.length == 0)
+        {
+            tradeIpc.send('collapse-overlay-window','tradeOverlayWindow'); 
+        }
+        var whisperButton = document.getElementById('trade-whisper-display-button');
+        if(whisperButton)
+        {
+            whisperButton.classList.remove('new');
+        }
+        
+        updateTradeNotifications();
     }
-    var whisperButton = document.getElementById('trade-whisper-display-button');
-    if(whisperButton)
+    catch(e)
     {
-        whisperButton.classList.remove('new');
+        console.log(e);
     }
-    
-    updateTradeNotifications();
 }
 
 var getFormattedTime = function (militaryTime){

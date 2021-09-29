@@ -11,7 +11,7 @@ class FileStreamReader {
     logInitialized = false;
     processLineFunction;
     fileUrl;
-    buffer = Buffer.alloc(FileStreamReader.BUFFER_SIZE);
+    buffer;
     isStopping = false;
 
     constructor(fileUrl, processLineFunction)
@@ -31,10 +31,7 @@ class FileStreamReader {
         FileStreamReaderFS.open(this.fileUrl, 'r', this.handleOpen);
     }
 
-    stop() 
-    {
-        isStopping = true;
-    }
+    stop = () => isStopping = true;
 
     handleOpen(status, fileDescriptor) 
     {

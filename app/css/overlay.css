@@ -24,6 +24,11 @@ html
 	opacity: .65;
 }
 
+.price-check .title-bar
+{
+	opacity: .95;
+}
+
 .trade-notification
 {
 	display: inline-block;
@@ -37,6 +42,7 @@ html
     top: auto;
     right: auto;
     position: inherit;
+	padding-top: 0px;
 }
 
 #collase-btn
@@ -53,6 +59,12 @@ html
 	overflow-x: hidden;
 	overflow-y: scroll;
 	position: relative;
+}
+
+.price-check .overlay-body
+{
+	background-color: rgb(37, 37, 37);
+	display: block;
 }
 
 .trade-whisper-container
@@ -120,4 +132,123 @@ html
 {
     display: flex;
     width: 100%;
+}
+
+.filter-row input[type=checkbox]
+{
+	display: inline-block;
+    margin: 0px;
+    padding: 0px;
+}
+
+.us-table.price-check-results
+{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	height: auto;
+    padding: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.price-check-amount
+{
+	padding-right: 2px;
+	text-align: right;
+}
+
+.price-check .header
+{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	color: white;
+}
+
+.divider-after
+{
+	border-bottom: 3px solid #636363;
+}
+
+.price-check .header .header-text
+{
+	font-size: 1rem;
+}
+
+.filters .us-table-cell
+{
+	padding-right: 5px;
+	padding-left: 5px;
+	vertical-align: middle;
+}
+
+.filters .us-table-row:nth-child(2n-1)
+{
+	background-color: rgb(22, 22, 22);
+}
+
+.us-table-row .us-table-cell:hover
+{
+	color:rgb(231, 231, 231);
+}
+
+.overlay-body > div
+{
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.filter-value label
+{
+	display: inline-block;
+}
+
+.filter-value input
+{
+	display: inline-block;
+	width: 3rem;
+}
+
+.filter-value input[type=text]
+{
+	vertical-align: top;
+}
+
+.filter-row > .us-table-cell:last-child
+{
+	text-align: right;
+}
+
+.filter-row.implicit-mods .filter-display-name
+{
+	text-decoration: underline;
+}
+
+.account-status
+{
+	display: block;
+    padding: 1px 5px;
+    margin: 1px 5px;
+    border: 1px solid black;
+	text-align: center;
+}
+
+.filter-current
+{
+	display: inline-block;
+    width: 2rem;
+    border: 1px solid white;
+    background-color: rgb(21 21 21);
+    text-align: center;
+    padding: 1px;
+    margin-top: auto;
+    margin-bottom: auto;
+    box-sizing: border-box;
+}
+
+#filters
+{
+	max-height: 400px;
+	overflow-y: auto;
 }

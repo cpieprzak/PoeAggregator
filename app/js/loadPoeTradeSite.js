@@ -8,6 +8,7 @@ function loadPoeWebsite()
 
 function loadOfficialTradeWebsite(url)
 {
+	console.log(`loading ${url}`)
 	initialized = true;
 	var id = 'poe-search-window';
 	currentWindow = document.getElementById('poe-search-window');
@@ -75,5 +76,4 @@ function saveTrade()
 	newSearchRow.querySelectorAll('.search-comment')[0].focus();
 	newSearchRow.parentNode.classList.add('new');
 	setTimeout(()=>{newSearchRow.parentNode.classList.remove('new');},500);
-
 }

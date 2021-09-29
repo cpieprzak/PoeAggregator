@@ -141,17 +141,15 @@ async function setForegroundWindowToPoe()
     return isSuccessful;
 }
 
-async function sendClipboardTextToPoe() 
+async function outputClipboardTextToPoe() 
 {
     if(await setForegroundWindowToPoe())
     {
-        setTimeout(async ()=>{
-            await keyTap(VK_RETURN);
-            await keyToggle(VK_CONTROL, "down");
-            await keyTap(keycode.codes.v);
-            await keyToggle(VK_CONTROL, "up");
-            await keyTap(VK_RETURN);
-        },25);
+        await keyTap(VK_RETURN);
+        await keyToggle(VK_CONTROL, "down");
+        await keyTap(keycode.codes.v);
+        await keyToggle(VK_CONTROL, "up");
+        await keyTap(VK_RETURN);
     }
 }
 
@@ -166,4 +164,29 @@ async function focusAggregator()
     await keyToggle(VK_SHIFT, "up");
     await keyToggle(VK_ALT, "up");
     await keyToggle(VK_CONTROL, "up");
+}
+
+let inCommand = false;
+async function copyAdvancedItemText()
+{
+    if(!inCommand)
+    {
+        inCommand = true;
+        try{            
+            if(await setForegroundWindowToPoe())
+            {
+                await keyToggle(VK_CONTROL, "down");
+                await keyToggle(VK_ALT, "down");
+                await keyToggle(keycode.codes.c, "down");
+                await keyToggle(keycode.codes.c, "up");
+                await keyToggle(VK_ALT, "up");
+                await keyToggle(VK_CONTROL, "up");
+            }
+        }
+        catch (e)
+        {
+            console.log(e);
+        }
+        inCommand = false;
+    }   
 }
