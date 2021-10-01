@@ -150,7 +150,7 @@ class CopiedItem {
         }
         
         this.isWatchstone = this.itemType.includes('Watchstone');
-        if(this.rarity === 'Magic')
+        if(this.rarity == 'Magic')
         {
             let mods = [].concat(this.prefixMods).concat(this.suffixMods);
             for(const mod of mods)
@@ -183,26 +183,66 @@ class CopiedItem {
 
     configureItemStats()
     {
-        let modGroups = [];
-        modGroups.push(this.enchantMods); 
-        modGroups.push(this.implicitMods);
-        modGroups.push(this.prefixMods);
-        modGroups.push(this.suffixMods);
-        modGroups.push(this.uniqueMods);       
+        let mods = []  
+            .concat(this.enchantMods) 
+            .concat(this.implicitMods)
+            .concat(this.prefixMods)
+            .concat(this.suffixMods)
+            .concat(this.uniqueMods);
         
-        for(const modGroup of modGroups)
+        for(const mod of mods)
         {
-            for(const mod of modGroup)
+            for(const modPart of mod.modParts)
             {
-                for(const modPart of mod.modParts)
+                let tmp = new ItemStat(modPart);
+                let stats = [];
+                stats.push(tmp);
+                if(tmp.name)
                 {
-                    let itemStat = new ItemStat(modPart);
+                    if(this.checkAttribute(tmp.name,'strength'))
+                    {
+                        stats.push({
+                            name: 'to-maximum-life',
+                            value: roundToPlaces(tmp.value / 2,0),
+                            bestTier: 5,
+                            filter: {
+                                id: 'pseudo.pseudo_total_life',
+                                text: '+# total maximum Life',
+                                type: 'pseudo'
+                            }
+                        });
+                    }
+                    if(this.checkAttribute(tmp.name,'intelligence'))
+                    {
+                        stats.push({
+                            name: 'to-maximum-mana',
+                            value: roundToPlaces(tmp.value / 2,0),
+                            bestTier: 5,
+                            filter: {
+                                id: 'pseudo.pseudo_total_mana',
+                                text: '+# total maximum Mana',
+                                type: 'pseudo'
+                            }
+                        });
+                    }
+                }
+                for(let itemStat of stats)
+                {
                     let storedItemStat = this.itemStats.get(itemStat.name);
-                    if(storedItemStat) itemStat.combineWith(storedItemStat);
+                    if(storedItemStat) itemStat = combineItemStats(itemStat, storedItemStat);
                     this.itemStats.set(itemStat.name, itemStat);
                 }
             }
         }
+    }
+
+    checkAttribute(itemStatName,attribute)
+    {
+        let isComboAttribute = itemStatName.includes('-and-') && itemStatName.includes(attribute);
+        isComboAttribute = isComboAttribute || itemStatName.includes('to-all-attributes');
+        let attrTag = 'to-' + attribute;
+
+        return itemStatName.includes(attrTag) || isComboAttribute;
     }
 
     static copiedItemToElement(copiedItem)
@@ -213,6 +253,15 @@ class CopiedItem {
             let line = copiedItem.itemLines[i];
             let div = document.createElement('div');
             div.innerHTML = line;
+            element.append(div);
+        }
+        
+        element.append(document.createElement('br'));
+
+        for (let [itemStatName, itemStat] of copiedItem.itemStats.entries())
+        {
+            let div = document.createElement('div');
+            div.innerHTML = itemStatName;
             element.append(div);
         }
         return element;

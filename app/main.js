@@ -427,7 +427,14 @@ function buildMenu(hotkeys) {
 	menuItems.push({
 		label: 'Open Dev Tools',
 		accelerator: process.platform === 'darwin' ? 'Cmd+Shift+I' : 'Ctrl+Shift+I',
-		click() { mainWindow.webContents.openDevTools(); }
+		click() 
+		{
+			 mainWindow.webContents.openDevTools();
+			 for (const [windowName, overlay] of overlays.entries())
+			 {
+				overlay.webContents.openDevTools();
+			 }
+		}
 	});
 
 	return Menu.buildFromTemplate([

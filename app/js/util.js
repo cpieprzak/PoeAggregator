@@ -168,6 +168,10 @@ for (const term of ['unique', 'implicit', 'prefix', 'suffix'])
     modMap.set(`${term[0].toUpperCase()}${term.slice(1)} Modifier`,term);
 }
 
+const upperCaseFirstLetter = (string) => {
+	return string ? string[0].toUpperCase() + string.slice(1) : string;
+}
+
 const lookupModType = (modName) => {
     let modType = null;
     for(const key of [ ...modMap.keys() ])
@@ -295,3 +299,16 @@ function timeFromNow(date)
 	}
 	return msg;
 }
+
+const roundToPlaces = (num, places) => {
+	let rounded = num;
+	if(places == 0)
+	{
+		rounded = parseInt(num.toFixed(0),10);
+	}
+	else
+	{
+		rounded = Math.round((num + Number.EPSILON) * (1 * 10 ^ places)) / (1 * 10 ^ places);
+	}
+	return rounded;
+};

@@ -104,7 +104,7 @@ function buildFilters(copiedItem)
     QS('.filters').innerHTML = '';
     let filters = [];
     let rarity = copiedItem.itemProperties.get('Rarity');
-    let spread = .1;
+    let spread = rarity == 'Unique' ? .2 : .1;
     let itemClass = copiedItem.itemProperties.get('Item Class');
     let mapTier = copiedItem.itemProperties.get('Map Tier');
     let isGem = rarity === 'Gem';
@@ -280,6 +280,7 @@ function buildFilters(copiedItem)
             true,
             copiedItem.linkedSockets));
     }
+
     for (let [itemStatName, itemStat] of copiedItem.itemStats.entries())
     {
         if(itemStat.filter)
@@ -289,6 +290,7 @@ function buildFilters(copiedItem)
             let enabled = mapTier && !itemStat.isImplicit ? false : true;
             enabled = copiedItem.isWatchstone ? false : enabled;
             enabled = isJewel && itemStat.isImplicit ? false : enabled;
+            enabled = itemStat.filter.type == 'crafted' ? false : enabled;
             filterValue.id = itemStat.filter.id;
             
             let tmpSpread = spread;
@@ -296,6 +298,10 @@ function buildFilters(copiedItem)
             {                 
                 tmpSpread = 0.0;
                 if(!['jewel.cluster','armour.helmet','armour.boots'].includes(itemClass))
+                {
+                    enabled = false;
+                }
+                else if (['Rare'].includes(rarity))
                 {
                     enabled = false;
                 }
@@ -331,8 +337,9 @@ function buildFilters(copiedItem)
                     'stats.filter',
                     enabled,
                     filterValue);
-                    filter.isEnchant = itemStat.isEnchant;
-                    filter.isImplicit = itemStat.isImplicit;
+                filter.isEnchant = itemStat.isEnchant;
+                filter.isImplicit = itemStat.isImplicit;
+                filter.itemStatName = itemStatName;
                 filters.push(filter);   
             }        
         }
@@ -372,6 +379,7 @@ function buildFilters(copiedItem)
 function displayFilter(filter)
 {
     let filterRow = searchFilterTemplate.cloneNode(true);
+    if(filter.itemStatName)filterRow.classList.add(filter.itemStatName);
     filterRow.id = null;
     filterRow.classList.add('filter-row');
     filterRow.setAttribute('data',JSON.stringify(filter));    

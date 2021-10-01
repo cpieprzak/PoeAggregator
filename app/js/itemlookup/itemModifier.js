@@ -5,10 +5,17 @@ class ItemModifier
     modType;
     modName;
     tier;
+    isCrafted = false;
+
     constructor(line, modParts)
     {
         this.original = line;
         this.modType = lookupModType(line);
+        line.includes('Master Crafted') ? this.isCrafted = true : '';
+        if(this.isCrafted)
+        {
+            this.modName = line.includes('Suffix') ? 'of the Order' : 'Upgraded';
+        }
         if(line.includes('(Tier: '))
         {
             const parts = line.split('(Tier: ');

@@ -20,6 +20,10 @@ class ItemStat
         this.name = modPart.statName;
         this.value = modPart.hasOptions ? modPart.value : modPart.value ? parseFloat(modPart.value) : null;
         this.filter = modPart.searchFilter;
+        if(this.filter && this.filter.type != 'explicit')
+        {
+            this.filter.text = `(${upperCaseFirstLetter(this.filter.type)}) ${this.filter.text}`;
+        }
         
         let resistMultiplier = totalElementalResistMods.get(modPart.statName);
         if(resistMultiplier)
@@ -28,27 +32,33 @@ class ItemStat
             this.value = this.value * resistMultiplier;
             this.filter =  {
                 id: 'pseudo.pseudo_total_elemental_resistance',
-                text: '+#% total Elemental Resistance'
+                text: '(Pseudo) +#% total Elemental Resistance'
             };
         }
     }
-    combineWith(itemStat)
+}
+
+
+function combineItemStats(stat1, stat2)
+{
+    if(!stat1 && !stat2) return null;
+    if(!stat1) return stat2;
+    if(!stat2) return stat1;
+
+    let combined = stat2;
+
+    combined.value = stat2.value ? (stat1.value + stat2.value) : stat1.value;
+    if(stat1.value)
     {
-        if(itemStat)
+        if(combined.bestTier == null)
         {
-            this.value = this.value ? (itemStat.value + this.value) : itemStat.value;
-            if(itemStat.value)
-            {
-                if(this.bestTier == null)
-                {
-                    this.bestTier = itemStat.bestTier;
-                }
-                else if (itemStat.bestTier != null)
-                {
-                    this.bestTier = this.bestTier < itemStat.bestTier ? this.bestTier : itemStat.bestTier;
-                }
-            }
+            combined.bestTier = stat1.bestTier;
         }
-        return this;
+        else if (stat1.bestTier != null)
+        {
+            combined.bestTier = combined.bestTier < stat1.bestTier ? combined.bestTier : stat1.bestTier;
+        }
     }
+
+    return combined;
 }

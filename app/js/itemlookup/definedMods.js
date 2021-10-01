@@ -11,10 +11,11 @@ ignoredMods.push('chance-to-cause-bleeding-on-hit');
 ignoredMods.push('increased-damage-per-power-charge');
 ignoredMods.push('of-physical-attack-damage-leeched-as-life');
 ignoredMods.push('of-physical-attack-damage-leeched-as-mana');
+ignoredMods.push('increased-armour');
 
 const excludedMods = [];
 excludedMods.push('quality-does-not-increase-physical-damage');
-
+excludedMods.push('reflects-physical-damage-to-melee-attackers');
 
 const totalElementalResistMods = new Map();
 totalElementalResistMods.set('to-cold-resistance',1);
