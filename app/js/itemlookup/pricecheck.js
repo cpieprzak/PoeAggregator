@@ -332,8 +332,11 @@ function buildFilters(copiedItem)
 
             if(!excludedMods.includes(itemStat.name))
             {
+                let displayText = itemStat.filter && itemStat.filter.type != 'explicit' ? 
+                    `(${upperCaseFirstLetter(itemStat.filter.type)}) ${itemStat.filter.text}` : 
+                    itemStat.filter.text;
                 let filter = new ItemFilter(
-                    itemStat.filter.text,
+                    displayText,
                     'stats.filter',
                     enabled,
                     filterValue);

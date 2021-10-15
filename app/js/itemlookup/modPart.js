@@ -40,10 +40,6 @@ class ModPart
         filters = filters == null ? searchFilters.get(this.statName) : filters;
         filters = filters == null ? [] : filters;
         
-							if(this.statName.includes('ccupi')){
-                                console.log(this.statName,filters);
-                            }
-        
         for (const filter of filters)
         {
             //console.log(filter);

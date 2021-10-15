@@ -20,10 +20,6 @@ class ItemStat
         this.name = modPart.statName;
         this.value = modPart.hasOptions ? modPart.value : modPart.value ? parseFloat(modPart.value) : null;
         this.filter = modPart.searchFilter;
-        if(this.filter && this.filter.type != 'explicit')
-        {
-            this.filter.text = `(${upperCaseFirstLetter(this.filter.type)}) ${this.filter.text}`;
-        }
         
         let resistMultiplier = totalElementalResistMods.get(modPart.statName);
         if(resistMultiplier)
@@ -37,7 +33,6 @@ class ItemStat
         }
     }
 }
-
 
 function combineItemStats(stat1, stat2)
 {
