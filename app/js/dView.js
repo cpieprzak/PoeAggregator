@@ -331,6 +331,10 @@ function dView(result, searchInfo)
 			socketInfo.appendChild(document.createTextNode(')'));
 			overrides['item.sockets'] = socketPanel;		
 		}
+		if(result.item.scourgeMods)
+		{
+			overrides['item.scourgeMods'] = makeModList(getMods(result.item, 'scourge'), 'scourge');
+		}
 		if(result.item.implicitMods)
 		{
 			overrides['item.implicitMods'] = makeModList(getMods(result.item, 'implicit'), 'implicit');

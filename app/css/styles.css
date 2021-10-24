@@ -711,6 +711,11 @@ textarea.notes
     text-decoration: underline;
 }
 
+.scourge-mods
+{
+	color: #ff6e25;	
+}
+
 .implicit-mods
 {
 	color: #958e87;	
