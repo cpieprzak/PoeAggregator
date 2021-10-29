@@ -139,14 +139,13 @@ ipcMain.on('set-resizable', (event,resizable)=>{
 ipcMain.on('price-check', (event, copiedItem) => {
 	debug(`price-check: ${JSON.stringify(copiedItem)}`);
 	priceCheckWindow.webContents.send('price-check',copiedItem);
-	showWindow(priceCheckWindow);
+	showWindow(priceCheckWindow,true);
 	priceCheckWindow.setAlwaysOnTop(false);
 });
 
 ipcMain.on('price-check-message', (event,message) => {
 	debug(`price-check-message`);
 	priceCheckWindow.webContents.send('price-check-message',message);
-	showWindow(priceCheckWindow);
 });
 
 var isTradeWindowLocked = false;
@@ -533,9 +532,9 @@ function buildPriceCheckWindow()
 	return window;
 }
 
-function showWindow(window)
+function showWindow(window,alwaysShow)
 {
-	if(!window.isVisible())
+	if(!window.isVisible() || alwaysShow)
 	{
 		window.show();
 		window.setAlwaysOnTop(true, "screen-saver");
