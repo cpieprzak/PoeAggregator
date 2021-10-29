@@ -140,6 +140,7 @@ ipcMain.on('price-check', (event, copiedItem) => {
 	debug(`price-check: ${JSON.stringify(copiedItem)}`);
 	priceCheckWindow.webContents.send('price-check',copiedItem);
 	showWindow(priceCheckWindow);
+	priceCheckWindow.setAlwaysOnTop(false);
 });
 
 ipcMain.on('price-check-message', (event,message) => {
@@ -156,7 +157,7 @@ ipcMain.on('trade-whisper', (event,line)=>{
 		var overlay = overlays.get(overlayName);
 		getLocalStorageValue('show-trade-whisper-overlay').then((showOverlay)=>{
 			if(showOverlay){
-				overlay.show();
+				showWindow(overlay);
 				getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
 					var stashBoundConifgured = bounds ? true : false;
 					tradeOverlayWindow.webContents.send('trade-whisper',line,stashBoundConifgured);
@@ -534,9 +535,12 @@ function buildPriceCheckWindow()
 
 function showWindow(window)
 {
-	window.show();
-	window.setAlwaysOnTop(true, "screen-saver");
-	window.setVisibleOnAllWorkspaces(true);
+	if(!window.isVisible())
+	{
+		window.show();
+		window.setAlwaysOnTop(true, "screen-saver");
+		window.setVisibleOnAllWorkspaces(true);
+	}
 }
 
 function log(msg)
