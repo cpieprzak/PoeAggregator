@@ -109,6 +109,8 @@ function buildFilters(copiedItem)
     let mapTier = copiedItem.itemProperties.get('Map Tier');
     let isGem = rarity === 'Gem';
     let isJewel = itemClass == 'Jewels';
+    let isBelt = itemClass == 'Belts';
+
     if(itemClass && itemClassLookUp.get(itemClass))
     {        
         let original = itemClass;
@@ -126,7 +128,7 @@ function buildFilters(copiedItem)
             original
             ));
     }
-    if(rarity != 'Rare' || isJewel)
+    if(rarity != 'Rare' || isJewel || isBelt)
     {
         if(rarity == 'Unique')
         {
@@ -139,6 +141,12 @@ function buildFilters(copiedItem)
     {
         filters.push(new ItemFilter('Item Type','query.type', mapTier ? true : false,copiedItem.itemType));
     }
+    
+    if(rarity != 'Unique')
+    {
+        filters.push(new ItemFilter('Rarity','query.filters.type_filters.rarity.option','nonunique','Not Unique'));
+    }
+
     let corruptedFilter = new ItemFilter(
         'Is Corrupted?',
         'query.filters.misc_filters.filters.corrupted.option',
@@ -152,7 +160,7 @@ function buildFilters(copiedItem)
             filters.push(new ItemFilter(
                             'ilvl',
                             'query.filters.misc_filters.filters.ilvl.min',
-                            ['Normal','Magic'].includes(rarity),
+                            ['Normal','Magic'].includes(rarity) || copiedItem.isUnidentified,
                             parseInt(copiedItem.itemProperties.get('Item Level'))));
         }
         filters.push(corruptedFilter);
@@ -291,17 +299,18 @@ function buildFilters(copiedItem)
             enabled = copiedItem.isWatchstone ? false : enabled;
             enabled = isJewel && itemStat.isImplicit ? false : enabled;
             enabled = itemStat.filter.type == 'crafted' ? false : enabled;
+            enabled = !(['Unique'].includes(rarity) && !itemStat.isImplicit) && enabled;
             filterValue.id = itemStat.filter.id;
             
             let tmpSpread = spread;
             if(itemStat.filter.type == 'enchant')
-            {                 
+            {         
                 tmpSpread = 0.0;
                 if(!['jewel.cluster','armour.helmet','armour.boots'].includes(itemClass))
                 {
                     enabled = false;
                 }
-                else if (['Rare'].includes(rarity))
+                else if (['Rare'].includes(rarity) && !['jewel.cluster'].includes(itemClass))
                 {
                     enabled = false;
                 }

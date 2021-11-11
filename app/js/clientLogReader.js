@@ -43,6 +43,11 @@ function processLine(line)
                     }
                 }
             }
+            else if(line.includes(' has joined the area.'))
+            {
+                let playerName = line.split(' : ')[1].split(' has joined the area.')[0].trim();
+                ipc.send('player-joined',playerName);
+            }
         }
         catch (e)
         {

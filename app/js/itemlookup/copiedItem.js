@@ -18,6 +18,7 @@ class CopiedItem {
     itemType;
     rarity;
     isWatchstone;
+    isUnidentified = false;
 
     constructor(itemText)
     {
@@ -37,6 +38,7 @@ class CopiedItem {
         }
         this.itemLines = tmpItemLines;
         this.isCorrupted = this.itemLines.includes("Corrupted") ? true : false;
+        this.isUnidentified = this.itemLines.includes("Unidentified") ? true : false;
         this.itemName = this.itemLines[2];
         for(let i = 0; i < this.itemLines.length; i++)
         {

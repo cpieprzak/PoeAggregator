@@ -1,11 +1,20 @@
 const tradeIpc = require('electron').ipcRenderer;
 const crypto = require('crypto');
 
-tradeIpc.on('trade-whisper', (e,line,stashBoundConifgured) => {
+tradeIpc.on('trade-whisper', (event,line,stashBoundConifgured) => {
     try{
         var tradeWhisper = new TradeWhisper(line).toElement(stashBoundConifgured);
         makeClickable(tradeWhisper);
         pushTradeWhisper(tradeWhisper, QS('.trade-whisper-container'), stashBoundConifgured);
+    } catch (e){console.log(e);}
+});
+
+tradeIpc.on('player-joined', (event,playerName) => {
+    try{
+        for (let tradeWhisper of QSA(`.pn-${playerName}`))
+        {
+            tradeWhisper.classList.add('player-joined');
+        }
     } catch (e){console.log(e);}
 });
 
@@ -109,6 +118,7 @@ function TradeWhisper(line)
 
     this.toElement = (stashBoundConifgured) => {
         var element = whisperTemplate.cloneNode(true);
+        element.classList.add(`pn-${this.from}`);
         element.classList.add(this.tradeId)
         element.tradeId = this.tradeId;
         if(stashBoundConifgured){element.querySelector('.highlight-buttons').classList.remove('hidden');}

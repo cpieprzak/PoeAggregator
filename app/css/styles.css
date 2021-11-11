@@ -346,6 +346,11 @@ textarea.notes
     flex-wrap: wrap;
 }
 
+.player-joined .trade-button
+{
+	background-color: #3b7925;
+}
+
 #watched-display-window
 {
     flex-direction: row;
@@ -358,6 +363,7 @@ textarea.notes
 	position: relative;
     margin-top: 3px;
     margin-bottom: 3px;
+	width: 100%;
 }
 
 .display-window-title .title-text
@@ -831,7 +837,7 @@ ul
 .copied 
 {
 	text-decoration: line-through;
-	background-color: #5c5f67;
+	background-color: #5c5f67 !important;
 }
 
 .bold 
@@ -939,6 +945,8 @@ ul
 .ilvl 
 {
 	white-space: nowrap;
+    font-weight: bold;
+    color: #ffffff;
 }
 
 .v-top 
@@ -1183,6 +1191,13 @@ a:visited
 {
 	width: 3rem;
 }
+
+.modal-content-box .us-table-cell input.search-min-quant
+{
+	width: 3rem;
+	text-align: center;
+}
+
 .modal-content-box select
 {
 	display: inline-block;

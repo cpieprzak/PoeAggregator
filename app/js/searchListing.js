@@ -60,12 +60,13 @@ function SearchListing(listingString)
 	this.color = '#1c1e23';
 	this.searchCategory = '';
 	this.autoCopy  = '0';
+	this.minQuantity = '';
 	this.viewId = 'main-display-window';
 	this.orgin = 'live-search';
 	
 	if(listingString != null)
 	{
-		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'searchCategory','autoCopy'];
+		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'searchCategory','autoCopy','minQuantity'];
 		var searchParts = listingString.trim().split('[');
 		for (var i = 0; i < searchParts.length; i++)
 		{
@@ -95,6 +96,7 @@ function SearchListing(listingString)
 		clonedNode.color = this.color;
 		clonedNode.searchCategory = this.searchCategory;
 		clonedNode.autoCopy = this.autoCopy;
+		clonedNode.minQuantity = this.minQuantity;
 		clonedNode.viewId = this.viewId;
 		clonedNode.orgin = this.orgin;
 		
@@ -413,6 +415,9 @@ function openSearchesModal()
 		{
 			autoCopyBox.checked = true;
 		}
+
+		var minQuantBox = searchRow.querySelector('.search-min-quant');
+		minQuantBox.value = search.minQuantity;
 
 		var addNewButton = searchRow.querySelector('.add-new-button');
 		replaceWithRemoveButton(addNewButton, searchRow);	

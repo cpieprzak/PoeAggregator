@@ -42,6 +42,35 @@ function dView(result, searchInfo)
 	overrides['icon'] = icon;
 	newNode.id = result.id;
 
+	let copyMaxQuant = false;
+	if(searchInfo && searchInfo.minQuantity && searchInfo.minQuantity.length > 0 && result.item.stackSize)
+	{
+		let stackSize = result.item.stackSize;
+		let meetsQuantRequirement = result.item.stackSize > parseInt(searchInfo.minQuantity);
+
+		if(meetsQuantRequirement)
+		{
+			copyMaxQuant = true;
+			if(result.listing.price && result.listing.price.amount)
+			{
+				let whitespace = '                                                                                                     ';
+				let separator = ' ********************** ';
+				let priceQuant = result.listing.price.amount;
+				let totalPrice = stackSize * priceQuant;
+				let currencyType = result.listing.price.currency;
+				let itemName = result.item.baseType;
+
+				let msg = `.${whitespace}${separator} ${stackSize} ${itemName} for  ${totalPrice} ${currencyType}  ${separator}`;
+
+				result.listing.whisper += msg;
+			}
+		}
+		else
+		{
+			return;
+		}
+	}
+
 	var whisperButtonText = 'Whisper';
 	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
 	overrides['watch-item-button'] = buildWatchButton(result.id,searchInfo);
@@ -222,7 +251,7 @@ function dView(result, searchInfo)
 		{
 			var influences = Object.keys(result.item.influences);
 
-			var influencePanel = document.createElement('div');
+			var influencePanel = document.createElement('span');
 			for (var i = 0; i < influences.length; i++)
 			{
 				var influence = document.createElement('span');

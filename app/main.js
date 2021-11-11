@@ -148,6 +148,11 @@ ipcMain.on('price-check-message', (event,message) => {
 	priceCheckWindow.webContents.send('price-check-message',message);
 });
 
+ipcMain.on('player-joined', (event,playerName) => {
+	debug(`player-joined: ${playerName}`);
+	tradeOverlayWindow.webContents.send('player-joined',playerName);
+});
+
 var isTradeWindowLocked = false;
 ipcMain.on('trade-whisper', (event,line)=>{		
 	var overlayName = 'tradeOverlayWindow';
