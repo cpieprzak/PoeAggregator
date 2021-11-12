@@ -128,7 +128,11 @@ function buildFilters(copiedItem)
             original
             ));
     }
-    if(rarity != 'Rare' || isJewel || isBelt)
+    if(copiedItem.itemType && copiedItem.itemType.includes('Invitation'))
+    {
+        filters.push(new ItemFilter('Item Type','query.type',true,copiedItem.itemType));
+    }
+    else if(rarity != 'Rare' || isJewel || isBelt)
     {
         if(rarity == 'Unique')
         {

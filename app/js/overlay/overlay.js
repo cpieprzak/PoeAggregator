@@ -7,6 +7,12 @@ function hideHighlightOverlay()
 
 function hideTradeOverlay()
 {
+    let closeButtons = QSA('.trade-whisper .button.close');
+    for(const button of closeButtons)
+	{
+        button.click();
+    }
+    callAllWindowFunction('closeTradeByTradeId(\'' + this.tradeId + '\')');
 	overlayIpc.send('show-overlay-window','tradeOverlayWindow', false); 
 }
 
