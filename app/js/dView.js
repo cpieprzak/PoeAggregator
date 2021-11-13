@@ -42,25 +42,22 @@ function dView(result, searchInfo)
 	overrides['icon'] = icon;
 	newNode.id = result.id;
 
-	let copyMaxQuant = false;
 	if(searchInfo && searchInfo.minQuantity && searchInfo.minQuantity.length > 0 && result.item.stackSize)
 	{
 		let stackSize = result.item.stackSize;
-		let meetsQuantRequirement = result.item.stackSize > parseInt(searchInfo.minQuantity);
+		let meetsQuantRequirement = result.item.stackSize >= parseInt(searchInfo.minQuantity);
 
 		if(meetsQuantRequirement)
 		{
-			copyMaxQuant = true;
-			if(result.listing.price && result.listing.price.amount)
+			if(result.listing.price && result.listing.price.amount && stackSize > 1)
 			{
-				let whitespace = '                                                                                                     ';
-				let separator = ' ********************** ';
+				let separator = ' ******************************************************************************************** ';
 				let priceQuant = result.listing.price.amount;
 				let totalPrice = stackSize * priceQuant;
 				let currencyType = result.listing.price.currency;
 				let itemName = result.item.baseType;
 
-				let msg = `.${whitespace}${separator} ${stackSize} ${itemName} for  ${totalPrice} ${currencyType}  ${separator}`;
+				let msg = `. ${separator} ===============> WTB ${stackSize} ${itemName} for  ${totalPrice} ${currencyType}  ${separator}`;
 
 				result.listing.whisper += msg;
 			}

@@ -169,6 +169,11 @@ function TradeWhisper(line)
                     }
                 }
             }
+            if(this.isCommodityTrade && varTarget == 'itemName')
+            {
+                this.itemName = this.itemName.replace(/[0-9]/g, ' ').trim();
+                newElement.onclick = (e) => {copyTextToClipboard(this.itemName);};
+            }
             newElement.appendChild(node);
             variable.parentNode.insertBefore(newElement,variable);
             variable.remove();
@@ -219,6 +224,7 @@ function TradeWhisper(line)
                             break;
                         case 'Sold' :
                             msg = whisperPrefix + 'I\'m sorry but ' + myItem + ' has sold. :(';
+                            hideHighlightOverlay();
                             break;                            
                         case 'Trade' :
                             msg = '/tradewith ' + myself.from;
