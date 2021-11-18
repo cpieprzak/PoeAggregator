@@ -36,6 +36,7 @@ function dView(result, searchInfo)
 	var newNode = template.cloneNode(true);
 	var overrides = [];
 	var icon = document.createElement('img');
+	let league = document.getElementById('league').value;	
 	icon.result = result;
 	icon.onclick = function(){console.log(this.result);};
 	icon.src = result.item.icon;
@@ -51,15 +52,26 @@ function dView(result, searchInfo)
 		{
 			if(result.listing.price && result.listing.price.amount && stackSize > 1)
 			{
-				let separator = ' ******************************************************************************************** ';
 				let priceQuant = result.listing.price.amount;
 				let totalPrice = stackSize * priceQuant;
 				let currencyType = result.listing.price.currency;
+				currencyType = currencyType[0].toUpperCase() + currencyType.slice(1);
 				let itemName = result.item.baseType;
-
-				let msg = `. ${separator} ===============> WTB ${stackSize} ${itemName} for  ${totalPrice} ${currencyType}  ${separator}`;
-
-				result.listing.whisper += msg;
+				let isEnglish = result.listing.whisper.includes('I would like to buy your');
+				if (isEnglish)
+				{
+					let acctName = result.listing.account.lastCharacterName;
+					let msg = `@${acctName} Hi, I'd like to buy your ${stackSize} ${itemName} for my ${totalPrice} ${currencyType} Orb in ${league}.`;
+					result.listing.whisper = msg;
+				}
+				else
+				{
+					let separator = ' ******************************************************************************************** ';
+	
+					let msg = `. ${separator} ===============> WTB ${stackSize} ${itemName} for  ${totalPrice} ${currencyType}  ${separator}`;
+	
+					result.listing.whisper += msg;
+				}				
 			}
 		}
 		else
@@ -225,8 +237,7 @@ function dView(result, searchInfo)
 	if(searchInfo != null)
 	{
 		overrides['search-comment'] = searchInfo.searchComment;
-		var searchLink = document.createElement('a');
-		var league = document.getElementById('league').value;		
+		var searchLink = document.createElement('a');	
 		var searchLink = document.createElement('span');
 		searchLink.classList.add('link');
 		searchLink.appendChild(document.createTextNode(searchInfo.searchUrlPart));

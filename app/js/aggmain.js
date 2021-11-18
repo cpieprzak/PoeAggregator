@@ -201,29 +201,32 @@ function addItem(data, searchInfo)
 	{	
 		var result = results[i];
 		var newNode = dView(result, searchInfo);
-		display.insertBefore(newNode, display.firstChild);
-		if(viewId == 'main-display-window')
+		if(newNode)
 		{
-			if(!newNode.classList.contains('hidden'))
+			display.insertBefore(newNode, display.firstChild);
+			if(viewId == 'main-display-window')
 			{
-				playSound(searchInfo.soundId, searchInfo.soundVolume);
-			}
-			lastItem = newNode;
-			allDisplayedItems.push(lastItem);
-			while(allDisplayedItems.length > maxItemsDisplayed)
-			{
-				var oldestItem = allDisplayedItems.shift();
-				if(oldestItem)
+				if(!newNode.classList.contains('hidden'))
 				{
-					oldestItem.remove();
-					oldestItem = null;			
+					playSound(searchInfo.soundId, searchInfo.soundVolume);
 				}
-			}
-			remote.getCurrentWindow().flashFrame(true);
-			var isHidden = newNode.classList.contains('hidden');
-			if(!isHidden && searchInfo.autoCopy == '1')
-			{
-				copyTextToClipboard(result.listing.whisper);
+				lastItem = newNode;
+				allDisplayedItems.push(lastItem);
+				while(allDisplayedItems.length > maxItemsDisplayed)
+				{
+					var oldestItem = allDisplayedItems.shift();
+					if(oldestItem)
+					{
+						oldestItem.remove();
+						oldestItem = null;			
+					}
+				}
+				remote.getCurrentWindow().flashFrame(true);
+				var isHidden = newNode.classList.contains('hidden');
+				if(!isHidden && searchInfo.autoCopy == '1')
+				{
+					copyTextToClipboard(result.listing.whisper);
+				}
 			}
 		}
 	}
@@ -680,20 +683,11 @@ function orderByValue()
 }
 
 
-var outputToView = function(data, parameters)
+var outputToView = function(data, searchInfo, parameters)
 {
 	var viewId = 'main-display-window';
 	var json = JSON.parse(data);
-	var loadedItems = json.result;
-	
-	if(parameters != null)
-	{
-		viewId = parameters.viewId;
-		if(parameters.orgin && parameters.orgin == 'run')
-		{
-			loadedItems = loadedItems.reverse();
-		}
-	}
+	var loadedItems = json.result.reverse();
 	
 	var listings = [];
 	for(var i = 0; i < loadedItems.length; i++)
@@ -704,31 +698,19 @@ var outputToView = function(data, parameters)
 			listings.push(itemId);
 		}
 	}
+	
 	if(listings.length > 0)
 	{
-		var searchinfo = new SearchListing();
-		if(parameters != null)
-		{
-			var urlPart = parameters.searchUrlPart;
-			if(urlPart != null)
-			{
-				searchinfo.searchUrlPart = urlPart;
-			}
-		}
-		searchinfo.viewId = viewId;
-	    requestManager.addRequest(new ItemRequest(searchinfo,listings));
+	    requestManager.addRequest(new ItemRequest(searchInfo,listings));
 	}
 };
 
-function runSortedSearch(search, sort, callback)
+function runSortedSearch(searchInfo, sort, callback)
 {
 	if(!ItemFetchManager.isRateLimited())
 	{
-		var url = '/api/trade/search/';
-		var searchInfo = new SearchListing();
-		searchInfo.searchUrlPart = search;
 		searchInfo.orgin = 'run';
-		url += search + '?q=';
+		var url = `/api/trade/search/${searchInfo.searchUrlPart}?q=`;
 
 		var sortsearches = function(data, searchinfo, uponcomplete, mySort)
 		{
@@ -777,7 +759,7 @@ function callAjaxWithSession(method, url, callback, requestBody, searchInfo, upo
 			method: method,
 			headers: myHeaders
 		};
-		
+
 		var data = '';
 		const req = https.request(options, res => 
 		{

@@ -224,7 +224,7 @@ function TradeWhisper(line)
                             break;
                         case 'Sold' :
                             msg = whisperPrefix + 'I\'m sorry but ' + myItem + ' has sold. :(';
-                            hideHighlightOverlay();
+                            callAllWindowFunction('closeTradeByTradeId(\'' + this.tradeId + '\')');
                             break;                            
                         case 'Trade' :
                             msg = '/tradewith ' + myself.from;

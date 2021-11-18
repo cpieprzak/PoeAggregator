@@ -313,10 +313,10 @@ function runSearch(searchRow)
 	var urlBox = searchRow.querySelector('.search-url');
 	if(urlBox.value != null && urlBox.value.trim().length > 0)
 	{
-		var search = urlBox.value;
+		var searchInfo = getSearchListingFromSearchRow(searchRow);
 		var sort = new Object();
 		sort.price = 'asc';
-		runSortedSearch(search, sort, outputToView);
+		runSortedSearch(searchInfo, sort, outputToView);
 	}	
 }
 
@@ -560,17 +560,27 @@ function generateSearchString()
 			{
 				searchString += ',\n';
 			}
-			var inputs = searchRow.querySelectorAll('.search-control');
-			var rowString = '';
-			for(var j = 0; j < inputs.length; j++)
-			{
-				var rowInput = inputs[j];
-				rowString += translateInput(rowInput);
-			}
-			searchString += rowString;
+			searchString += translateSearchRow(searchRow);
 		}
 	}
 	return searchString;
+}
+
+function translateSearchRow(searchRow)
+{
+	var inputs = searchRow.querySelectorAll('.search-control');
+	var rowString = '';
+	for(var j = 0; j < inputs.length; j++)
+	{
+		var rowInput = inputs[j];
+		rowString += translateInput(rowInput);
+	}
+	return rowString;
+}
+
+function getSearchListingFromSearchRow(searchRow)
+{
+	return new SearchListing(translateSearchRow(searchRow));
 }
 
 function translateInput(rowInput)
