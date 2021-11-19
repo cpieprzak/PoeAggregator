@@ -148,7 +148,11 @@ function buildFilters(copiedItem)
     
     if(rarity != 'Unique')
     {
-        filters.push(new ItemFilter('Rarity','query.filters.type_filters.rarity.option','nonunique','Not Unique'));
+        filters.push(new ItemFilter(
+            'Rarity','query.filters.type_filters.filters.rarity.option',
+            true,
+            'nonunique',
+            'Not Unique'));
     }
 
     let corruptedFilter = new ItemFilter(
