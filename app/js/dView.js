@@ -496,6 +496,25 @@ function dView(result, searchInfo)
 				}
 			}				
 		}
+		if(result.item.additionalProperties)
+		{
+			for(var k = 0; k < result.item.properties.length; k++)
+			{
+				var property = result.item.properties[k];
+				if(property != null && property.name)
+				{
+					var propertyName = property.name;
+					var overrideKey = 'item.additionalProperties.' + propertyName;
+					var propertyValues = '';
+					if(property.values)
+					{
+						var propValues = property.values;
+						propertyValues = outputPropertyValues(propValues);
+					}
+					overrides[overrideKey] = propertyValues;
+				}
+			}				
+		}
 		overrides['requirements.label'] = '';
 		if(result.item.requirements)
 		{
