@@ -1,6 +1,5 @@
 const priceCheckIpc = require('electron').ipcRenderer;
 
-
 var priceCheckResultTemplate = QS('#price-check-result-template');
 if(priceCheckResultTemplate) priceCheckResultTemplate.remove();
 
@@ -549,7 +548,7 @@ function executeSearch(requestBody,callback)
 function showInAggregator()
 {    
     let query = buildSearchQuery(getFiltersFromHtml());
-    executeSearch(query, (data)=>{
+    executeSearch(query, (data) => {
         setTimeout(()=>{
             newPoeSearch(data.id);
         },500);

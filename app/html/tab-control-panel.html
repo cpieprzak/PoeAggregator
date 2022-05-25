@@ -1,8 +1,6 @@
 <div class='tab-control-panel'>
     <div class='overlay-control'>
-        <div  id='ex-ratio-tracker-fill'>
-
-        </div>
+        <div  id='ex-ratio-tracker-fill'></div>
         <div id='ex-ratio-tracker'>
             <label>
                 <span class='ex-fraction'>1.0</span>
@@ -18,18 +16,15 @@
             </label>
         </div>
     </div>
-    <div 
-        class='overlay-control'
-        onclick="setCurrentWindow('main-display-window',this);"
-        id="display-window-button">
+    <div  class='overlay-control'
+          onclick="setCurrentWindow('main-display-window',this);"
+          id="display-window-button">
         Main
     </div>
     <div class='overlay-control' onclick="setCurrentWindow('watched-display-window',this);">Watched</div>
-    <div 
-        class='overlay-control' 
-        onclick="showHideWindow('trade-whisper-display-window',this);"
-        id="trade-whisper-display-button"
-    >
+    <div class='overlay-control' 
+         onclick="showHideWindow('trade-whisper-display-window',this);"
+         id="trade-whisper-display-button">
         Whispers
     </div>
     <div class='overlay-control' onclick="loadPoeWebsite('poe-search-window',this);">Poe Trade</div>

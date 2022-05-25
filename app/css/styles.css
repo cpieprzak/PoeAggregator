@@ -1624,3 +1624,8 @@ td
 {
 	margin-right: 1rem;
 }
+
+.button .material-symbols-outlined
+{
+	font-size: inherit;
+}

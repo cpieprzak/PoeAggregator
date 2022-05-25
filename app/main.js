@@ -4,6 +4,7 @@ var mainWindow = null;
 var tradeOverlayWindow = null;
 var stashTabHighlightingWindow = null;
 var priceCheckWindow = null;
+var quickSearchWindow = null;
 
 var overlays = new Map();
 var overlayHeights = new Map();
@@ -51,7 +52,9 @@ async function createWindow() {
 	tradeOverlayWindow = buildTradeOverlayWindow();
 	stashTabHighlightingWindow = buildStashTabHighlightingWindow();
 	priceCheckWindow = buildPriceCheckWindow();
+	quickSearchWindow = buildQuickSearchWindow();
 	
+	overlays.set('quickSearchWindow',quickSearchWindow);
 	overlays.set('priceCheckWindow',priceCheckWindow);
 	overlays.set('tradeOverlayWindow',tradeOverlayWindow);
 	overlays.set('stashTabHighlightingWindow',stashTabHighlightingWindow);
@@ -62,7 +65,7 @@ async function createWindow() {
 		showWindow(tradeOverlayWindow);
 	}
 	
-	if(isDebug)mainWindow.webContents.openDevTools();
+	if(isDebug) mainWindow.webContents.openDevTools();
 
 	mainWindow.show();
 	const filter = {
@@ -557,5 +560,40 @@ function log(msg)
 ipcMain.on('set-ignore-mouse-events', (event, ...args) => {
 	BrowserWindow.fromWebContents(event.sender).setIgnoreMouseEvents(...args)
 })
+
+function buildQuickSearchWindow()
+{
+	let window = new BrowserWindow(
+		{
+			x: 0,
+			y: 0,
+			width: 600,
+			height: 650,
+			minWidth: 540,
+			minHeight: 200,
+			frame: false,
+			transparent: true,
+			skipTaskbar: true,
+			show: false,
+			webPreferences:
+			{
+				nodeIntegration: true,
+				contextIsolation: false,
+				enableRemoteModule: true,
+				webviewTag: true,
+				backgroundThrottling: false
+			},
+		});
+		window.loadFile('./html/overlay/quick-search-overlay.html');
+		if(isDebug) window.openDevTools();
+
+	return window;
+}
+
+ipcMain.on('quick-search', (event, searchInfo) => {
+	debug(`quick-search: ${searchInfo}`);
+	quickSearchWindow.webContents.send('quick-search',searchInfo);
+	showWindow(quickSearchWindow,true);
+});
 
 const debug = (msg) => {if(isDebug)console.log(msg);}

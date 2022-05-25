@@ -59,6 +59,13 @@ html
 	overflow-x: hidden;
 	overflow-y: scroll;
 	position: relative;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.quick-search .overlay-body
+{
+	overflow-y: hidden;
 }
 
 .price-check .overlay-body
@@ -159,6 +166,12 @@ html
 	text-align: right;
 }
 
+.currency-amount
+{
+	padding-right: 2px;
+	text-align: right;
+}
+
 .price-check .header
 {
 	padding-top: 5px;
@@ -191,12 +204,6 @@ html
 .us-table-row .us-table-cell:hover
 {
 	color:rgb(231, 231, 231);
-}
-
-.overlay-body > div
-{
-	padding-left: 5px;
-	padding-right: 5px;
 }
 
 .filter-value label
@@ -251,4 +258,42 @@ html
 {
 	max-height: 400px;
 	overflow-y: auto;
+}
+
+.us-table-row.is-corrupted
+{
+	background-color: #352929;
+}
+
+.us-table-row.is-mirrored
+{
+	background-color: #1b2132;
+	text-decoration: line-through;
+	color: rgb(173, 216, 230);
+}
+
+.header-text label
+{
+	margin-right: 1rem;
+}
+
+.quick-search-result .us-table-cell
+{
+	border-bottom: 2px solid rgb(46, 46, 46);
+}
+
+.quick-search-result:hover .us-table-cell
+{
+	border-bottom: 2px solid rgb(173, 216, 230);
+}
+
+.quick-search-result-wrapper
+{
+	overflow-y: scroll;
+	height: calc(100% - 5rem);
+}
+
+.quick-search-controls input[type=checkbox]
+{
+	vertical-align: text-top;
 }

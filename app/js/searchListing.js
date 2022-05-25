@@ -1,4 +1,5 @@
 const {remote} = require('electron');
+const searchListingIpc = require('electron').ipcRenderer;
 const { writeFile } = require('fs');
 dialog = remote.dialog;
 browserWindow = remote.getCurrentWindow();
@@ -317,6 +318,44 @@ function runSearch(searchRow)
 		var sort = new Object();
 		sort.price = 'asc';
 		runSortedSearch(searchInfo, sort, outputToView);
+	}	
+}
+
+function loadSearchItemsInNewWindow(element)
+{
+	if(!element.classList.contains('disabled'))
+	{
+		var runButtons = document.querySelectorAll('.run-button');
+		for(var i = 0; i < runButtons.length; i++)
+		{
+			var runButton = runButtons[i];
+			runButton.classList.add('disabled');
+		}
+		var parent = element.parentNode;
+		while(!parent.classList.contains('search-row'))
+		{
+			parent = parent.parentNode;
+		}
+		setTimeout(()=>
+		{
+			var runButtons = document.querySelectorAll('.run-button');
+			for(var i = 0; i < runButtons.length; i++)
+			{
+				var runButton = runButtons[i];
+				runButton.classList.remove('disabled');
+			}
+		},5000);
+		runSearchInNewWindow(parent);
+	}
+}
+
+function runSearchInNewWindow(searchRow)
+{
+	var urlBox = searchRow.querySelector('.search-url');
+	if(urlBox.value != null && urlBox.value.trim().length > 0)
+	{
+		var searchInfo = getSearchListingFromSearchRow(searchRow);
+		searchListingIpc.send('quick-search',JSON.stringify(searchInfo));
 	}	
 }
 
