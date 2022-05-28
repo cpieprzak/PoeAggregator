@@ -71,10 +71,12 @@ function TradeWhisper(line)
     this.isBigTrade = line.includes('exalted');
     this.inviteMsg = '';
     this.isCommodityTrade = false;
+    this.hasTabInformation = false;
     this.tradeId = '';
 
     this.parseMessage = () => {
         try {
+            this.hasTabInformation = this.line.indexOf('(stash tab') > -1;
             var parts = this.line.split(' ');
             this.timestamp = getFormattedTime(parts[1]);
             parts = this.line.split(' @From ');
@@ -98,13 +100,16 @@ function TradeWhisper(line)
                 this.price = this.line.split(' listed for ')[1].split(' in ')[0].trim();
                 this.priceQuantity = this.price.split(' ')[0].trim();
                 this.priceType = this.price.split(' ')[1].trim();
-                this.league = this.line.split(' listed for ')[1].split(' in ')[1].split(' (')[0].trim();        
-                this.tab = this.line.split(' (stash tab "')[1].split('"; position')[0].trim();
-                this.position = this.line.split('"; position:')[1].split(')')[0].trim();
-                if(this.position != '') {
-                    this.positionX = this.position.split(',')[0].replace('left ','').trim();
-                    this.positionY = this.position.split(',')[1].replace(' top','').trim();
-                    this.position = '(' + this.position + ')';
+                this.league = this.line.split(' listed for ')[1].split(' in ')[1].split(' (')[0].trim();
+                if(this.hasTabInformation)
+                {
+                    this.tab = this.line.split(' (stash tab "')[1].split('"; position')[0].trim();
+                    this.position = this.line.split('"; position:')[1].split(')')[0].trim();
+                    if(this.position != '') {
+                        this.positionX = this.position.split(',')[0].replace('left ','').trim();
+                        this.positionY = this.position.split(',')[1].replace(' top','').trim();
+                        this.position = '(' + this.position + ')';
+                    }
                 }
             }
             this.tradeId = generateTradeId(this.itemName + '-' + this.price + '-' + this.from);
@@ -169,7 +174,7 @@ function TradeWhisper(line)
                     }
                 }
             }
-            if(this.isCommodityTrade && varTarget == 'itemName')
+            if(varTarget == 'itemName')
             {
                 this.itemName = this.itemName.replace(/[0-9]/g, ' ').trim();
                 newElement.onclick = (e) => {copyTextToClipboard(this.itemName);};
@@ -328,4 +333,3 @@ function configureHighlightStash()
 
 const hashId = (id) => crypto.createHash('md5').update(id).digest('hex');
 const generateTradeId = (id) => !id ? 'trade-whisper-bad-id' : `trade-whisper-${hashId(id)}`;
-                
