@@ -1,9 +1,24 @@
+const soundNames = [
+	'Confirm',
+	'Wood',
+	'Pulse',
+	'Melody',
+	'Dit-Dot',
+	'Melody 2',
+	'Dot-Dot',
+	'Metal',
+	'Plink',
+	'OMG',
+	'Dial',
+	'Arcade',
+	'Ring'
+];
 var sounds = [];
 function populateSounds()
 {
 	for(var i = 1; i < 14; i++)
 	{
-		sounds['' + i] = new Audio('./audio/' + i +'.wav');
+		sounds[soundNames[i - 1]] = new Audio('./audio/' + i +'.wav');
 	}
 	var soundSelects = document.querySelectorAll('select.search-sounds');
 	for(var i = 0; i < soundSelects.length; i++)
