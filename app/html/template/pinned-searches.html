@@ -1,0 +1,64 @@
+<div class="pinned-searches">
+    <div class="pinned-search-category hidden" id="category-template">
+        <div class="us-table">
+            <div class="us-table-row">
+                <div class="us-table-cell w-1 expand-category"><span class="material-symbols-outlined">chevron_right</span></div>        
+                <div class="us-table-cell w-100 category-name expand-category"></div>
+                <div class="us-table-cell w-1">
+                    <span class="button delete-category-button" title="Delete Category">
+                        <span class="material-symbols-outlined">delete_forever</span>
+                    </span>
+                </div>        
+            </div>
+        </div>
+        <div class="pinned-search-body hidden">
+            <div class="us-table pinned-search-table">
+                <div class="us-table-row pinned-search-row">
+                    <div class="us-table-cell w-1"><span class="button run-button run-in-agg-button">Run</span></div>
+                    <div class="us-table-cell w-1"><span class="button run-button run-in-poe-button">Go</span></div>
+                    <div class="us-table-cell w-1">
+                        <span class="button run-button run-in-new-window-button" title="Run Search in New Window">
+                            <span class="material-symbols-outlined">open_in_new</span>
+                        </span>
+                    </div>
+                    <div class="us-table-cell search-comment"></div>
+                    <div class="us-table-cell w-1">
+                        <span class="button delete-button" title="Delete Category">
+                            <span class="material-symbols-outlined">delete_forever</span>
+                        </span>
+                    </div>        
+                </div>
+            </div>
+            <div>
+                <span>
+                    <span class="button new-search-button"><span class="material-symbols-outlined">add</span></span>
+                </span>
+                <span class="search-comment">Add Search</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="pinned-search-category">
+        <div class="us-table">
+            <div class="us-table-row" id="add-new-pinned-category-row">
+                <div class="us-table-cell w-1">
+                    <span class="button" onclick="configureNewPinnedCategory()"><span class="material-symbols-outlined">add_circle</span></span>
+                </div>        
+                <div class="us-table-cell w-100 new-category-text">Add New Category</div>
+            </div>        
+            <div class="us-table-row hidden" id="configure-new-pinned-category-row">
+                <div class="us-table-cell">
+                    <span class="button disabled"><span class="material-symbols-outlined">add_circle</span></span>
+                </div>        
+                <div class="us-table-cell w-100 new-category-text">
+                    <input id="new-category-name" type="text" class="w-100"/>
+                </div>
+                <div class="us-table-cell t-right w-1">
+                    <span class="button approve" onclick="approveNewCategory()"><span class="material-symbols-outlined">check_circle</span></span>
+                    <span class="button cancel" onclick="cancelNewCategory()"><span class="material-symbols-outlined">cancel</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="" id="pinned-categories"></div>
+</div>

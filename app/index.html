@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet" href="./css/styles.css">
 		<link rel="stylesheet" href="./css/modCustomization.css">
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -20,9 +21,11 @@
 							<div class='display-window-wrapper flex-item condensed hidden' id='trade-whisper-display-window'>
 								<poe-agg-template id="template/tradeWhisper.html"></poe-agg-template>
 							</div>
+
 							<div class='display-window-wrapper flex-item condensed view-tab' id='main-display-window'>
 								<div id='scroll-to-top' class='overlay-control' onclick='scrollToTop();'>Top</div>
 							</div>
+
 							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='watched-display-window'>
 								<div class='display-window-title'>
 									<div class='title-text'>My Watched Items</div>
@@ -30,13 +33,22 @@
 								</div>
 								<div class='content-pane'></div>
 							</div>	
+
 							<div class='display-window-wrapper flex-item condensed view-tab hidden' id='poe-search-window'>
 								<webview id="poe-webview" src="https://www.pathofexile.com/trade/search" style="width: 100%;height:100%" ></webview>
 								<div class='overlay-control hidden' id='trade-url-overlay'>
 									<div class='selectable' id='trade-url-part'></div>
 									<span class="button hidden" id='save-trade-button' onclick="saveTrade()">Save Search</span>
+									<span class="button run-button run-in-new-window-button" title="Run Search in New Window"  onclick="runTrade()">
+										<span class="material-symbols-outlined">open_in_new</span>
+									</span>
 								</div>
 							</div>
+							
+							<div class='display-window-wrapper flex-item condensed hidden' id='pinned-searches-display-window'>
+								<poe-agg-template id="template/pinned-searches.html"></poe-agg-template>
+							</div>
+
 							<poe-agg-template id="tab-control-panel.html"></poe-agg-template>
 						</div>
 					</td>
@@ -48,38 +60,41 @@
 		<poe-agg-template id="notes-modal.html"></poe-agg-template>
 		<poe-agg-template id="searches-modal.html"></poe-agg-template>
 		<poe-agg-template id="currency-modal.html"></poe-agg-template>
+		<poe-agg-template id="modal/pinned-search-modal.html"></poe-agg-template>
+		
 
 		<script type="text/javascript" src="./js/polyfills.js"></script>
 		<script type="text/javascript" src="./js/currencyImages.js"></script>
 		<script type="text/javascript" src="./js/util.js"></script>
 		<script type="text/javascript" src="./js/itemlookup/definedMods.js"></script>
-		<script type="text/javascript" src="./js/file/FileStreamReader.js"></script>	
+		<script type="text/javascript" src="./js/file/FileStreamReader.js"></script>
 	   	<script type="text/javascript" src="./js/template.js"></script>
-		<script type="text/javascript" src="./js/audio.js"></script>		
+		<script type="text/javascript" src="./js/audio.js"></script>
 		<script type="text/javascript" src="./js/connectionManager.js"></script>
 		<script type="text/javascript" src="./js/searchListing.js"></script>
 		<script type="text/javascript" src="./js/dView.js"></script>
 		<script type="text/javascript" src="./js/aggmain.js"></script>
 		<script type="text/javascript" src="./js/itemFetcher.js"></script>
-		<script type="text/javascript" src="./js/webSocketWrapper.js"></script>		
+		<script type="text/javascript" src="./js/webSocketWrapper.js"></script>
 		<script type="text/javascript" src="./js/leagueInfo.js"></script>
-		<script type="text/javascript" src="./js/dataPersistence.js"></script>	
-		<script type="text/javascript" src="./js/currencyConversion.js"></script>	
+		<script type="text/javascript" src="./js/dataPersistence.js"></script>
+		<script type="text/javascript" src="./js/currencyConversion.js"></script>
 		<script type="text/javascript" src="./js/trackedStats.js"></script>
 		<script type="text/javascript" src="./js/watchedItems.js"></script>
 		<script type="text/javascript" src="./js/itemRequest.js"></script>
 		<script type="text/javascript" src="./js/requestManager.js"></script>		
-		<script type="text/javascript" src="./js/startup.js"></script>		
+		<script type="text/javascript" src="./js/startup.js"></script>
 		<script type="text/javascript" src="./js/clientLogReader.js"></script>	
 		<script type="text/javascript" src="./js/tradeWhisper.js"></script>		
 		<script type="text/javascript" src="./js/loadPoeTradeSite.js"></script>	
-		<script type="text/javascript" src="./js/menu.js"></script>		
+		<script type="text/javascript" src="./js/menu.js"></script>
 		<script type="text/javascript" src="./js/win32.js"></script>
 		<script type="text/javascript" src="./js/itemlookup/pricecheck.js"></script>
 		<script type="text/javascript" src="./js/itemlookup/filters/searchFilters.js"></script>
 		<script type="text/javascript" src="./js/itemlookup/modPart.js"></script>
 		<script type="text/javascript" src="./js/itemlookup/itemStat.js"></script>
 		<script type="text/javascript" src="./js/itemlookup/itemModifier.js"></script>
-		<script type="text/javascript" src="./js/itemlookup/copiedItem.js"></script>		
+		<script type="text/javascript" src="./js/itemlookup/copiedItem.js"></script>
+		<script type="text/javascript" src="./js/pinnedSearches.js"></script>
 	</body>
 </html>

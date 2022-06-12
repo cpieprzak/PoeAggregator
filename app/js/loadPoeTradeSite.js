@@ -55,10 +55,18 @@ function hide(id)
 	element.classList.add('hidden');
 }
 
+function runTrade()
+{
+	let slug = document.getElementById('trade-url-part').innerHTML;
+	let search = new SearchListing();
+	search.searchUrlPart = slug;
+	search.searchComment = 'Quick Search From Offical Trade Site';
+	runSearchInNewWindowFromSearchInfo(search);
+}
+
 function saveTrade()
 {
 	var newSearchRow = document.getElementById('new-search-row');
-
 	var searchControls = newSearchRow.querySelectorAll('.search-control');
 	for(var i = 0; i < searchControls.length; i++)
 	{

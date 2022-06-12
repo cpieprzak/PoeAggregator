@@ -32,6 +32,7 @@ influenceMods['of the Elevated Conquest'] = 'warlord-mod';
 
 function dView(result, searchInfo)
 {
+	if(!result) return;
 	var template = document.getElementById('item-template');
 	var newNode = template.cloneNode(true);
 	var overrides = [];

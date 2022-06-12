@@ -37,7 +37,7 @@ async function exportSearches()
 function ListingManager(listingString)
 {
 	this.searches = [];
-	if(listingString != null && listingString.length > 0)
+	if(listingString && listingString.length > 0)
 	{
 		var listedSearches = listingString.split(',');
 		for (var i = 0; i < listedSearches.length; i++)
@@ -65,7 +65,7 @@ function SearchListing(listingString)
 	this.viewId = 'main-display-window';
 	this.orgin = 'live-search';
 	
-	if(listingString != null)
+	if(listingString)
 	{
 		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'searchCategory','autoCopy','minQuantity'];
 		var searchParts = listingString.trim().split('[');
@@ -317,6 +317,7 @@ function runSearch(searchRow)
 		var searchInfo = getSearchListingFromSearchRow(searchRow);
 		var sort = new Object();
 		sort.price = 'asc';
+        searchInfo.soundId = '';
 		runSortedSearch(searchInfo, sort, outputToView);
 	}	
 }
@@ -351,12 +352,17 @@ function loadSearchItemsInNewWindow(element)
 
 function runSearchInNewWindow(searchRow)
 {
-	var urlBox = searchRow.querySelector('.search-url');
+	let urlBox = searchRow.querySelector('.search-url');
 	if(urlBox.value != null && urlBox.value.trim().length > 0)
 	{
-		var searchInfo = getSearchListingFromSearchRow(searchRow);
-		searchListingIpc.send('quick-search',JSON.stringify(searchInfo));
+		let searchInfo = getSearchListingFromSearchRow(searchRow);
+		runSearchInNewWindowFromSearchInfo(searchInfo);
 	}	
+}
+
+function runSearchInNewWindowFromSearchInfo(searchInfo)
+{
+	searchListingIpc.send('quick-search',JSON.stringify(searchInfo));
 }
 
 function checkActives(input)
@@ -375,8 +381,7 @@ function checkActives(input)
 				if(input == activeCheckbox)
 				{
 					alert('You cannot have more than 20 searches active at once.');
-				}
-				
+				}				
 			}
 			else if(checkedActives.length > maxActiveSearches)
 			{
@@ -398,9 +403,7 @@ function openSearchesModal()
 	var allSearchesTable = document.getElementById('all-searches-table');
 	var oldRows = allSearchesTable.querySelectorAll('.search-row');
 	for(var i = 0; i < oldRows.length; i++)
-	{
 		allSearchesTable.removeChild(oldRows[i]);
-	}
 	
 	var searches = manager.searches;
 	var searchCategories = [];
@@ -449,11 +452,7 @@ function openSearchesModal()
 		categoryBox.addEventListener("blur", function(e){remakeCategories();});
 		
 		var autoCopyBox = searchRow.querySelector('.search-auto-copy');
-		autoCopyBox.checked = false;
-		if(search.autoCopy == 1)
-		{
-			autoCopyBox.checked = true;
-		}
+		autoCopyBox.checked = search.autoCopy == 1;
 
 		var minQuantBox = searchRow.querySelector('.search-min-quant');
 		minQuantBox.value = search.minQuantity;

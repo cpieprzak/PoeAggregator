@@ -5,8 +5,8 @@ function WatchedItemManager()
 	this.input = document.getElementById('watched-items');
 	this.view = document.getElementById('watched-display-window');
 	this.interval = 20 * 1000;
-	this.getSoundId = function(){return '10';};
-	this.getSoundVolume = function(){return 75};
+	this.getSoundId = function(){ return '10'; };
+	this.getSoundVolume = function(){ return 75 };
 
 	this.initialize = function()
 	{
@@ -151,32 +151,35 @@ function updateWatched(data, searchInfo)
 	for(var i = 0; i < results.length; i++)
 	{	
 		var result = results[i];
-		var newNode = dView(result, searchInfo);
-		var oldStats = allTrackedStats[newNode.id];
-		allTrackedStats[newNode.id] = newNode.trackedStats;
-		if(newNode.trackedStats.alert(oldStats))
+		if(result)
 		{
-			var display = document.getElementById('main-display-window');
-			var soundId = document.getElementById('watched-notification-sound').value;
-			var soundVolume = document.getElementById('watched-notification-sound-volume').value;
-			playSound(soundId, soundVolume);
-			remote.getCurrentWindow().flashFrame(true);
-			newNode.classList.add('watched-item');
-			display.insertBefore(newNode, display.firstChild);
-			lastItem = newNode;
-			allDisplayedItems.push(lastItem);
-			while(allDisplayedItems.length > maxItemsDisplayed)
+			var newNode = dView(result, searchInfo);
+			var oldStats = allTrackedStats[newNode.id];
+			allTrackedStats[newNode.id] = newNode.trackedStats;
+			if(newNode.trackedStats.alert(oldStats))
 			{
-				var oldestItem = allDisplayedItems.shift();
-				if(oldestItem != null)
+				var display = document.getElementById('main-display-window');
+				var soundId = document.getElementById('watched-notification-sound').value;
+				var soundVolume = document.getElementById('watched-notification-sound-volume').value;
+				playSound(soundId, soundVolume);
+				remote.getCurrentWindow().flashFrame(true);
+				newNode.classList.add('watched-item');
+				display.insertBefore(newNode, display.firstChild);
+				lastItem = newNode;
+				allDisplayedItems.push(lastItem);
+				while(allDisplayedItems.length > maxItemsDisplayed)
 				{
-					oldestItem.parentNode.removeChild(oldestItem);
-					oldestItem = null;			
+					var oldestItem = allDisplayedItems.shift();
+					if(oldestItem != null)
+					{
+						oldestItem.parentNode.removeChild(oldestItem);
+						oldestItem = null;			
+					}
 				}
-			}
-		}		
-		searchInfo.viewId = 'watched-display-window';
-		searchInfo.refreshTarget = document.querySelector('#watched-display-window .ggg-id-' + result.id);
-		updateItem(result, searchInfo);
+			}		
+			searchInfo.viewId = 'watched-display-window';
+			searchInfo.refreshTarget = document.querySelector('#watched-display-window .ggg-id-' + result.id);
+			updateItem(result, searchInfo);
+		}
 	}
 }

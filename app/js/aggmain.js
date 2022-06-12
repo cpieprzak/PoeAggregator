@@ -242,6 +242,12 @@ function hideCurrencyRatios()
 	document.getElementById('currency-ratios').classList.add('hidden');
 }
 
+
+function toggleModal(id)
+{
+	document.getElementById(id).classList.toggle('hidden');
+}
+
 function updateFontSize()
 {
 	var body = document.querySelector('body');

@@ -432,6 +432,16 @@ textarea.notes
 	background-color: #163669;
 }
 
+.button.approve
+{
+	background-color: #1a921a;
+}
+
+.button.cancel
+{
+	background-color: #ad5555;
+}
+
 .button.disabled
 {
 	opacity: .3;
@@ -491,7 +501,7 @@ textarea.notes
     margin-bottom: 5px;
 }
 
-#trade-whisper-display-window
+#trade-whisper-display-window, #pinned-searches-display-window
 {
 	background: #51585f;
     justify-content: space-around;
@@ -1070,7 +1080,12 @@ a:visited
 	border-radius: 1rem;
 	border: 1px solid black;
 	background-color: #ffffff;	
-	padding: .5rem;
+	padding: .25rem;
+}
+
+.modal-content-box .modal-body {
+	max-height: 70vh;
+	overflow-y: scroll;
 }
 
 #settings-modal
@@ -1102,12 +1117,14 @@ a:visited
 	top: 0px;
 	left: 0px;
 	width: 100vw;
+	text-align: center;
 }
 
 .modal-body
 {
 	min-height: 40vh;
 	padding: .5rem;
+	background-color: #e4e4e4;
 }
 
 #currency-ratios
@@ -1628,4 +1645,102 @@ td
 .button .material-symbols-outlined
 {
 	font-size: inherit;
+}
+
+.pinned-searches, #pinned-categories {
+	display: contents;
+}
+
+.pinned-search-category {
+    margin: .5rem;
+	margin-bottom: 0px;
+    padding: .25rem;
+    width: 100%;
+    background-color: #242527;
+    text-align: initial;
+}
+
+.pinned-search-category .us-table-row .us-table-cell:last-child {
+    white-space: nowrap;
+}
+
+.w-1 {
+	width: 1%;
+}
+
+.w-50 {
+	width: 50%;
+}
+
+.w-100 {
+	width: 100%;
+}
+
+.new-category-text {
+	padding-left: .25rem;
+	padding-right: .25rem;
+}
+
+#pinned-searches-display-window .button {
+	line-height: 1;
+}
+
+.us-table-cell > .material-symbols-outlined {
+    padding: .25rem 0;
+}
+
+#pinned-searches-display-window .expanded .expand-category .material-symbols-outlined {
+	transform: rotate(90deg);
+}
+
+.expand-category {
+	cursor: pointer;
+}
+
+.pinned-search-row .us-table-cell {
+	border-top: 2px solid rgb(46, 46, 46);
+	background-color: #44464a
+}
+
+.pinned-search-body .search-comment {	
+    padding: 0px .25rem;
+}
+
+.category-name {
+	font-weight: bold;
+	color: #b7b7ff;	
+}
+
+.pinned-search-body .search-comment {
+	color: #ffffff;
+	padding-left: .25rem;
+}
+
+.auto-width {
+	width: min-content;
+    left: auto;
+    right: auto;	
+	position: relative;
+}
+
+.text-filter-row {
+	padding: .25rem;
+	background-color: #c0c0c0;
+}
+
+#pinned-search-modal .modal-body {
+	padding: 0px;
+}
+
+.searches-table .us-table-cell {
+	padding-left: .25rem;
+	padding-right: .25rem;
+}
+
+.searches-table .us-table-row:nth-child(2n+1) .us-table-cell {
+	background-color: #efefef;
+}
+
+#pinned-search-modal .modal-content-box {
+	width: 25rem;
 }

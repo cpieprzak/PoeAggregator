@@ -1,0 +1,30 @@
+<div class="modal-wrapper">
+    <div class="hidden" id="pinned-search-modal">
+        <div class="modal-background" onclick="toggleModal('pinned-search-modal')"></div>
+        <div class="us-table">
+            <div class="us-table-row">
+                <div class="us-table-cell w-50"></div>
+                <div class="us-table-cell">
+                    <div class="modal-content-box auto-width">
+                        <div class="modal-header">Add Search to Category</div>
+                        <div class="text-filter-row"><label class="nowrap">Filter <input type="text" class="text-filter" value=""></label></div>
+                        <div class="modal-body">
+                            <div class="us-table searches-table">
+                                <div class="us-table-row">
+                                    <div class="us-table-cell t-left nowrap" data="searchComment"></div>
+                                    <div class="us-table-cell w-1">
+                                        <span class="button add-search-button"><span class="material-symbols-outlined">add</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div><div class="button" onclick="toggleModal('pinned-search-modal')">Close</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="us-table-cell w-50"></div>
+            </div>
+        </div>
+    </div>
+</div>
