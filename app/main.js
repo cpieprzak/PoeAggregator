@@ -406,6 +406,10 @@ async function configurePosition() {
 	}
 
 	mainWindow.on('close', () => {
+		if (mainWindow.isDestroyed()) {
+			return;
+		}
+
 		for (const [windowName, overlay] of overlays.entries())
 		{
 			var bounds = overlay.getBounds();
