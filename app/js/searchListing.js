@@ -505,8 +505,10 @@ function saveSearchString()
 	searchInput.value = generateSearchString();
 	saveLocalData('search-wrapper');
 	showHide('search-string-builder');
-	stopSockets();
-	setTimeout(startSockets, 1500);
+	if (isSearchActive()) {
+		stopSockets();
+		setTimeout(startSockets, 1500);
+	}
 }
 
 function activateSearches()
