@@ -598,7 +598,16 @@ function dView(result, searchInfo)
 		
 		callAjax(itemUrl, refreshItem, this.searchInfo);
 	}
+	const dismissButton = document.createElement('div');
+	dismissButton.classList.add('button');
+	dismissButton.title = 'Dismiss';
+	dismissButton.appendChild(document.createTextNode('Dismiss'));
+	dismissButton.onclick = function()
+	{
+		this.parentNode.parentNode.parentNode.remove();
+	};
 	overrides['refresh-button'] = refreshButton;
+	overrides['dismiss-button'] = dismissButton;
 	
 	if(fields != null && fields.length > 0)
 	{
