@@ -141,6 +141,10 @@ function clearDisplay()
 	lastItem = null;
 }
 
+function isSearchActive() {
+	return hasActiveSockets;
+}
+
 function startSockets() 
 {
 	setCurrentWindow('main-display-window');
