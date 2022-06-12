@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'FrizQuadrataITC';
+  src:  url('../fonts/FrizQuadrataITC.woff2') format('woff2'),
+        url('../fonts/FrizQuadrataITC.woff') format('woff');
+}
+
 html
 {
 	height: 100%;
@@ -20,7 +26,7 @@ body
 	height:100%;
 	margin: 0px;
 	padding: 0px;
-	font-family: cursive;
+	font-family: 'FrizQuadrataITC';
 	background-color:rgba(3, 45, 53, 0);
 }
 
