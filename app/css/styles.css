@@ -1702,6 +1702,10 @@ td
 	background-color: #44464a
 }
 
+.pinned-search-row:hover .us-table-cell {
+	background-color: #7b7b7b
+}
+
 .pinned-search-body .search-comment {	
     padding: 0px .25rem;
 }

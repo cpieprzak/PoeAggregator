@@ -181,7 +181,7 @@ function addSearchToCategory (search,category) {
      };
      let runInNewWindowButton = row.querySelector('.run-in-new-window-button');
      runInNewWindowButton.onclick = () => {
-        if(runInNewWindowButton.contains('disabled')) return;
+        if(runInNewWindowButton.classList.contains('disabled')) return;
         disableRunButtons(3000);
         runSearchInNewWindowFromSearchInfo(search);
      };
@@ -218,7 +218,8 @@ function loadCatagories() {
         loadedCatagories.forEach(catagory => {
             let newCategory = addNewCategory(catagory.catagoryName);
             catagory.searches.forEach(search => {
-                addSearchToCategory (search,newCategory);
+                search = new SearchListing().copyFrom(search);
+                addSearchToCategory(search,newCategory);
             });
         });
     }

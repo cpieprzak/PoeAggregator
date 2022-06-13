@@ -722,7 +722,7 @@ function runSortedSearch(searchInfo, sort, callback)
 		searchInfo.orgin = 'run';
 		var url = `/api/trade/search/${searchInfo.searchUrlPart}?q=`;
 
-		var sortsearches = function(data, searchinfo, uponcomplete, mySort)
+		var sortsearches = function(data, info, uponcomplete, mySort)
 		{
 			var results =  JSON.parse(data);
 			var requestBody = new Object();
@@ -735,7 +735,7 @@ function runSortedSearch(searchInfo, sort, callback)
 			var league = document.getElementById('league').value;
 			var path = '/api/trade/search/';
 			path += league;
-			callAjaxWithSession('POST', path, uponcomplete, requestBody, searchInfo);
+			callAjaxWithSession('POST', path, uponcomplete, requestBody, info);
 		};
 
 		callAjaxWithSession('GET', url, sortsearches, null, searchInfo, callback, sort);

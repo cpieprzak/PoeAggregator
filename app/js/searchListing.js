@@ -103,6 +103,23 @@ function SearchListing(listingString)
 		
 		return clonedNode;
 	}
+
+	this.copyFrom = (other) =>
+	{
+		this.active = other.active;
+		this.searchUrlPart = other.searchUrlPart;
+		this.searchComment = other.searchComment;
+		this.soundId = other.soundId;
+		this.soundVolume = other.soundVolume;
+		this.color = other.color;
+		this.searchCategory = other.searchCategory;
+		this.autoCopy = other.autoCopy;
+		this.minQuantity = other.minQuantity;
+		this.viewId = other.viewId;
+		this.orgin = other.orgin;
+
+		return this;
+	}
 }
 
 var searchFilter = document.getElementById('search-filter');
