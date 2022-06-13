@@ -1,3 +1,18 @@
+const soundNames = [
+	'Confirm',
+	'Wood',
+	'Pulse',
+	'Harp',
+	'Dit-Dot',
+	'Melody',
+	'Dot-Dot',
+	'Metal',
+	'Plink',
+	'Huge',
+	'Dial',
+	'Arcade',
+	'Ring'
+];
 var sounds = [];
 function populateSounds()
 {
@@ -12,12 +27,12 @@ function populateSounds()
 		soundSelect.innerHTML = '';
 		var blankOption = document.createElement('option');
 		soundSelect.appendChild(blankOption);
-		
+
 		for (var key in sounds)
 		{
 			var newOption = document.createElement('option');
 			newOption.value = key;
-			newOption.appendChild(document.createTextNode(key));
+			newOption.appendChild(document.createTextNode(soundNames[key - 1]));
 			soundSelect.appendChild(newOption);
 		}
 		soundSelect.playSound = function()
