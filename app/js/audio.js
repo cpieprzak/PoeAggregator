@@ -18,7 +18,7 @@ function populateSounds()
 {
 	for(var i = 1; i < 14; i++)
 	{
-		sounds[soundNames[i - 1]] = new Audio('./audio/' + i +'.wav');
+		sounds['' + i] = new Audio('./audio/' + i +'.wav');
 	}
 	var soundSelects = document.querySelectorAll('select.search-sounds');
 	for(var i = 0; i < soundSelects.length; i++)
@@ -27,12 +27,12 @@ function populateSounds()
 		soundSelect.innerHTML = '';
 		var blankOption = document.createElement('option');
 		soundSelect.appendChild(blankOption);
-		
+
 		for (var key in sounds)
 		{
 			var newOption = document.createElement('option');
 			newOption.value = key;
-			newOption.appendChild(document.createTextNode(key));
+			newOption.appendChild(document.createTextNode(soundNames[key - 1]));
 			soundSelect.appendChild(newOption);
 		}
 		soundSelect.playSound = function()
