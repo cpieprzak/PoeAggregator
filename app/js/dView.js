@@ -587,7 +587,10 @@ function dView(result, searchInfo)
 	refreshButton.searchInfo = searchInfo.cloneNode(true);
 	refreshButton.refreshTarget = newNode;
 	refreshButton.title = 'Refresh';
-	refreshButton.appendChild(document.createTextNode('Refresh'));
+	const refreshIcon = document.createElement('span');
+	refreshIcon.classList.add('material-symbols-outlined');
+	refreshIcon.appendChild(document.createTextNode('refresh'));
+	refreshButton.appendChild(refreshIcon);
 	refreshButton.onclick = function ()
 	{
 		var msg = this.gggid + ' ' + this.searchInfo.searchUrlPart;
@@ -601,7 +604,10 @@ function dView(result, searchInfo)
 	const dismissButton = document.createElement('div');
 	dismissButton.classList.add('button');
 	dismissButton.title = 'Dismiss';
-	dismissButton.appendChild(document.createTextNode('Dismiss'));
+	const dismissIcon = document.createElement('span');
+	dismissIcon.classList.add('material-symbols-outlined');
+	dismissIcon.appendChild(document.createTextNode('close'));
+	dismissButton.appendChild(dismissIcon);
 	dismissButton.onclick = function()
 	{
 		this.parentNode.parentNode.parentNode.remove();
