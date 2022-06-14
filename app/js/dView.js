@@ -81,8 +81,36 @@ function dView(result, searchInfo)
 		}
 	}
 
-	var whisperButtonText = 'Whisper';
-	overrides['copy-item-button'] = buildCopyButton('Copy Item', atob(result.item.extended.text));
+	const copyIcon = document.createElement('span');
+	copyIcon.classList.add('material-symbols-outlined');
+	copyIcon.title = 'Copy';
+	copyIcon.appendChild(document.createTextNode('content_copy'));
+	const whisperIcon = document.createElement('span');
+	whisperIcon.classList.add('material-symbols-outlined');
+	whisperIcon.title = 'Whisper';
+	whisperIcon.appendChild(document.createTextNode('send'));
+	const whisperDismissIcon = document.createElement('span');
+	whisperDismissIcon.classList.add('material-symbols-outlined');
+	whisperDismissIcon.title = 'Whisper and Dismiss';
+	whisperDismissIcon.appendChild(document.createTextNode('send_and_archive'));
+	const refreshIcon = document.createElement('span');
+	refreshIcon.classList.add('material-symbols-outlined');
+	refreshIcon.title = 'Refresh';
+	refreshIcon.appendChild(document.createTextNode('refresh'));
+	const dismissIcon = document.createElement('span');
+	dismissIcon.classList.add('material-symbols-outlined');
+	dismissIcon.title = 'Dismiss';
+	dismissIcon.appendChild(document.createTextNode('close'));
+
+	const secondCopyIcon = document.createElement("span");
+  secondCopyIcon.classList.add("material-symbols-outlined");
+  secondCopyIcon.title = "Copy";
+  secondCopyIcon.appendChild(document.createTextNode("content_copy"));
+  const copyLabel = document.createElement("span");
+  copyLabel.appendChild(secondCopyIcon);
+	copyLabel.appendChild(document.createTextNode(' Item'));
+
+	overrides['copy-item-button'] = buildCopyButton(copyLabel, Buffer.from(result.item.extended.text, 'base64').toString());
 	overrides['watch-item-button'] = buildWatchButton(result.id,searchInfo);
 	overrides['listing.price.currency.img'] = '';
 	overrides['listing.price.chaos.equiv'] = '';
@@ -225,16 +253,17 @@ function dView(result, searchInfo)
 	}
 	if(result.listing.account.name)
 	{
-		whisperButtonText += ' ' + result.listing.account.lastCharacterName;
-		overrides['account-profile'] = buildAccountLink(result.listing.account.name);
+		overrides['profile-info'] = buildCharAndAccountInfo(result.listing.account.name, result.listing.account.lastCharacterName);
 	}
-	overrides['whisper-button'] = buildCopyButton(whisperButtonText, result.listing.whisper);
-	overrides['whisper-to-poe-button'] = buildCopyButton('↩', result.listing.whisper, true);	
+
+	overrides['whisper-button'] = buildCopyButton(copyIcon, result.listing.whisper);
+	overrides['whisper-to-poe-button'] = buildCopyButton(whisperIcon, result.listing.whisper, true);
+	overrides['whisper-dismiss-button'] = buildCopyButton(whisperDismissIcon, result.listing.whisper, true, true);
 	overrides['item.corrupted'] = '';
 	overrides['item.mirrored'] = '';
 	overrides['search-comment'] = '';
 	overrides['item.influences'] = '';
-	
+
 	if(searchInfo != null)
 	{
 		overrides['search-comment'] = searchInfo.searchComment;
@@ -588,9 +617,6 @@ function dView(result, searchInfo)
 	refreshButton.searchInfo = searchInfo.cloneNode(true);
 	refreshButton.refreshTarget = newNode;
 	refreshButton.title = 'Refresh';
-	const refreshIcon = document.createElement('span');
-	refreshIcon.classList.add('material-symbols-outlined');
-	refreshIcon.appendChild(document.createTextNode('refresh'));
 	refreshButton.appendChild(refreshIcon);
 	refreshButton.onclick = function ()
 	{
@@ -605,9 +631,6 @@ function dView(result, searchInfo)
 	const dismissButton = document.createElement('div');
 	dismissButton.classList.add('button');
 	dismissButton.title = 'Dismiss';
-	const dismissIcon = document.createElement('span');
-	dismissIcon.classList.add('material-symbols-outlined');
-	dismissIcon.appendChild(document.createTextNode('close'));
 	dismissButton.appendChild(dismissIcon);
 	dismissButton.onclick = function()
 	{
@@ -1104,47 +1127,47 @@ function getTextFromNode(node)
 	return text;
 }
 
-function buildCopyButton(buttonText, textToCopy, sendToPoe)
+function buildCopyButton(text, textToCopy, sendToPoe, dismissListing)
 {
-	var inputElement = document.createElement('input');
-	inputElement.type = "button";
-	inputElement.className = "button";
-	inputElement.value = buttonText;
-	if(sendToPoe)
-	{
+	var inputElement = document.createElement('div');
+	inputElement.classList.add('button');
+	if (typeof text === 'string') {
+		inputElement.appendChild(document.createTextNode(text));
+	} else {
+		inputElement.appendChild(text);
+	}
+
 		inputElement.addEventListener('click', function(event)
 		{
 			copyTextToClipboard(textToCopy);
-			sendClipboardTextToPoe();
+			if (sendToPoe)
+			{
+				sendClipboardTextToPoe();
+			}
+			if (dismissListing) {
+				inputElement.parentNode.parentNode.remove();
+			}
 			event.target.classList.add('copied');
 		});
-	}
-	else
-	{
-		inputElement.addEventListener('click', function(event)
-		{
-			copyTextToClipboard(textToCopy);
-			event.target.classList.add('copied');
-		});
-	}
 
 	return inputElement;
 }
 
-function buildAccountLink(accountName)
+function buildCharAndAccountInfo(accountName, characterName)
 {
 	var panel = document.createElement('span');
 	var inputElement = document.createElement('span');
 	inputElement.classList.add('link');
-	inputElement.appendChild(document.createTextNode(accountName));
+	inputElement.style.marginLeft = 6;
+	inputElement.appendChild(document.createTextNode(' (' + accountName + ')'));
 	inputElement.accountName = accountName;
-	inputElement.addEventListener('click', function(event)
+	inputElement.addEventListener('click', function()
 	{
 	    var url = 'https://www.pathofexile.com/account/view-profile/' + this.accountName;
 	    openBrowserWindow(url);
 	});
 	
-	panel.appendChild(document.createTextNode('Account: '));
+	panel.appendChild(document.createTextNode(characterName));
 	panel.appendChild(inputElement);
 	
 	return panel;
@@ -1157,13 +1180,12 @@ function buildWatchButton(itemId,searchInfo)
 	{
 		viewId = searchInfo.viewId;
 	}
-	var inputElement = document.createElement('input');
-	inputElement.type = 'button';
-	inputElement.className = 'button';
+	var inputElement = document.createElement('div');
+	inputElement.classList.add('button');
 	inputElement.itemId = itemId;
 	if(viewId == 'watched-display-window')
 	{
-		inputElement.value = 'Stop Watching';
+		inputElement.innerText = 'Stop Watching';
 		inputElement.addEventListener('click', function(event)
 		{
 			watchedItemManager.removeItem(this.itemId);
@@ -1171,7 +1193,7 @@ function buildWatchButton(itemId,searchInfo)
 	}
 	else
 	{
-		inputElement.value = 'Watch Item';
+		inputElement.innerText = 'Watch';
 		inputElement.addEventListener('click', function(event)
 		{
 			watchedItemManager.addItem(this.itemId);
