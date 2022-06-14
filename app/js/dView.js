@@ -81,33 +81,34 @@ function dView(result, searchInfo)
 		}
 	}
 
-	const copyIcon = document.createElement('span');
-	copyIcon.classList.add('material-symbols-outlined');
-	copyIcon.title = 'Copy';
-	copyIcon.appendChild(document.createTextNode('content_copy'));
-	const whisperIcon = document.createElement('span');
-	whisperIcon.classList.add('material-symbols-outlined');
-	whisperIcon.title = 'Whisper';
-	whisperIcon.appendChild(document.createTextNode('send'));
+	const copyWhisper = document.createTextNode('Whisper');
+
+	const sendWhisperIcon = document.createElement('span');
+	sendWhisperIcon.classList.add('material-symbols-outlined');
+	sendWhisperIcon.title = 'Whisper';
+	sendWhisperIcon.appendChild(document.createTextNode('send'));
+
 	const whisperDismissIcon = document.createElement('span');
 	whisperDismissIcon.classList.add('material-symbols-outlined');
 	whisperDismissIcon.title = 'Whisper and Dismiss';
 	whisperDismissIcon.appendChild(document.createTextNode('send_and_archive'));
+
 	const refreshIcon = document.createElement('span');
 	refreshIcon.classList.add('material-symbols-outlined');
 	refreshIcon.title = 'Refresh';
 	refreshIcon.appendChild(document.createTextNode('refresh'));
+
 	const dismissIcon = document.createElement('span');
 	dismissIcon.classList.add('material-symbols-outlined');
 	dismissIcon.title = 'Dismiss';
 	dismissIcon.appendChild(document.createTextNode('close'));
 
 	const secondCopyIcon = document.createElement("span");
-  secondCopyIcon.classList.add("material-symbols-outlined");
-  secondCopyIcon.title = "Copy";
-  secondCopyIcon.appendChild(document.createTextNode("content_copy"));
-  const copyLabel = document.createElement("span");
-  copyLabel.appendChild(secondCopyIcon);
+	secondCopyIcon.classList.add("material-symbols-outlined");
+	secondCopyIcon.title = "Copy";
+	secondCopyIcon.appendChild(document.createTextNode("content_copy"));
+	const copyLabel = document.createElement("span");
+	copyLabel.appendChild(secondCopyIcon);
 	copyLabel.appendChild(document.createTextNode(' Item'));
 
 	overrides['copy-item-button'] = buildCopyButton(copyLabel, Buffer.from(result.item.extended.text, 'base64').toString());
@@ -235,14 +236,8 @@ function dView(result, searchInfo)
 		if(online != null)
 		{
 			msgText = 'Online';
-			if(online.league)
-			{
-				statusPanel.title = online.league;
-			}
-			if(online.status)
-			{
-				msgText = online.status;
-			}
+			if(online.league) statusPanel.title = online.league;
+			if(online.status) msgText = online.status;
 		}
 		statusPanel.appendChild(document.createTextNode(msgText));
 		accountStatus.classList.add('account-status');
@@ -256,8 +251,8 @@ function dView(result, searchInfo)
 		overrides['profile-info'] = buildCharAndAccountInfo(result.listing.account.name, result.listing.account.lastCharacterName);
 	}
 
-	overrides['whisper-button'] = buildCopyButton(copyIcon, result.listing.whisper);
-	overrides['whisper-to-poe-button'] = buildCopyButton(whisperIcon, result.listing.whisper, true);
+	overrides['whisper-button'] = buildCopyButton(copyWhisper, result.listing.whisper);
+	overrides['whisper-to-poe-button'] = buildCopyButton(sendWhisperIcon, result.listing.whisper, true);
 	overrides['whisper-dismiss-button'] = buildCopyButton(whisperDismissIcon, result.listing.whisper, true, true);
 	overrides['item.corrupted'] = '';
 	overrides['item.mirrored'] = '';
@@ -299,10 +294,7 @@ function dView(result, searchInfo)
 				for(var j = 0; j < infNamelist.length; j++)
 				{
 					var namePart = infNamelist[j];
-					if(j > 0)
-					{
-						formatted += ' ';
-					}
+					if(j > 0) formatted += ' ';
 					formatted += namePart.charAt(0).toUpperCase() + namePart.substring(1);
 				}
 				influence.innerHTML = '{' + formatted + '}';
@@ -366,19 +358,9 @@ function dView(result, searchInfo)
 					isFirstInGroup = true;
 					linkCounter = 1;
 				}
-				if(linkCounter > maxLinks)
-				{
-					maxLinks = linkCounter;
-				}
-				
-				if(isFirstInGroup)
-				{
-					isFirstInGroup = false;
-				}
-				else
-				{
-					socketPanel.appendChild(socketLink.cloneNode(true));					
-				}
+				if(linkCounter > maxLinks) maxLinks = linkCounter;				
+				if(isFirstInGroup) isFirstInGroup = false;
+				else socketPanel.appendChild(socketLink.cloneNode(true));
 				var itemSocketColor = itemSocket.sColour;
 				var socketNode = document.createElement('span');
 				var socketCssClass = 'socket-' + itemSocketColor;
@@ -388,7 +370,6 @@ function dView(result, searchInfo)
 				linkCounter++;
 			}
 			socketPanel.appendChild(endSocketGroup.cloneNode(true));
-
 			
 			var maxLinksBox = document.createElement('span');
 			var linkText = maxLinks + 'L';
@@ -398,25 +379,13 @@ function dView(result, searchInfo)
 			socketInfo.appendChild(document.createTextNode(')'));
 			overrides['item.sockets'] = socketPanel;		
 		}
-		if(result.item.scourgeMods)
-		{
-			overrides['item.scourgeMods'] = makeModList(getMods(result.item, 'scourge'), 'scourge');
-		}
-		if(result.item.implicitMods)
-		{
-			overrides['item.implicitMods'] = makeModList(getMods(result.item, 'implicit'), 'implicit');
-		}
-		if(result.item.fracturedMods)
-		{				
-			overrides['item.fracturedMods'] = makeModList(getMods(result.item, 'fractured'), 'fractured');
-		}
-
-		if(result.item.notableProperties)
-		{
+		if(result.item.scourgeMods) overrides['item.scourgeMods'] = makeModList(getMods(result.item, 'scourge'), 'scourge');
+		if(result.item.implicitMods) overrides['item.implicitMods'] = makeModList(getMods(result.item, 'implicit'), 'implicit');
+		if(result.item.fracturedMods) overrides['item.fracturedMods'] = makeModList(getMods(result.item, 'fractured'), 'fractured');
+		if(result.item.notableProperties) {
 			var notables = result.item.notableProperties;
 			var ul = document.createElement('ul');
-			for(var i = 0; i < notables.length; i++)
-			{
+			for(var i = 0; i < notables.length; i++) {
 				var notable = notables[i];
 				var li = document.createElement('li');
 				var header = document.createElement('div');
@@ -424,11 +393,9 @@ function dView(result, searchInfo)
 				header.classList.add('header');
 				li.append(header);
 				var values = notable.values;
-				if(values)
-				{
+				if(values) {
 					var valueList = document.createElement('ul');
-					for(var j = 0; j < values.length; j++)
-					{
+					for(var j = 0; j < values.length; j++) {
 						var value = values[j];
 						var vli = document.createElement('li');
 						vli.innerHTML = value[0];
@@ -437,8 +404,7 @@ function dView(result, searchInfo)
 					li.append(valueList);
 				}
 				ul.append(li);
-			}
-			
+			}			
 			overrides['item.notableProperties'] = ul;
 		}
 
@@ -463,13 +429,7 @@ function dView(result, searchInfo)
 				modCountPanel.appendChild(suffixCount);
 				
 				var maxAffix = 3;
-				if(result.item.typeLine)
-				{
-					if(result.item.typeLine.endsWith('Jewel'))
-					{
-						maxAffix = 2;
-					}
-				}
+				if(result.item.typeLine && result.item.typeLine.endsWith('Jewel')) maxAffix = 2;
 				var isMagicItem = false;
 				if(result.item.frameType && result.item.frameType == 1)
 				{
@@ -601,14 +561,8 @@ function dView(result, searchInfo)
 	var itemNamePlate = document.createElement('span');
 	itemNamePlate.appendChild(document.createTextNode(result.item.name));
 	overrides['item.name'] = itemNamePlate;
-	if(result.item.verified)
-	{
-		newNode.classList.add('verified');
-	}
-	else
-	{
-		newNode.classList.add('not-verified');
-	}
+	if(result.item.verified) newNode.classList.add('verified');
+	else newNode.classList.add('not-verified');
 	var fields = newNode.querySelectorAll('.template-field');
 	
 	var refreshButton = document.createElement('div');
@@ -620,8 +574,6 @@ function dView(result, searchInfo)
 	refreshButton.appendChild(refreshIcon);
 	refreshButton.onclick = function ()
 	{
-		var msg = this.gggid + ' ' + this.searchInfo.searchUrlPart;
-
 		this.searchInfo.refreshTarget = this.refreshTarget;
 		var itemUrl = 'https://www.pathofexile.com/api/trade/fetch/' + this.gggid;
 		itemUrl += '?query=' + this.searchInfo.searchUrlPart;
@@ -726,17 +678,7 @@ function dView(result, searchInfo)
 	if(searchInfo.viewId == 'main-display-window')
 	{
 		var oldVersions = document.querySelectorAll('.' + gggId);
-		for(var p = 0; p < oldVersions.length; p++)
-		{
-			oldVersions[p].classList.add('outdated');
-		}
-		/*
-		newNode.classList.add('unviewed');
-		newNode.onmouseover = function(event)
-		{
-			this.classList.remove('unviewed');
-			this.onmouseover = null;
-		}*/
+		for(var p = 0; p < oldVersions.length; p++) oldVersions[p].classList.add('outdated');
 	}
 	
 	newNode.allText = JSON.stringify(newNode).toLowerCase() + getTextFromNode(newNode).toLowerCase();
@@ -771,24 +713,14 @@ function makeModList(compositeMods, affixListType)
 				var modCssClass = compositeModDisplayText.toLowerCase().trim();
 				modCssClass = modCssClass.replace(/[^a-zA-Z]/gi, '_');
 				modCssClass = modCssClass.replace(/_+/g,'-');
-				if(modCssClass.startsWith('-'))
-				{
-					modCssClass = modCssClass.substring(1);
-				}
-				if(modCssClass.endsWith('-'))
-				{
-					modCssClass = modCssClass.substring(0,modCssClass.length-1);
-				}
+				if(modCssClass.startsWith('-')) modCssClass = modCssClass.substring(1);
+				if(modCssClass.endsWith('-')) modCssClass = modCssClass.substring(0,modCssClass.length-1);
 				
 				compositeText.classList.add(modCssClass);
 			}
-			if(affixListType == 'veiled')
-			{
-				compositeModDisplayText = 'Veiled ' + compositeModDisplayText;
-			}
+			if(affixListType == 'veiled') compositeModDisplayText = 'Veiled ' + compositeModDisplayText;
 			compositeText.appendChild(document.createTextNode(compositeModDisplayText));
-			compositeModPanel.appendChild(compositeText);
-			
+			compositeModPanel.appendChild(compositeText);			
 
 			var detailModPanel = document.createElement('span');
 			detailModPanel.classList.add('detail-mod-panel');			
@@ -800,10 +732,7 @@ function makeModList(compositeMods, affixListType)
 				{
 					var itemMod = itemMods[j];
 					var modBox = document.createElement('span');
-					if(itemMod.affixType != null  && itemMod.affixType.length > 0)
-					{
-						modBox.classList.add('at-' + itemMod.affixType);
-					}
+					if(itemMod.affixType != null  && itemMod.affixType.length > 0) modBox.classList.add('at-' + itemMod.affixType);
 					if(itemMod.modTier != '' || itemMod.modName != ' ' || itemMod.modRangeString != null)
 					{
 						modBox.classList.add('mod-box');
@@ -859,18 +788,9 @@ function outputPropertyValues(propValues)
 	for(var index = 0; index < propValues.length; index++)
 	{
 		var value = propValues[index];
-		if(isFirst)
-		{
-			isFirst = !isFirst;
-		}
-		else
-		{
-			returnValue += ',';
-		}
-		if(value != null)
-		{
-			returnValue += value[0];
-		}
+		if(isFirst) isFirst = !isFirst;
+		else returnValue += ',';
+		if(value != null) returnValue += value[0];
 	}
 	returnValue += '';
 	
@@ -887,24 +807,12 @@ function ItemMod(modName, modTier, modRangeString, modType)
 	this.affixType = '';
 	if(modTier != null)
 	{
-		if(modTier.startsWith('P'))
-		{
-			this.affixType ='prefix';
-		}
-		else if(modTier.startsWith('S'))
-		{
-			this.affixType ='suffix';
-		}
+		if(modTier.startsWith('P')) this.affixType ='prefix';
+		else if(modTier.startsWith('S')) this.affixType ='suffix';
 		else if(modTier.startsWith('R'))
 		{
-			if(modType == 'veiled')
-			{
-				this.affixType ='veiled';
-			}
-			else
-			{
-				this.affixType ='crafted';
-			}
+			if(modType == 'veiled') this.affixType ='veiled';
+			else this.affixType ='crafted';
 		}
 	}
 }
@@ -978,14 +886,8 @@ function getMods(item, modType)
 								var modTier = moreModInfo.tier;
 								if(modTier)
 								{
-									if(modTier.startsWith('P'))
-									{
-										prefixCount++;
-									}
-									else if(modTier.startsWith('S'))
-									{
-										suffixCount++;										
-									}
+									if(modTier.startsWith('P')) prefixCount++;
+									else if(modTier.startsWith('S')) suffixCount++;
 								}
 								
 								if(moreModInfo.magnitudes)
@@ -999,42 +901,30 @@ function getMods(item, modType)
 										    var modHashKey = modMagnitudes[v].hash;											
 										    var modMin = modMagnitudes[v].min;
 										    var modMax = modMagnitudes[v].max;
-											if (modMax < 0)
-											{
+											if (modMax < 0) {
 												var temp = modMin;
 												modMin = -modMax;
 												modMax = -temp;
 											}											
 										    var modRange = '';
-										    if(modMin != modMax)
-										    {
-										        modRange = '('+ modMin + '-' + modMax + ')';										       
-										    }
-					 
-										    if(modMin != 0 || modMax != 0)
-										    {
-										        var itemMod = keyToCompositeMods[modHashKey];
+										    if(modMin != modMax) modRange = '('+ modMin + '-' + modMax + ')';					 
+										    if(modMin != 0 || modMax != 0) {
+										        let itemMod = keyToCompositeMods[modHashKey];
 										       
 										        if(itemMod == null)
 										        {
-										            var itemMod = new ItemMod(modName, modTier, modRange);
-													try
-													{
+										            let itemMod = new ItemMod(modName, modTier, modRange);
+													try {
 											            hashToMod[modHashKey].mods.push(itemMod);
 										            }
-													catch(err)
-													{
+													catch(err) {
 														console.log("no mod for hash:"); 
 														console.log(item);
 													}
 										            keyToCompositeMods[modHashKey] = itemMod;
 										        }
-										        else
-										        {
-										            if(modRange != '')
-										            {
-										                itemMod.modRangeString += ' - ' + modRange;
-										            }
+										        else {
+										            if(modRange != '') itemMod.modRangeString += ' - ' + modRange;
 										        }  
 										    }                                      
 										}
@@ -1098,57 +988,34 @@ function updateItem(result,searchInfo)
 		console.log(e);
 		display.append(refreshedItem);
 	}
-	if(lastItem == oldNode)
-	{
-		lastItem = refreshedItem;
-	}		
+	if(lastItem == oldNode) lastItem = refreshedItem;
 	oldNode.remove();
-	if(viewId == 'main-display-window')
-	{
-		allDisplayedItems.push(refreshedItem);
-	}
+	if(viewId == 'main-display-window') allDisplayedItems.push(refreshedItem);
 }
 
 function getTextFromNode(node)
 {
 	var text = '';
-	if(node.children && node.children.size > 0)
-	{
+	if(node.children && node.children.size > 0) {
 		var children = node.children;
-		for(var i = 0; i < children.length; i++)
-		{
-			text += getTextFromNode(children[i]);
-		}
+		for(var i = 0; i < children.length; i++) text += getTextFromNode(children[i]);
 	}
-	if(node.textContent)
-	{
-		text += node.textContent.trim();
-	}
+	if(node.textContent) text += node.textContent.trim();
 	return text;
 }
 
-function buildCopyButton(text, textToCopy, sendToPoe, dismissListing)
-{
-	var inputElement = document.createElement('div');
+function buildCopyButton(text, textToCopy, sendToPoe, dismissListing) {
+	let inputElement = document.createElement('div');
 	inputElement.classList.add('button');
-	if (typeof text === 'string') {
-		inputElement.appendChild(document.createTextNode(text));
-	} else {
-		inputElement.appendChild(text);
-	}
+	if (typeof text === 'string') inputElement.appendChild(document.createTextNode(text));
+	else inputElement.appendChild(text);
 
-		inputElement.addEventListener('click', function(event)
-		{
-			copyTextToClipboard(textToCopy);
-			if (sendToPoe)
-			{
-				sendClipboardTextToPoe();
-			}
-			if (dismissListing) {
-				inputElement.parentNode.parentNode.remove();
-			}
-			event.target.classList.add('copied');
-		});
+	inputElement.onclick = () => {
+		copyTextToClipboard(textToCopy);
+		if (sendToPoe) sendClipboardTextToPoe();
+		if (dismissListing) inputElement.parentNode.parentNode.remove();
+		inputElement.classList.add('copied');
+	};
 
 	return inputElement;
 }
@@ -1161,9 +1028,8 @@ function buildCharAndAccountInfo(accountName, characterName)
 	inputElement.style.marginLeft = 6;
 	inputElement.appendChild(document.createTextNode(' (' + accountName + ')'));
 	inputElement.accountName = accountName;
-	inputElement.addEventListener('click', function()
-	{
-	    var url = 'https://www.pathofexile.com/account/view-profile/' + this.accountName;
+	inputElement.addEventListener('click', function() {
+	    let url = 'https://www.pathofexile.com/account/view-profile/' + this.accountName;
 	    openBrowserWindow(url);
 	});
 	
