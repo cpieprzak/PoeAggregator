@@ -6,9 +6,7 @@
             <div class="modal-body">	
                 <div class="us-inline-table t-left">
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Default Alert Sound
-                        </div>
+                        <div class="us-table-cell">Default Alert Sound</div>
                         <div class="us-table-cell sound-wrapper">
                             <label class='nowrap'>                                
                                 <div class="us-table-table">
@@ -17,13 +15,16 @@
                                             <select class="local-data search-sounds" id='notification-sound'>
                                                 <option value="" selected></option>
                                             </select>
-                                            <input 
-                                                class="local-data search-volume"
-                                                type="hidden" value="25"
-                                                id='notification-sound-volume'>
+                                            <input class="local-data search-volume"
+                                                   type="hidden" value="25"
+                                                   id='notification-sound-volume'>
                                         </div>
                                         <div class="us-table-cell">
-                                            <div class="button test-sound-button" title="Test Sound" onclick="testSound(this)"><span class="material-symbols-outlined">volume_up</span></div>
+                                            <div class="button test-sound-button" 
+                                                 title="Test Sound" 
+                                                 onclick="testSound(this)">
+                                                 <span class="material-symbols-outlined">volume_up</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -31,56 +32,41 @@
                         </div>
                     </div>
                     <div class="us-table-row">
+                        <div class="us-table-cell">Font Size</div>
                         <div class="us-table-cell">
-                            Font Size
-                        </div>
-                        <div class="us-table-cell">
-                            <input
-                                    type="range" 
-                                    class="local-data" 
-                                    id="font-size"
-                                    min="1" 
-                                    max="100" 
-                                    value="50" 
-                                    onchange="updateFontSize()">
+                            <input type="range" 
+                                   class="local-data" 
+                                   id="font-size"
+                                   min="1" 
+                                   max="100" 
+                                   value="50" 
+                                   onchange="updateFontSize()">
                         </div>
                     </div>
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Swap View
-                        </div>
-                        <div class="us-table-cell">
-                            <div class='button' onclick="toggleView()" >View</div>
-                        </div>
+                        <div class="us-table-cell">Swap View</div>
+                        <div class="us-table-cell"><div class='button' onclick="toggleView()" >View</div></div>
                     </div>
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Max Items Displayed
-                        </div>
+                        <div class="us-table-cell">Max Items Displayed</div>
                         <div class="us-table-cell">
                             <input class="local-data" type='text' id='max-items-displayed-box' value='300' onblur="updateMaxItemsDisplayed()" />
                         </div>
                     </div>
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            poesessionid
-                        </div>
+                        <div class="us-table-cell">poesessionid</div>
                         <div class="us-table-cell">
                             <input class="local-data" type='password' id='poesessionid' value='' onblur="updatePoesessionid()" />
                         </div>
                     </div>
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Queue Update Speed (MS)
-                        </div>
+                        <div class="us-table-cell">Queue Update Speed (MS)</div>
                         <div class="us-table-cell">
                             <input class="local-data" type='text' id='queue-update-speed' value='700' onblur="updateQueue()" />
                         </div>
                     </div>
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Watched Item Sound
-                        </div>
+                        <div class="us-table-cell">Watched Item Sound</div>
                         <div class="us-table-cell">
                             <div class="horizontal-flex-box space-between sound-wrapper" >
                                 <div>
@@ -89,20 +75,16 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <input 
-                                            class="local-data search-volume"
-                                            type="range" min="10" max="100" value="25"
-                                            id='watched-notification-sound-volume'
-                                        >
+                                    <input class="local-data search-volume"
+                                           type="range" min="10" max="100" value="25"
+                                           id='watched-notification-sound-volume'>
                                 </div>
                                 <div><div class="button test-sound-button" title="Test Sound" onclick="testSound(this)"><span class="material-symbols-outlined">volume_up</span></div></div>
                             </div>
                         </div>
                     </div>
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Client Log Path
-                        </div>
+                        <div class="us-table-cell">Client Log Path</div>
                         <div class="us-table-cell">
                             <input class="local-data"
                                    type='text'
@@ -111,9 +93,7 @@
                         </div>
                     </div>
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Trade Received Sound
-                        </div>
+                        <div class="us-table-cell">Trade Received Sound</div>
                         <div class="us-table-cell">
                             <div class="horizontal-flex-box space-between sound-wrapper" >
                                 <div>
@@ -122,20 +102,20 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <input 
-                                            class="local-data search-volume"
-                                            type="range" min="10" max="100" value="25"
-                                            id='trade-notification-sound-volume'
-                                        >
+                                    <input class="local-data search-volume"
+                                           type="range" min="10" max="100" value="25"
+                                           id='trade-notification-sound-volume'>
                                 </div>
-                                <div><div class="button test-sound-button" title="Test Sound" onclick="testSound(this)"><span class="material-symbols-outlined">volume_up</span></div></div>
+                                <div>
+                                    <div class="button test-sound-button" title="Test Sound" onclick="testSound(this)">
+                                        <span class="material-symbols-outlined">volume_up</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div> 
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Big Trade Received Sound
-                        </div>
+                        <div class="us-table-cell">Big Trade Received Sound</div>
                         <div class="us-table-cell">
                             <div class="horizontal-flex-box space-between sound-wrapper" >
                                 <div>
@@ -144,36 +124,28 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <input 
-                                            class="local-data search-volume"
-                                            type="range" min="10" max="100" value="25"
-                                            id='big-trade-notification-sound-volume'
-                                        >
+                                    <input class="local-data search-volume"
+                                           type="range" min="10" max="100" value="25"
+                                           id='big-trade-notification-sound-volume'>
                                 </div>
                                 <div><div class="button test-sound-button" title="Test Sound" onclick="testSound(this)"><span class="material-symbols-outlined">volume_up</span></div></div>
                             </div>
                         </div>
                     </div>  
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Auto Copy Trade Invite To Clipboard
-                        </div>
+                        <div class="us-table-cell">Auto Copy Trade Invite To Clipboard</div>
                         <div class="us-table-cell">
                             <input class="local-data" type='checkbox' id='auto-copy-trade-invite' value='1' onchange="updateAutoCopyTradeWhisperInvite(this)" />
                         </div>
                     </div> 
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Show Trade Whisper Overlay
-                        </div>
+                        <div class="us-table-cell">Show Trade Whisper Overlay</div>
                         <div class="us-table-cell">
                             <input class="local-data" type='checkbox' id='show-trade-whisper-overlay' value='1' onchange="updateShowTradeWhisperOverlay(this)" />
                         </div>
                     </div> 
                     <div class="us-table-row">
-                        <div class="us-table-cell">
-                            Configure Trade Whisper Overlay
-                        </div>
+                        <div class="us-table-cell">Configure Trade Whisper Overlay</div>
                         <div class="us-table-cell">
                             <input type="button" class="button" value="Configure" onclick='configureHighlightStash()'>
                         </div>

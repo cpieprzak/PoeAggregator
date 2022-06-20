@@ -1,6 +1,15 @@
 const tradeIpc = require('electron').ipcRenderer;
 const crypto = require('crypto');
 
+let whisperTemplate = document.getElementById('trade-whisper-template');
+whisperTemplate?.remove();
+let autoCopyTradeWhisperInvite = false;
+
+document.addEventListener('localDataLoaded', () => {
+    whisperTemplate = document.getElementById('trade-whisper-template');
+    whisperTemplate.remove();
+});
+
 tradeIpc.on('trade-whisper', (event,line,stashBoundConifgured) => {
     try{
         var tradeWhisper = new TradeWhisper(line).toElement(stashBoundConifgured);
@@ -11,50 +20,35 @@ tradeIpc.on('trade-whisper', (event,line,stashBoundConifgured) => {
 
 tradeIpc.on('player-joined', (event,playerName) => {
     try{
-        for (let tradeWhisper of QSA(`.pn-${playerName}`))
-        {
+        for (let tradeWhisper of QSA(`.pn-${playerName}`)) {
             tradeWhisper.classList.add('player-joined');
         }
     } catch (e){console.log(e);}
 });
 
-function pushTradeWhisper(tradeWhisperElement, tradeContainer, stashBoundConifgured)
-{
+function pushTradeWhisper(tradeWhisperElement, tradeContainer, stashBoundConifgured) {
     var pushed = false;
-    if(!QS('.' + tradeWhisperElement.tradeId))
-    {
+    if(!QS('.' + tradeWhisperElement.tradeId)) {
         tradeContainer.append(tradeWhisperElement);
         updateTradeNotifications();
         pushed = true;
     }
     return pushed;
 }
-function updateTradeNotifications()
-{
-    var notification = QS('.trade-notification');
-    if(notification)
-    {
-        var count = getTradeWhisperCount();
-        if(count > 0)
-        {
-            notification.classList.add('new');
-        }
-        else{
-            notification.classList.remove('new');
-        }
+
+function updateTradeNotifications() {
+    let notification = QS('.trade-notification');
+    if(notification) {
+        let count = getTradeWhisperCount();
+        if(count > 0) notification.classList.add('new');
+        else notification.classList.remove('new');
         notification.innerHTML = count;
     }
 }
 
-const getTradeWhisperCount = () => {
-    return QSA('.trade-whisper').length;
-};
+const getTradeWhisperCount = () => { return QSA('.trade-whisper').length; };
 
-var whisperTemplate = document.getElementById('trade-whisper-template');
-whisperTemplate.remove();
-
-function TradeWhisper(line)
-{
+function TradeWhisper(line) {
     this.line = line;
     this.timestamp = '';
     this.from = '';
@@ -101,8 +95,7 @@ function TradeWhisper(line)
                 this.priceQuantity = this.price.split(' ')[0].trim();
                 this.priceType = this.price.split(' ')[1].trim();
                 this.league = this.line.split(' listed for ')[1].split(' in ')[1].split(' (')[0].trim();
-                if(this.hasTabInformation)
-                {
+                if(this.hasTabInformation) {
                     this.tab = this.line.split(' (stash tab "')[1].split('"; position')[0].trim();
                     this.position = this.line.split('"; position:')[1].split(')')[0].trim();
                     if(this.position != '') {
@@ -138,18 +131,11 @@ function TradeWhisper(line)
             var button = document.querySelector('#trade-whisper-display-button');
             if (button){button.classList.remove('new')};
         });
-        if(this.isBigTrade)
-        {
-            element.classList.add('big-trade');
-        }
-        if(this.isCommodityTrade)
-        {
-            element.classList.add('commodity-trade');
-        }
+        if(this.isBigTrade) element.classList.add('big-trade');
+        if(this.isCommodityTrade) element.classList.add('commodity-trade');
         element.id = '';
         var variables = element.querySelectorAll('poe-var');
-        for(var i = 0; i < variables.length; i++)
-        {
+        for(var i = 0; i < variables.length; i++) {
             var variable = variables[i];
             var varTarget = variable.getAttribute('rel');
             var data = this[varTarget];
@@ -157,15 +143,12 @@ function TradeWhisper(line)
             var newElementClass = 'v-' + varTarget;
             newElement.classList.add(newElementClass);
             var node = document.createTextNode(data);
-            if(varTarget == 'priceType')
-            {
+            if(varTarget == 'priceType') {
                 var priceImg = currencyImages[data];
                 var priceTypeString = data.toLowerCase().replace(' ','-').replace('\'','').replace(' ','-');
-                for (const [key, value] of Object.entries(currencyImages))
-                {
+                for (const [key, value] of Object.entries(currencyImages)) {
                     var currencyKey = key.toLowerCase();
-                    if(priceTypeString.includes(currencyKey))
-                    {
+                    if(priceTypeString.includes(currencyKey)) {
                         node = document.createElement('img');
                         node.src = value;
                         node.classList.add('currency-img');
@@ -174,8 +157,7 @@ function TradeWhisper(line)
                     }
                 }
             }
-            if(varTarget == 'itemName')
-            {
+            if(varTarget == 'itemName') {
                 this.itemName = this.itemName.replace(/[0-9]/g, ' ').trim();
                 newElement.onclick = (e) => {copyTextToClipboard(this.itemName);};
             }
@@ -185,8 +167,7 @@ function TradeWhisper(line)
         }
 
         var buttons = element.querySelectorAll('input[type="button"]');
-        for(var i = 0; i < buttons.length; i++)
-        {
+        for(var i = 0; i < buttons.length; i++) {
             var button = buttons[i];
             button.inviteMsg = this.inviteMsg;
             button.from = this.from;
@@ -195,23 +176,19 @@ function TradeWhisper(line)
             button.tradeId = this.tradeId;
             button.positionX = this.positionX;
             button.positionY = this.positionY;
-            button.onclick = (e) =>
-            {
+            button.onclick = (e) => {
                 var myself = e.target;
-                if(myself.value == 'X')
-                {
+                if(myself.value == 'X') {
                     callAllWindowFunction('closeTradeByTradeId(\'' + this.tradeId + '\')');
                     tradeIpc.send('highlight-stash',this.positionX,this.positionY,'Hide');
                 }
-                else
-                {
+                else {
                     myself.classList.add('copied');
                     var content = myself.value;
                     var msg = null;
                     var whisperPrefix = '@' + myself.from + ' ';
                     var myItem = myself.itemName + ' listed for ' + myself.price;
-                    switch(content)
-                    {
+                    switch(content) {
                         case '1x' :
                             tradeIpc.send('highlight-stash',this.positionX,this.positionY,content);
                             break;
@@ -243,8 +220,7 @@ function TradeWhisper(line)
                             hideHighlightOverlay();
                             break;
                     }
-                    if(msg)
-                    {
+                    if(msg) {
                         copyTextToClipboard(msg);
                         sendClipboardTextToPoe();
                     }
@@ -256,31 +232,20 @@ function TradeWhisper(line)
     }
 }
 
-function closeTradeByTradeId(tradeId)
-{
+function closeTradeByTradeId(tradeId) {
     try{
         var trades = document.querySelectorAll('.' + tradeId);
         Array.from(trades).forEach(trade => trade.remove());
         var whispers = document.querySelectorAll('.trade-whisper');
-        if(whispers.length == 0)
-        {
-            tradeIpc.send('collapse-overlay-window','tradeOverlayWindow'); 
-        }
+        if(whispers.length == 0) tradeIpc.send('collapse-overlay-window','tradeOverlayWindow');
         var whisperButton = document.getElementById('trade-whisper-display-button');
-        if(whisperButton)
-        {
-            whisperButton.classList.remove('new');
-        }
-        
+        if(whisperButton) whisperButton.classList.remove('new');
         updateTradeNotifications();
     }
-    catch(e)
-    {
-        console.log(e);
-    }
+    catch(e) { console.log(e); }
 }
 
-var getFormattedTime = function (militaryTime){
+var getFormattedTime = function (militaryTime) {
     var parts = militaryTime.split(':');
     var hours24 = parseInt(parts[0]);
     var hours = ((hours24 + 11) % 12) + 1;
@@ -290,46 +255,31 @@ var getFormattedTime = function (militaryTime){
     return hours + ':' + minutes + amPm;
 };
 
-var autoCopyTradeWhisperInvite = false;
 
-function updateAutoCopyTradeWhisperInvite(checkbox)
-{
-    if(checkbox)
-    {
-        autoCopyTradeWhisperInvite = checkbox.checked;
-    }
+function updateAutoCopyTradeWhisperInvite(checkbox) {
+    if(checkbox) autoCopyTradeWhisperInvite = checkbox.checked;
 }
 
-function playTradeSound(tradeWhisper)
-{
-    var line = tradeWhisper.line;
-    var soundId = document.getElementById('trade-notification-sound').value;
-    var volume = document.getElementById('trade-notification-sound-volume').value;
-    if(tradeWhisper.isBigTrade)
-    {
-        var bigSound = document.getElementById('big-trade-notification-sound').value
-        if(bigSound.trim() != '')
-        {
+function playTradeSound(tradeWhisper) {
+    let line = tradeWhisper.line;
+    let soundId = document.getElementById('trade-notification-sound').value;
+    let volume = document.getElementById('trade-notification-sound-volume').value;
+    if(tradeWhisper.isBigTrade) {
+        let bigSound = document.getElementById('big-trade-notification-sound').value
+        if(bigSound.trim() != '') {
             soundId = bigSound;
             volume = document.getElementById('big-trade-notification-sound-volume').value;
         }
     }
-    if(soundId.trim() != '')
-    {
-        playSound(soundId, volume);
-    }
+    if(soundId.trim() != '') playSound(soundId, volume);
 }
 
-function updateShowTradeWhisperOverlay()
-{
+function updateShowTradeWhisperOverlay() {
     var checked = document.getElementById('show-trade-whisper-overlay').checked;
     tradeIpc.send('show-overlay-window', 'tradeOverlayWindow', checked); 
 }
 
-function configureHighlightStash()
-{
-    tradeIpc.send('configure-highlight-stash'); 
-}
+function configureHighlightStash() { tradeIpc.send('configure-highlight-stash'); }
 
 const hashId = (id) => crypto.createHash('md5').update(id).digest('hex');
 const generateTradeId = (id) => !id ? 'trade-whisper-bad-id' : `trade-whisper-${hashId(id)}`;

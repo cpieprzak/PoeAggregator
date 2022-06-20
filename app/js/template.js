@@ -1,50 +1,43 @@
-var templateTag = 'poe-agg-template';
-class PoeAggTemplate extends HTMLDivElement 
-{
-    constructor()
-    {
-        super();
-    }
+let templateTag = 'poe-agg-template';
+class PoeAggTemplate extends HTMLDivElement {
+    constructor() { super(); }
 }
 customElements.define(templateTag, PoeAggTemplate, { extends: 'div' });
 
-function loadTemplate(id)
-{
-    var url = './html/' + id;
-    var xhr = new XMLHttpRequest();
-    xhr.templateId = id;
-    xhr.onreadystatechange = function (e) 
-    {
-        if (xhr.readyState == 4 && xhr.status == 200) 
-        {
-            var placeholder = document.getElementById(this.templateId);
-            var parent = placeholder.parentNode;
-            var content = document.createElement('div');
+async function loadTemplate(id) {
+    return new Promise((resolve, reject) => {
+    let url = './html/' + id;
+    let xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let placeholder = document.getElementById(id);
+            let parent = placeholder.parentNode;
+            let content = document.createElement('div');
             content.innerHTML = xhr.responseText;
             content = content.firstChild;
             parent.insertBefore(content, placeholder);
             placeholder.remove();
+            resolve();
         }
+        else reject();
     }
+    xhr.onerror = () => { reject(); };
     xhr.open("GET", url, false);
     xhr.setRequestHeader('Content-type', 'text/html');
-    xhr.send();    
+    xhr.send();   
+    }); 
 }
 
-var templates = document.querySelectorAll(templateTag);
-while(templates != null && templates.length > 0)
-{
-    for(var i = 0; i < templates.length; i++)
-    {
-        var template = templates[i];
-        try
-        {
-            loadTemplate(template.id);
+async function loadTemplates() {
+    let templates = document.querySelectorAll(templateTag);
+    while (templates?.length > 0) {
+        for(let template of templates) {
+            try { await loadTemplate(template.id); }
+            catch(e) { console.log(e); }
         }
-        catch(e)
-        {
-            console.log(e);
-        }
+        templates = document.querySelectorAll(templateTag);
     }
-    templates = document.querySelectorAll(templateTag);
+    document.dispatchEvent(new Event('poeAggTemplateComplete'));
 }
+
+loadTemplates(document);

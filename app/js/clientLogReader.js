@@ -1,8 +1,11 @@
 const clientLogName = 'Client.txt';
 var clientLog = '';
-var clientLogPathInput = document.getElementById('client-log-path');
+var clientLogPathInput;
 var logReader;
 
+document.addEventListener('localDataLoaded', () => {
+    clientLogPathInput = document.getElementById('client-log-path');
+});
 function updateClientLogPath()
 {
     clientLog = `${clientLogPathInput.value}/${clientLogName}`;

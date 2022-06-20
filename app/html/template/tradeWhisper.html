@@ -1,17 +1,29 @@
 <div id="trade-whisper-template" class="trade-whisper hidden">
     <div class='trade-whisper-wrapper'>
         <div class='header'>
-            <div class="horizontal-flex-box">
-                <div class='nowrap'>
-                    <poe-var rel="priceQuantity"></poe-var>
-                    <poe-var rel="priceType"></poe-var>
-                </div>  
-                <div>
-                    <poe-var rel="itemName"></poe-var>
-                </div> 
+            <div class="us-table">
+                <div class="us-table-row">
+                    <div class="us-table-cell">
+                        <div class="horizontal-flex-box">
+                            <div class='nowrap'>
+                                <poe-var rel="priceQuantity"></poe-var>
+                                <poe-var rel="priceType"></poe-var>
+                            </div>  
+                            <div>
+                                <poe-var rel="itemName"></poe-var>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="us-table-cell w-1 dismiss">
+                        <div class="button" title="Dismiss">
+                            <label>
+                                <span class="material-symbols-outlined" title="Dismiss">close</span>
+                                <input type="button" class="button close hidden" value="X">
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <input type="button" class="button close" value="X">
         </div>
         <div class="us-table">
             <div class="us-table-row">

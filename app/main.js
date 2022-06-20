@@ -249,21 +249,20 @@ ipcMain.on('configure-highlight-stash', (event) => {
 });
 
 ipcMain.on('highlight-stash', (event,x,y,tabType) => {
-	getLocalStorageValue('stash-tab-bounds').then((bounds)=>{
-		if(tabType == 'Hide')
-		{
+	getLocalStorageValue('stash-tab-bounds').then((bounds) => {
+		if(tabType == 'Hide') {
 			stashTabHighlightingWindow.hide();
 			configuringStashTabs = false;
 		}
 		else if(bounds != null && !configuringStashTabs)
 		{
 			bounds = JSON.parse(bounds);
-			var slots = 12;
-			if(tabType == '4x'){slots = 24}
-			var width = bounds.height / slots;
-			var height = width;
-			var newX = ((Number.parseInt(x)-1) * width) + bounds.x;
-			var newY = ((Number.parseInt(y)-1) * height) + bounds.y;
+			let slots = 12;
+			if(tabType == '4x') slots = 24;
+			let width = bounds.height / slots;
+			let height = width;
+			let newX = ((Number.parseInt(x)-1) * width) + bounds.x;
+			let newY = ((Number.parseInt(y)-1) * height) + bounds.y;
 			stashTabHighlightingWindow.setPosition(Number.parseInt(newX),Number.parseInt(newY));
 			stashTabHighlightingWindow.setMinimumSize(Number.parseInt(width),Number.parseInt(height));
 			stashTabHighlightingWindow.setSize(Number.parseInt(width),Number.parseInt(height));
@@ -275,31 +274,24 @@ ipcMain.on('highlight-stash', (event,x,y,tabType) => {
 	});
 });
 
-ipcMain.on('all-window-function', (event,javascript)=>{
+ipcMain.on('all-window-function', (event,javascript) => {
 	let functionNames = [];
 	let javascriptParts = javascript.split('(');
-	for (let i = 0; i < javascriptParts.length - 1; i++)
-	{
+	for (let i = 0; i < javascriptParts.length - 1; i++) {
 		let part = javascriptParts[i];
 		let functionName = part.split(' ').pop().trim();
 		if(functionName.length > 0) functionNames.push(functionName);
 	}
 	let functionCheck = 'true';
-	for(const name of functionNames)
-	{
-		functionCheck += ` && typeof ${name} != 'undefined'`;
-	}
+	for(const name of functionNames) functionCheck += ` && typeof ${name} != 'undefined'`;
 	let javascriptWrapper = `if(${functionCheck}){${javascript}}`;
 	for (const [windowName, overlay] of overlays.entries())
-	{
 		overlay.webContents.executeJavaScript(javascriptWrapper, true);
-	}
 	mainWindow.webContents.executeJavaScript(javascriptWrapper, true);
 });
 
 ipcMain.on('collapse-overlay-window', (event,windowName)=>{	
-	if(overlays.has(windowName))
-	{
+	if(overlays.has(windowName)) {
 		var overlay = overlays.get(windowName);
 		var {width,height} = overlay.getBounds();
 		if(height > MIN_TRADE_HEIGHT){overlayHeights.set(windowName,height);}		
@@ -312,8 +304,7 @@ ipcMain.on('collapse-overlay-window', (event,windowName)=>{
 });
 
 ipcMain.on('show-overlay-window', (event,windowName,show)=>{	
-	if(overlays.has(windowName))
-	{
+	if(overlays.has(windowName)) {
 		debug(`Showing ${windowName}: ${show}`);
 		var overlay = overlays.get(windowName);
 		show ? showWindow(overlay) : overlay.hide();
@@ -330,8 +321,7 @@ app.on('ready', () => {
 	createWindow();
 });
 
-function quitApp()
-{
+function quitApp() {
 	globalShortcut.unregister('CommandOrControl+Alt+Shift+L');
 	globalShortcut.unregister('F4');
 	app.quit();
@@ -379,8 +369,7 @@ async function configurePosition() {
 	var bounds = await (getLocalStorageValue('agg-main-bounds'));
 	var isMaximized = await (getLocalStorageValue('agg-main-maximized'));
 
-	if (bounds && bounds != 'undefined') 
-	{
+	if (bounds && bounds != 'undefined') {
 		bounds = JSON.parse(bounds);
 		debug(bounds);
 		mainWindow.setSize(bounds.width, bounds.height);
@@ -388,15 +377,10 @@ async function configurePosition() {
 		debug(`isMaximized: ${isMaximized}`)
 		if(isMaximized === 'true'){mainWindow.maximize();}
 	}
-	else
-	{
-		mainWindow.maximize();
-	}
-	for (const [windowName, overlay] of overlays.entries())
-	{
+	else mainWindow.maximize();
+	for (const [windowName, overlay] of overlays.entries()) {
 		var bounds = await getLocalStorageValue(windowName + '-bounds');
-		if(bounds)
-		{
+		if(bounds) {
 			debug(`Found bounds for window ${windowName}: ${bounds}`);
 			bounds = JSON.parse(bounds);
 			overlayHeights.set(windowName,bounds.height);
@@ -406,17 +390,11 @@ async function configurePosition() {
 	}
 
 	mainWindow.on('close', () => {
-		if (mainWindow.isDestroyed()) {
-			return;
-		}
+		if (mainWindow.isDestroyed()) return;
 
-		for (const [windowName, overlay] of overlays.entries())
-		{
+		for (const [windowName, overlay] of overlays.entries()) {
 			var bounds = overlay.getBounds();
-			if(overlayHeights.get(windowName))
-			{
-				bounds.height = overlayHeights.get(windowName);
-			}
+			if(overlayHeights.get(windowName)) bounds.height = overlayHeights.get(windowName);
 			bounds = JSON.stringify(bounds);
 			
 			debug(`Saving bounds for window ${windowName}: ${bounds}`);
@@ -439,13 +417,10 @@ function buildMenu(hotkeys) {
 	menuItems.push({
 		label: 'Open Dev Tools',
 		accelerator: process.platform === 'darwin' ? 'Cmd+Shift+I' : 'Ctrl+Shift+I',
-		click() 
-		{
+		click() {
 			 mainWindow.webContents.openDevTools();
 			 for (const [windowName, overlay] of overlays.entries())
-			 {
-				overlay.webContents.openDevTools();
-			 }
+			 	overlay.webContents.openDevTools();
 		}
 	});
 
@@ -457,8 +432,7 @@ function buildMenu(hotkeys) {
 	])
 }
 
-function buildTradeOverlayWindow()
-{
+function buildTradeOverlayWindow() {
 	var tradeOverlayWindow = new BrowserWindow(
 		{
 			width: MIN_TRADE_WIDTH,
@@ -510,7 +484,7 @@ function buildStashTabHighlightingWindow()
 			},
 		});
 		stashTabHighlightingWindow.loadFile('./html/overlay/stashTab-highlighting-overlay.html');
-		if(isDebug)stashTabHighlightingWindow.openDevTools();
+		if(isDebug) stashTabHighlightingWindow.openDevTools();
 
 	return stashTabHighlightingWindow;
 }

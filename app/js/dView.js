@@ -1033,7 +1033,7 @@ function buildCharAndAccountInfo(accountName, characterName)
 	    openBrowserWindow(url);
 	});
 	
-	panel.appendChild(document.createTextNode(characterName));
+	panel.appendChild(document.createTextNode(characterName + ' '));
 	panel.appendChild(inputElement);
 	
 	return panel;

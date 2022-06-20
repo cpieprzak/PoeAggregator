@@ -1,8 +1,20 @@
 const {remote} = require('electron');
 const searchListingIpc = require('electron').ipcRenderer;
 const { writeFile } = require('fs');
+
+var maxActiveSearches = 20;
 dialog = remote.dialog;
 browserWindow = remote.getCurrentWindow();
+let searchFilter = document.getElementById('search-filter');
+document.addEventListener('localDataLoaded', () => {
+	searchFilter = document.getElementById('search-filter');
+	searchFilter.onkeyup = filterSearches;
+	searchFilter.onblur = filterSearches;
+	searchFilter.onclick = clearSearchFilter;
+	
+	let loadFileInput = document.getElementById('load-searches');
+	loadFileInput.addEventListener('change',loadSearchFile);
+});
 
 let exportOptions = 
 {
@@ -16,32 +28,23 @@ let exportOptions =
  	]
 }
 
-async function exportSearches()
-{
+async function exportSearches() {
 	var searches = generateSearchString();
-	try
-	{
+	try {
 		var {filePath, cancelled} = await dialog.showSaveDialog(browserWindow,exportOptions);
-		if(!cancelled)
-		{
+		if(!cancelled) {
 			console.log(filePath);
 			writeFile(filePath,searches, error => {if (error) { console.error(error.message);}});
 		}
 	}
-	catch(error)
-	{
-		console.log(error);
-	}
+	catch(error) { console.log(error); }
 }
 
-function ListingManager(listingString)
-{
+function ListingManager(listingString) {
 	this.searches = [];
-	if(listingString && listingString.length > 0)
-	{
+	if(listingString && listingString.length > 0) {
 		var listedSearches = listingString.split(',');
-		for (var i = 0; i < listedSearches.length; i++)
-		{
+		for (var i = 0; i < listedSearches.length; i++)	{
 			var search = listedSearches[i];
 			search = search.replace('%2C',',');
 			var newListing = new SearchListing(search);
@@ -50,9 +53,7 @@ function ListingManager(listingString)
 	}
 }
 
-var maxActiveSearches = 20;
-function SearchListing(listingString)
-{
+function SearchListing(listingString) {
 	this.active = '1';
 	this.searchUrlPart = '';
 	this.searchComment = '';
@@ -65,29 +66,19 @@ function SearchListing(listingString)
 	this.viewId = 'main-display-window';
 	this.orgin = 'live-search';
 	
-	if(listingString)
-	{
+	if(listingString) {
 		var variables = [ null, 'active', 'searchUrlPart', 'searchComment', 'soundId', 'soundVolume', 'color', 'searchCategory','autoCopy','minQuantity'];
 		var searchParts = listingString.trim().split('[');
-		for (var i = 0; i < searchParts.length; i++)
-		{
+		for (var i = 0; i < searchParts.length; i++) {
 			var searchPart = searchParts[i].replace('[','').replace(']','').trim();
-			if(searchPart != null)
-			{	
+			if(searchPart != null) {	
 				var variable = variables[i];
-				if(variable != null)
-				{
-					this[variable] = searchPart;
-				}
+				if(variable != null) { this[variable] = searchPart; }
 			}		
 		}
 	}
-	if(this.soundVolume < 1 && this.soundVolume > 0)
-	{
-		this.soundVolume *= 100;
-	}
-	this.cloneNode = function()
-	{
+	if(this.soundVolume < 1 && this.soundVolume > 0) this.soundVolume *= 100;
+	this.cloneNode = function() {
 		var clonedNode = new SearchListing();
 		clonedNode.active = this.active;
 		clonedNode.searchUrlPart = this.searchUrlPart;
@@ -104,8 +95,7 @@ function SearchListing(listingString)
 		return clonedNode;
 	}
 
-	this.copyFrom = (other) =>
-	{
+	this.copyFrom = (other) => {
 		this.active = other.active;
 		this.searchUrlPart = other.searchUrlPart;
 		this.searchComment = other.searchComment;
@@ -122,111 +112,70 @@ function SearchListing(listingString)
 	}
 }
 
-var searchFilter = document.getElementById('search-filter');
-searchFilter.onkeyup = filterSearches;
-searchFilter.onblur = filterSearches;
-searchFilter.onclick = clearSearchFilter;
-function clearSearchFilter()
-{
-	if(searchFilter.value == 'Filter Searches')
-	{
+function clearSearchFilter() {
+	let searchFilter = document.getElementById('search-filter');
+	if(searchFilter.value == 'Filter Searches') {
 		searchFilter.value =  '';
 		var searchTable = document.getElementById('all-searches-table');
 		var searchRows = searchTable.querySelectorAll('.search-row');
-		for(var i = 0; i < searchRows.length; i++)
-		{
+		for(var i = 0; i < searchRows.length; i++) {
 			var row = searchRows[i];
 			row.classList.remove('hidden');
 		}
 	}
 }
 
-function filterSearches(e)
-{
+function filterSearches(e) {
 	var searchTable = document.getElementById('all-searches-table');
 	var searchRows = searchTable.querySelectorAll('.search-row');
 	var filterText = searchFilter.value.toLowerCase();
-	if(e.key === "Escape")
-	{
+	if(e.key === "Escape") {
 		searchFilter.value = '';
 		filterText = '';
     }
-	for(var i = 0; i < searchRows.length; i++)
-	{
+	for(var i = 0; i < searchRows.length; i++) {
 		var row = searchRows[i];
 		var commentInput = row.querySelector('.search-comment');
 		var commentText = commentInput.value.toLowerCase();
 		var categoryInput = row.querySelector('.search-category');
 		var categoryText = categoryInput.value.toLowerCase();
 		var shown = false;
-		if (commentText.indexOf(filterText) > -1 || categoryText.indexOf(filterText) > -1)
-		{
-			shown = true;
-		}
+		if (commentText.indexOf(filterText) > -1 || categoryText.indexOf(filterText) > -1) shown = true;
 		
-		if(shown)
-		{
-			row.classList.remove('hidden');
-		}
-		else
-		{
-			row.classList.add('hidden');
-		}
+		if(shown) row.classList.remove('hidden');
+		else row.classList.add('hidden');
 	}
 };
 
-function sortActiveSearches()
-{
+function sortActiveSearches() {
 	var searchTable = document.getElementById('all-searches-table');
 	var actives = [];
 	var inactives = [];
 	var searchRows = searchTable.querySelectorAll('.search-row');
-	for(var i = 0; i < searchRows.length; i++)
-	{
+	for(var i = 0; i < searchRows.length; i++) {
 		var row = searchRows[i];
 		var activeInput = row.querySelector('.search-active');
-		if (activeInput.checked)
-		{
-			actives.push(row);
-		}
-		else
-		{
-			inactives.push(row);
-		}
+		if (activeInput.checked) actives.push(row);
+		else inactives.push(row);
 	}
-	for(var i = 0; i < actives.length; i++)
-	{
-		searchTable.appendChild(actives[i]);
-	}
-	for(var i = 0; i < inactives.length; i++)
-	{
-		searchTable.appendChild(inactives[i]);
-	}
+	for(var i = 0; i < actives.length; i++) searchTable.appendChild(actives[i]);
+	for(var i = 0; i < inactives.length; i++) searchTable.appendChild(inactives[i]);
 }
 
-function addNewSearchRow()
-{
+function addNewSearchRow() {
 	var searchesTable =  document.getElementById('all-searches-table');
 	var newRow = document.getElementById('new-search-row');
 	var searchRow = newRow.cloneNode(true);
 	searchRow.id = '';
 	
-	if(searchRow.querySelector('.search-url').value.trim() != '')
-	{
+	if(searchRow.querySelector('.search-url').value.trim() != '') {
 		var addNewButton = searchRow.querySelector('.add-new-button');
 		replaceWithRemoveButton(addNewButton, searchRow);	
 		
 		var soundVolume = searchRow.querySelector('.search-control.search-volume');
-		if(soundVolume.value != '')
-		{
-			if(soundVolume.value > 100)
-			{
-				soundVolume.value = 100;
-			}
-			else if(soundVolume.value < 10)
-			{
-				soundVolume.value = 10;
-			}
+		if(soundVolume.value != '') {
+			if(soundVolume.value > 100) soundVolume.value = 100;
+			else if(soundVolume.value < 10) soundVolume.value = 10;
 		}
 		
 		var soundVolume = searchRow.querySelector('.search-control.search-sounds');
@@ -234,89 +183,55 @@ function addNewSearchRow()
 		makeDraggable(searchRow,'search-row');
 		searchRow.querySelector('.search-category').addEventListener("blur", function(e){remakeCategories();});
 		var headerRow = searchesTable.querySelector('.search-header-row');
-		if(headerRow.nextSibling)
-		{
-			searchesTable.insertBefore(searchRow, headerRow.nextSibling);
-		}
-		else
-		{
-			searchesTable.appendChild(searchRow);
-		}		
+		if(headerRow.nextSibling) searchesTable.insertBefore(searchRow, headerRow.nextSibling);
+		else searchesTable.appendChild(searchRow);	
 	}
-	else
-	{
-		alert('A Url is required for a search entry');
-	}
+	else alert('A Url is required for a search entry');
 }
 
-function testSound(element)
-{
+function testSound(element) {
 	var parent = element.parentNode;
-	while(!parent.classList.contains('sound-wrapper'))
-	{
-		parent = parent.parentNode;
-	}
+	while(!parent.classList.contains('sound-wrapper')) parent = parent.parentNode;
 	var soundSelect = parent.querySelector('.search-sounds');
 	var soundVolume = parent.querySelector('.search-volume');
 	playSound(soundSelect.value, soundVolume.value);
 }
 
-function openTradeWebsite(element)
-{
+function openTradeWebsite(element) {
 	var parent = element.parentNode;
-	while(!parent.classList.contains('search-row'))
-	{
-		parent = parent.parentNode;
-	}
+	while(!parent.classList.contains('search-row')) parent = parent.parentNode;
 	var urlBox = parent.querySelector('.search-url');
-	if(urlBox.value != null && urlBox.value.trim().length > 0)
-	{
+	if(urlBox.value != null && urlBox.value.trim().length > 0) {
 		var league = document.getElementById('league').value;
 		var url = 'https://www.pathofexile.com/trade/search/' + league + '/' + urlBox.value;
 		loadOfficialTradeWebsite(url);
 	}	
 }
 
-function runActiveSearches()
-{
+function runActiveSearches() {
 	var searchTable = document.getElementById('all-searches-table');
 	var actives = [];
 	var searchRows = searchTable.querySelectorAll('.search-row');
-	for(var i = 0; i < searchRows.length; i++)
-	{
+	for(var i = 0; i < searchRows.length; i++) {
 		var row = searchRows[i];
 		var activeInput = row.querySelector('.search-active');
-		if (activeInput.checked)
-		{
-			actives.push(row);
-		}
+		if (activeInput.checked) actives.push(row);
 	}
-	for(var i = 0; i < actives.length; i++)
-	{
-		runSearch(actives[i]);
-	}
+	for(var i = 0; i < actives.length; i++) runSearch(actives[i]);
 }
 
-function loadSearchItems(element)
-{
-	if(!element.classList.contains('disabled'))
-	{
+function loadSearchItems(element) {
+	if(!element.classList.contains('disabled')) {
 		var runButtons = document.querySelectorAll('.run-button');
-		for(var i = 0; i < runButtons.length; i++)
-		{
+		for(var i = 0; i < runButtons.length; i++) {
 			var runButton = runButtons[i];
 			runButton.classList.add('disabled');
 		}
 		var parent = element.parentNode;
-		while(!parent.classList.contains('search-row'))
-		{
-			parent = parent.parentNode;
-		}
-		setTimeout(()=>
-		{
+		while(!parent.classList.contains('search-row')) parent = parent.parentNode;
+		setTimeout(()=> {
 			var runButtons = document.querySelectorAll('.run-button');
-			for(var i = 0; i < runButtons.length; i++)
-			{
+			for(var i = 0; i < runButtons.length; i++) {
 				var runButton = runButtons[i];
 				runButton.classList.remove('disabled');
 			}
@@ -325,12 +240,10 @@ function loadSearchItems(element)
 	}
 }
 
-function runSearch(searchRow)
-{
+function runSearch(searchRow) {
 	setCurrentWindow('main-display-window');	
 	var urlBox = searchRow.querySelector('.search-url');
-	if(urlBox.value != null && urlBox.value.trim().length > 0)
-	{
+	if(urlBox?.value?.trim()?.length > 0) {
 		var searchInfo = getSearchListingFromSearchRow(searchRow);
 		var sort = new Object();
 		sort.price = 'asc';
@@ -339,26 +252,18 @@ function runSearch(searchRow)
 	}	
 }
 
-function loadSearchItemsInNewWindow(element)
-{
-	if(!element.classList.contains('disabled'))
-	{
+function loadSearchItemsInNewWindow(element) {
+	if(!element.classList.contains('disabled')) {
 		var runButtons = document.querySelectorAll('.run-button');
-		for(var i = 0; i < runButtons.length; i++)
-		{
+		for(var i = 0; i < runButtons.length; i++) {
 			var runButton = runButtons[i];
 			runButton.classList.add('disabled');
 		}
 		var parent = element.parentNode;
-		while(!parent.classList.contains('search-row'))
-		{
-			parent = parent.parentNode;
-		}
-		setTimeout(()=>
-		{
+		while(!parent.classList.contains('search-row')) parent = parent.parentNode;
+		setTimeout(()=> {
 			var runButtons = document.querySelectorAll('.run-button');
-			for(var i = 0; i < runButtons.length; i++)
-			{
+			for(var i = 0; i < runButtons.length; i++) {
 				var runButton = runButtons[i];
 				runButton.classList.remove('disabled');
 			}
@@ -367,41 +272,32 @@ function loadSearchItemsInNewWindow(element)
 	}
 }
 
-function runSearchInNewWindow(searchRow)
-{
+function runSearchInNewWindow(searchRow) {
 	let urlBox = searchRow.querySelector('.search-url');
-	if(urlBox.value != null && urlBox.value.trim().length > 0)
-	{
+	if(urlBox.value != null && urlBox.value.trim().length > 0) {
 		let searchInfo = getSearchListingFromSearchRow(searchRow);
 		runSearchInNewWindowFromSearchInfo(searchInfo);
 	}	
 }
 
-function runSearchInNewWindowFromSearchInfo(searchInfo)
-{
+function runSearchInNewWindowFromSearchInfo(searchInfo) {
 	searchListingIpc.send('quick-search',JSON.stringify(searchInfo));
 }
 
-function checkActives(input)
-{
-	if(input.checked)
-	{
+function checkActives(input) {
+	if(input.checked) {
 		var allSearches = document.getElementById('all-searches-table');
 		var checkedActives = allSearches.querySelectorAll('.search-active:checked');
-		if(checkedActives != null)
-		{
-			if(checkedActives.length == maxActiveSearches)
-			{
+		if(checkedActives != null) {
+			if(checkedActives.length == maxActiveSearches) {
 				var newSearchRow = document.getElementById('new-search-row');
 				var activeCheckbox = newSearchRow.querySelector('.search-active');
 				activeCheckbox.checked = false;
-				if(input == activeCheckbox)
-				{
+				if(input == activeCheckbox) {
 					alert('You cannot have more than 20 searches active at once.');
 				}				
 			}
-			else if(checkedActives.length > maxActiveSearches)
-			{
+			else if(checkedActives.length > maxActiveSearches) {
 				input.checked = false;
 				alert('You cannot have more than 20 searches active at once.');
 			}
@@ -409,8 +305,7 @@ function checkActives(input)
 	}
 }
 
-function openSearchesModal()
-{
+function openSearchesModal() {
 	var searchId = 'search-string-builder';
 	var searchBuilder = document.getElementById(searchId);
 	searchBuilder.classList.remove('hidden');
@@ -426,8 +321,7 @@ function openSearchesModal()
 	var searchCategories = [];
 	
 	var totalActives = 0;
-	for(var i = 0; i < searches.length; i++)
-	{
+	for(var i = 0; i < searches.length; i++) {
 		var search = searches[i];
 		var searchesTable =  document.getElementById('all-searches-table');
 		var newRow = document.getElementById('new-search-row');
@@ -435,10 +329,8 @@ function openSearchesModal()
 		searchRow.id = '';
 		var activeBox = searchRow.querySelector('.search-active');
 		activeBox.checked = false;
-		if(search.active == 1)
-		{
-			if(totalActives < maxActiveSearches)
-			{
+		if(search.active == 1) {
+			if(totalActives < maxActiveSearches) {
 				activeBox.checked = true;
 				totalActives++;
 			}
@@ -462,8 +354,7 @@ function openSearchesModal()
 		var categoryBox = searchRow.querySelector('.search-category');
 		var searchCategory = search.searchCategory;
 		categoryBox.value = searchCategory;	
-		if(searchCategory != null && searchCategory.length > 0 && searchCategories.indexOf(searchCategory) < 0)
-		{
+		if(searchCategory != null && searchCategory.length > 0 && searchCategories.indexOf(searchCategory) < 0) {
 			searchCategories.push(search.searchCategory);
 		}
 		categoryBox.addEventListener("blur", function(e){remakeCategories();});
@@ -484,23 +375,20 @@ function openSearchesModal()
 	var searchCategoriesList = document.getElementById('search-categories');
 	searchCategoriesList.innerHTML = '';
 	searchCategories.sort();
-	for(var i = 0; i < searchCategories.length; i++)
-	{
+	for(var i = 0; i < searchCategories.length; i++) {
 		var category = document.createElement('option');
 		category.value = searchCategories[i];
 		searchCategoriesList.appendChild(category);
 	}
 }
 
-function replaceWithRemoveButton(newButton, row)
-{
+function replaceWithRemoveButton(newButton, row) {
 	var parent = newButton.parentNode;
 	var removeButton = document.createElement('div');
 	removeButton.classList.add('button');
 	removeButton.appendChild(document.createTextNode('Remove'));
 	removeButton.removeTarget = row;
-	removeButton.onclick = function()
-	{
+	removeButton.onclick = function() {
 		this.removeTarget.parentElement.removeChild(this.removeTarget);
 	}
 	parent.insertBefore(removeButton, newButton);
@@ -508,15 +396,13 @@ function replaceWithRemoveButton(newButton, row)
 }
 
 var tmpFileLink = document.createElement('a');
-function download(filename, content) 
-{
+function download(filename, content) {
 	tmpFileLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
 	tmpFileLink.setAttribute('download', filename);
 	tmpFileLink.click();
 }
 
-function saveSearchString()
-{
+function saveSearchString() {
 	var searchInput = document.getElementById('searches');
 	searchInput.value = generateSearchString();
 	saveLocalData('search-wrapper');
@@ -527,71 +413,54 @@ function saveSearchString()
 	}
 }
 
-function activateSearches()
-{
+function activateSearches() {
 	var searchesTable =  document.getElementById('all-searches-table');
 	var searchRows = searchesTable.querySelectorAll('.search-row');
-	for(var i = 0; i < searchRows.length; i++)
-	{
+	for(var i = 0; i < searchRows.length; i++) {
 		var searchRow = searchRows[i];
-		if(!searchRow.classList.contains('hidden'))
-		{
+		if(!searchRow.classList.contains('hidden')) {
 			var activeBox = searchRow.querySelector('.search-active');
 			activeBox.checked = true;	
-		}
-		
+		}		
 	}
 }
 
-function deactivateSearches()
-{
+function deactivateSearches() {
 	var searchesTable =  document.getElementById('all-searches-table');
 	var searchRows = searchesTable.querySelectorAll('.search-row');
-	for(var i = 0; i < searchRows.length; i++)
-	{
+	for(var i = 0; i < searchRows.length; i++) {
 		var searchRow = searchRows[i];
-		if(!searchRow.classList.contains('hidden'))
-		{
+		if(!searchRow.classList.contains('hidden')) {
 			var activeBox = searchRow.querySelector('.search-active');
 			activeBox.checked = false;	
-		}
-		
+		}		
 	}
 }
 
-function sortSearchesByCategory()
-{
+function sortSearchesByCategory() {
 	var searchesTable =  document.getElementById('all-searches-table');
 	var searchRows = searchesTable.querySelectorAll('.search-row');
 	var categories = [];
-	for(var i = 0; i < searchRows.length; i++)
-	{
+	for(var i = 0; i < searchRows.length; i++) {
 		var searchRow = searchRows[i];
 		var categoryBox = searchRow.querySelector('.search-category');
 		var categoryName = categoryBox.value;
-		if(categories[categoryName] == null)
-		{
-			categories[categoryName] = [];
-		}	
+		if(categories[categoryName] == null) categories[categoryName] = [];
 		categories[categoryName].push(searchRow);
 	}
 	var categoryNames = Object.keys(categories);
-	if(categoryNames != null)
-	{
-		categoryNames = categoryNames.sort(function(a, b) 
-		{
+	if(categoryNames) {
+		categoryNames = categoryNames.sort(function(a, b) {
 		    if(a === "" || a === null) return 1;
 		    if(b === "" || b === null) return -1;
 		    if(a === b) return 0;
 		    return a < b ? -1 : 1;
 		});
 	}
-	for(var i = 0; i < categoryNames.length; i++)
-	{
+	for(var i = 0; i < categoryNames.length; i++) {
 		var categoryName = categoryNames[i];
 		var orderedRows = categories[categoryName];
-		for(var j = 0; j < orderedRows.length; j++)
-		{
+		for(var j = 0; j < orderedRows.length; j++) {
 			var orderedRow = orderedRows[j];
 			searchesTable.appendChild(orderedRow);
 		}
@@ -599,51 +468,36 @@ function sortSearchesByCategory()
 }
 
 var tmpActiveCount = 0;
-function generateSearchString()
-{
+function generateSearchString() {
 	tmpActiveCount = 0;
 	var searchString = '';
 	var searchesTable =  document.getElementById('all-searches-table');
 	var searchRows = searchesTable.querySelectorAll('.search-row');
 	var isFirstRow = true;
-	for(var i = 0; i < searchRows.length; i++)
-	{
+	for(var i = 0; i < searchRows.length; i++) {
 		var searchRow = searchRows[i];
-		if(!searchRow.classList.contains('search-header-row'))
-		{
-			if(isFirstRow)
-			{
-				isFirstRow = false;
-			}
-			else
-			{
-				searchString += ',\n';
-			}
+		if(!searchRow.classList.contains('search-header-row')) {
+			if(isFirstRow) isFirstRow = false;
+			else searchString += ',\n';
 			searchString += translateSearchRow(searchRow);
 		}
 	}
 	return searchString;
 }
 
-function translateSearchRow(searchRow)
-{
+function translateSearchRow(searchRow) {
 	var inputs = searchRow.querySelectorAll('.search-control');
 	var rowString = '';
-	for(var j = 0; j < inputs.length; j++)
-	{
+	for(var j = 0; j < inputs.length; j++) {
 		var rowInput = inputs[j];
 		rowString += translateInput(rowInput);
 	}
 	return rowString;
 }
 
-function getSearchListingFromSearchRow(searchRow)
-{
-	return new SearchListing(translateSearchRow(searchRow));
-}
+function getSearchListingFromSearchRow(searchRow) { return new SearchListing(translateSearchRow(searchRow)); }
 
-function translateInput(rowInput)
-{
+function translateInput(rowInput) {
 	var translated = '[';
 	var inputValue = rowInput.value;
 
@@ -651,46 +505,24 @@ function translateInput(rowInput)
 	inputValue = inputValue.replace(']','');
 	inputValue = inputValue.replace(',','%2C');
 	
-	if(rowInput.type =='checkbox')
-	{
-		if(rowInput.checked)
-		{
-			if(rowInput.classList.contains('search-active'))
-			{
-				if(tmpActiveCount < maxActiveSearches)
-				{
+	if(rowInput.type =='checkbox') {
+		if(rowInput.checked) {
+			if(rowInput.classList.contains('search-active')) {
+				if(tmpActiveCount < maxActiveSearches) {
 					translated += '1';
 					tmpActiveCount++;
 				}
-				else
-				{
-					translated += '0';
-				}
+				else translated += '0';
 			}
-			else
-			{
-				translated += '1';
-			}
+			else translated += '1';
 		}
-		else
-		{
-			translated += '0';
-		}
+		else translated += '0';
 	}
-	else
-	{
-		if(rowInput.classList.contains('search-volume'))
-		{
-			if(inputValue != '')
-			{
-				if(inputValue > 100)
-				{
-					inputValue = 100;
-				}
-				else if(inputValue < 10)
-				{
-					inputValue = 10;
-				}
+	else {
+		if(rowInput.classList.contains('search-volume')) {
+			if(inputValue != '') {
+				if(inputValue > 100) inputValue = 100;
+				else if(inputValue < 10) inputValue = 10;
 			}
 		}
 		translated += inputValue;
@@ -700,55 +532,40 @@ function translateInput(rowInput)
 	return translated;
 }
 
-function remakeCategories()
-{
+function remakeCategories() {
 	var searchesTable =  document.getElementById('all-searches-table');
 	var searchRows = searchesTable.querySelectorAll('.search-row');
 	var searchCategories = [];
-	for(var i = 0; i < searchRows.length; i++)
-	{
+	for(var i = 0; i < searchRows.length; i++) {
 		var searchRow = searchRows[i];
 		var categoryBox = searchRow.querySelector('.search-category');
 		var searchCategory = categoryBox.value;	
-		if(searchCategory != null && searchCategory.length > 0 && searchCategories.indexOf(searchCategory) < 0)
-		{
+		if(searchCategory != null && searchCategory.length > 0 && searchCategories.indexOf(searchCategory) < 0) {
 			searchCategories.push(searchCategory);
 		}
 	}
-
 	var searchCategoriesList = document.getElementById('search-categories');
 	searchCategoriesList.innerHTML = '';
 	searchCategories.sort();
-	for(var i = 0; i < searchCategories.length; i++)
-	{
+	for(var i = 0; i < searchCategories.length; i++) {
 		var category = document.createElement('option');
 		category.value = searchCategories[i];
 		searchCategoriesList.appendChild(category);
 	}
 }
 
-var loadFileInput = document.getElementById('load-searches');
-
-loadFileInput.addEventListener('change', function () 
-{
-	var searchString = document.getElementById('searches');
+let loadSearchFile = () => {
+	let searchString = document.getElementById('searches');
 	searchString.value = '';
-	if (this.files && this.files[0]) 
-	{
+	if (this.files && this.files[0]) {
 		var searchFile = this.files[0];
 		var reader = new FileReader();
     
-		reader.addEventListener('load', function(e) 
-		{
-			searchString.value += e.target.result;
-		});
-		
-		reader.addEventListener('loadend', function(e) 
-		{
+		reader.addEventListener('load', function(e) { searchString.value += e.target.result; });		
+		reader.addEventListener('loadend', function(e) {
 			this.loadFileInput = null;
 			openSearchesModal();
-		});
-		
+		});		
 		reader.readAsText(searchFile);
 	}   
-});
+}

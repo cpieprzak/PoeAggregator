@@ -96,4 +96,3 @@ function SearchConnectionManager()
 		this.socketBox.value = connectedCount + '/' + this.totalSocketCount;
 	};
 }
-var SearchConnectionManager = new SearchConnectionManager();

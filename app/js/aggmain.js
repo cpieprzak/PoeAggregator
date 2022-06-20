@@ -11,37 +11,96 @@ var allDisplayedItems = [];
 var hasActiveSockets = false;
 var currencyRatios = [];
 var genericId = 0;
-var currentView = document.getElementById('main-display-window');
-var poesessionid = '';
+var currentView = null;
 var userAgent = "PoeAggregator" + version;
-var currentWindow = document.getElementById('poe-search-window');
+var currentWindow = null;
+var filterBox = null;
 
-function openBrowserWindow(url)
-{
-	ipc.send('loadGH',url);
-}
-
-function setCurrentWindow(id,obj)
-{
-	var views = document.querySelectorAll('.view-tab');
-	for (var i = 0; i < views.length; i++)
+document.addEventListener('localDataLoaded', () => {
+	currentWindow = document.getElementById('poe-search-window');
+	currentView = document.getElementById('main-display-window');
+	filterBox = document.getElementById('filter-box');
+	filterBox.onkeyup = function()
 	{
+		for(var i = 0; i < allDisplayedItems.length; i++)
+		{
+			var item = allDisplayedItems[i];
+			filterItem(item);		
+		}
+	};
+	var minSumBox = document.getElementById('min-sum-box');
+	minSumBox.onkeyup = function()
+	{
+		var minSumString = this.value;
+		if(minSumString != null && minSumString.trim().length > 0)
+		{
+			try
+			{
+				minSum = parseFloat(minSumString);
+			}
+			catch(error)
+			{
+				minSum = 0;
+			}
+		}
+		else
+		{
+			minSum = 0;	
+		}
+		for(var i = 0; i < allDisplayedItems.length; i++)
+		{
+			var item = allDisplayedItems[i];
+			filterItem(item);		
+		}
+	};
+	
+	var maxChaosBox = document.getElementById('max-chaos-box');
+	maxChaosBox.onkeyup = function() {
+		var valueString = this.value;
+		if(valueString != null && valueString.trim().length > 0) {
+			try { maxChaos = parseFloat(valueString); }
+			catch(error) { maxChaos = 0; }
+		}
+		else maxChaos = 0;
+		for(var i = 0; i < allDisplayedItems.length; i++) {
+			var item = allDisplayedItems[i];
+			filterItem(item);		
+		}
+	};
+	
+	var minValueBox = document.getElementById('min-value-box');
+	minValueBox.onkeyup = filterItems;
+});
+		
+var filterItems = function() {
+	var minValueString = this.value;
+	if(minValueString != null && minValueString.trim().length > 0) {
+		try { minValue = parseFloat(minValueString); }
+		catch(error) { minValue = 0; }
+	}
+	else minValue = 0;
+	for(var i = 0; i < allDisplayedItems.length; i++) {
+		var item = allDisplayedItems[i];
+		filterItem(item);		
+	}
+};
+
+function openBrowserWindow(url) { ipc.send('loadGH',url); }
+
+function setCurrentWindow(id,obj) {
+	var views = document.querySelectorAll('.view-tab');
+	for (var i = 0; i < views.length; i++) {
 		var view = views[i];
 		view.classList.add('hidden');
-		if(view.id && view.id == id)
-		{
+		if(view.id && view.id == id) {
 			view.classList.remove('hidden');
 			currentWindow = view;
 		}
 	}
-	if(obj && obj.classList)
-	{
-		obj.classList.remove('new');	
-	}
+	if(obj && obj.classList) obj.classList.remove('new');
 }
 
-function showHideWindow(id,obj)
-{
+function showHideWindow(id,obj) {
 	var view = document.getElementById(id);
 	view.classList.toggle('hidden');
 	obj.classList.remove('new');
@@ -55,10 +114,8 @@ function getItems()
 var lookupProcess = null;
 
 var updateSpeed = 3000;
-function updateQueue(updateSpeed)
-{
-	if(updateSpeed == null)
-	{
+function updateQueue(updateSpeed) {
+	if(updateSpeed == null) {
 		updateSpeed = document.getElementById('queue-update-speed');
 	}
 	try
@@ -77,45 +134,35 @@ function updateQueue(updateSpeed)
 	lookupProcess = setInterval(getItems, updateSpeed);
 }
 
-function updateTimes()
-{
+function updateTimes() {
 	var timesToUpdate = document.querySelectorAll('.create-date');
-	for (var i = 0; i < timesToUpdate.length; i++)
-	{
+	for (var i = 0; i < timesToUpdate.length; i++) {
 		var time = timesToUpdate[i];
 		var createDate = time.createDate;
 		var now = new Date();
 		var text = 'A few seconds';
 		var ageInSeconds = (now - createDate) / 1000;
-		if(ageInSeconds < 60)
-		{
+		if(ageInSeconds < 60) {
 			text = Math.round(ageInSeconds) + ' seconds ago';
 		}
-		else
-		{
+		else {
 			var timeInMinutes = ageInSeconds / 60;
 			var minutesString = 'minutes';
-			if(timeInMinutes < 2)
-			{
+			if(timeInMinutes < 2) {
 				minutesString = 'minute';
 			}
-			text = Math.round(timeInMinutes) + ' ' + minutesString + ' ago';
-		
+			text = Math.round(timeInMinutes) + ' ' + minutesString + ' ago';		
 		}
 		time.innerHTML = text;
 	}
 }
 setInterval(updateTimes, 1000);
 
-function callAjax(url, callback, searchInfo)
-{
-	if(!ItemFetchManager.isRateLimited())
-	{
+function callAjax(url, callback, searchInfo) {
+	if(!ItemFetchManager.isRateLimited()) {
 		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function()
-		{		
-			if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-			{
+		xmlhttp.onreadystatechange = function() {		
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				callback(xmlhttp.responseText, searchInfo);
 			}		
 		}
@@ -124,18 +171,15 @@ function callAjax(url, callback, searchInfo)
 	}
 }
 
-function consoleOut(data)
-{
+function consoleOut(data) {
 	var json = JSON.parse(data);
 	console.log(json);
 }
 
-function clearDisplay()
-{
+function clearDisplay() {
 	var display = document.getElementById('main-display-window');
 	display.querySelectorAll('.item-display').forEach((element)=>{
 		element.remove();
-
 	});
 	allDisplayedItems = [];
 	lastItem = null;
@@ -148,22 +192,16 @@ function isSearchActive() {
 function startSockets() 
 {
 	setCurrentWindow('main-display-window');
-	if(poesessionid == null || poesessionid.trim().length < 1)
-	{
+	if(poesessionid == null || poesessionid.trim().length < 1) {
 		alert('"poesessionid" must be set in the settings menu.')
 		return false;
 	}
-	if(hasActiveSockets)
-	{
-		return false;
-	}
-	else
-	{
+	if(hasActiveSockets) return false;
+	else {
 		activeCount = 0;
 		hasActiveSockets = true;		
 		var exPrice = document.getElementById('Exalted Orb');
-		if(exPrice.value == null || exPrice.value.length < 1)
-		{
+		if(exPrice.value == null || exPrice.value.length < 1) {
 			loadCurrency();
 		}
 		var league = document.getElementById('league').value;
@@ -175,9 +213,8 @@ function startSockets()
 		var listingManager = new ListingManager(searchesString);
 		var providedSearches = listingManager.searches;
 
-		if(providedSearches != null && providedSearches.length > 0)
-		{
-			SearchConnectionManager.start(providedSearches, socketUrl);
+		if(providedSearches != null && providedSearches.length > 0) {
+			searchConnectionManager.start(providedSearches, socketUrl);
 		}		
 	}
 } 
@@ -185,7 +222,7 @@ function startSockets()
 function stopSockets() 
 {
 	hasActiveSockets = false;
-	SearchConnectionManager.stop();
+	searchConnectionManager.stop();
 	requestManager.itemRequests = [];
 	document.getElementById('queue-count').value = requestManager.itemRequests.length;
 } 
@@ -304,98 +341,9 @@ function toggleView()
 	}
 }
 
-var filterBox = document.getElementById('filter-box');
-filterBox.onkeyup = function()
-{
-	for(var i = 0; i < allDisplayedItems.length; i++)
-	{
-		var item = allDisplayedItems[i];
-		filterItem(item);		
-	}
-};
-
-var minSum = 0;
-var minSumBox = document.getElementById('min-sum-box');
-minSumBox.onkeyup = function()
-{
-	var minSumString = this.value;
-	if(minSumString != null && minSumString.trim().length > 0)
-	{
-		try
-		{
-			minSum = parseFloat(minSumString);
-		}
-		catch(error)
-		{
-			minSum = 0;
-		}
-	}
-	else
-	{
-		minSum = 0;	
-	}
-	for(var i = 0; i < allDisplayedItems.length; i++)
-	{
-		var item = allDisplayedItems[i];
-		filterItem(item);		
-	}
-};
-
-var maxChaos = 0;
-var maxChaosBox = document.getElementById('max-chaos-box');
-maxChaosBox.onkeyup = function()
-{
-	var valueString = this.value;
-	if(valueString != null && valueString.trim().length > 0)
-	{
-		try
-		{
-			maxChaos = parseFloat(valueString);
-		}
-		catch(error)
-		{
-			maxChaos = 0;
-		}
-	}
-	else
-	{
-		maxChaos = 0;	
-	}
-	for(var i = 0; i < allDisplayedItems.length; i++)
-	{
-		var item = allDisplayedItems[i];
-		filterItem(item);		
-	}
-};
-
 var minValue = 0;
-var minValueBox = document.getElementById('min-value-box');
-minValueBox.onkeyup = filterItems;
-	
-var filterItems = function()
-{
-	var minValueString = this.value;
-	if(minValueString != null && minValueString.trim().length > 0)
-	{
-		try
-		{
-			minValue = parseFloat(minValueString);
-		}
-		catch(error)
-		{
-			minValue = 0;
-		}
-	}
-	else
-	{
-		minValue = 0;	
-	}
-	for(var i = 0; i < allDisplayedItems.length; i++)
-	{
-		var item = allDisplayedItems[i];
-		filterItem(item);		
-	}
-};
+var maxChaos = 0;
+var minSum = 0;
 
 function filterItem(item)
 {
@@ -715,8 +663,7 @@ var outputToView = function(data, searchInfo, parameters)
 	}
 };
 
-function runSortedSearch(searchInfo, sort, callback)
-{
+function runSortedSearch(searchInfo, sort, callback) {
 	if(!ItemFetchManager.isRateLimited())
 	{
 		searchInfo.orgin = 'run';
@@ -742,16 +689,13 @@ function runSortedSearch(searchInfo, sort, callback)
 	}
 }
 
-function callAjaxWithSession(method, url, callback, requestBody, searchInfo, uponcomplete, sort)
-{
-	if(!ItemFetchManager.isRateLimited())
-	{
+function callAjaxWithSession(method, url, callback, requestBody, searchInfo, uponcomplete, sort) {
+	if(!ItemFetchManager.isRateLimited()) {
 		var myHeaders = {
 			'User-Agent': userAgent
 		};
 	
-		if(requestBody != null)
-		{
+		if(requestBody) {
 			myHeaders = 
 			{				
 				'Cookie': cookie.serialize('POESESSID', poesessionid),
@@ -771,18 +715,13 @@ function callAjaxWithSession(method, url, callback, requestBody, searchInfo, upo
 		};
 
 		var data = '';
-		const req = https.request(options, res => 
-		{
-			if(res.statusCode == 200)
-			{
+		const req = https.request(options, res => {
+			if(res.statusCode == 200) {
 				res.setEncoding('utf8');
 				res.on('data', d => {data += d;});
 				res.on('end', d => {callback(data, searchInfo, uponcomplete, sort);});
 			}
-			else
-			{
-				console.log('Bad request: ' + res.statusCode);
-			}
+			else console.log('Bad request: ' + res.statusCode);
 		});
 	
 		req.on('error', error => {console.error(error)});
@@ -791,7 +730,4 @@ function callAjaxWithSession(method, url, callback, requestBody, searchInfo, upo
 	}	
 }
 
-function clearWatchedItems()
-{	
-	watchedItemManager.removeAll();
-}
+function clearWatchedItems() { watchedItemManager.removeAll(); }
