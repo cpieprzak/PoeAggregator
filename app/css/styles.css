@@ -313,11 +313,13 @@ textarea.notes {
 	width: 100%;
 }
 
-.display-window-title .title-text {
+.title-text {
 	font-size: 1.25rem;
 	display: inline-block;
 	color: #ffffff;
 	text-decoration: underline;
+    padding: .2rem 0px;
+    vertical-align: middle;
 }
 
 #watched-display-window .display-window-title .button {
@@ -1544,4 +1546,25 @@ td {
 
 #pinned-search-modal .modal-content-box {
 	width: 25rem;
+}
+
+.chat {
+	text-align: left;
+}
+
+.chat-row {    
+	font-size: .9rem;
+    color: #9cdcfe;
+    text-shadow: 1px 1px 3px black;
+    margin: 0px .2rem;
+}
+
+#chat-display-window, .chat-display {
+	width: 100%;
+}
+
+#chat-filter-box {
+    position: fixed;
+    left: 0px;
+    margin-top: .3rem;
 }

@@ -44,9 +44,7 @@ async function createWindow() {
 			},
 		});
 	mainWindow.hide();
-	mainWindow.on('close',()=>{
-		quitApp();
-	});
+	mainWindow.on('close',()=>{ quitApp(); });
 
 	mainWindow.loadFile('index.html');
 	tradeOverlayWindow = buildTradeOverlayWindow();
@@ -73,12 +71,8 @@ async function createWindow() {
 	}
 
 	session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-		if (details.url.startsWith('https://www.pathofexile.com/api/trade/fetch/')) {
-			details.requestHeaders['cookie'] = '';
-		}
-		else {
-			details.requestHeaders['cookie'] = 'POESESSID=' + getPoesessionid();
-		}
+		if (details.url.startsWith('https://www.pathofexile.com/api/trade/fetch/')) details.requestHeaders['cookie'] = '';
+		else details.requestHeaders['cookie'] = 'POESESSID=' + getPoesessionid();
 		callback({ requestHeaders: details.requestHeaders })
 	})
 
